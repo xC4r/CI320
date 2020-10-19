@@ -1,0 +1,237 @@
+/*!
+ * Addon Bootstrap - Simple Sidebar 
+ * Copyright 2013-2019 Start Bootstrap bY xC4r
+ */
+body{
+  background-color: #F8F8F8;
+}
+
+.sidebar{
+  width: 100%;
+  height:100%;
+}
+.page-wrapper {
+  background-color: #f4f6f9;
+  width: 100%;
+}
+/* Custom Colors */
+    /* Purple */
+.btn-outline-purple {
+  border-color: purple;
+  color: purple;
+}
+.btn-outline-purple:hover {
+  background: purple;
+  color: white;
+}
+
+.btn-outline-gold {
+  border-color: lightgoldenrodyellow;
+  color: lightgoldenrodyellow;
+}
+.btn-outline-gold:hover {
+  background: lightgoldenrodyellow;
+  color: white;
+}
+
+/* Custom CSS */
+@media (min-width: 768px) {
+  .sidebar{
+    position: fixed;
+    width: 300px;
+    height:100%;
+    overflow-y:auto;
+  }
+  .page-wrapper {
+    margin-left: 300px;
+    min-height: 560px;
+    width: auto;
+    background-color: #f4f6f9;
+    border-left: 1px solid #e7e7e7;
+  }
+  .collapse.dont-collapse-sm {
+    display: block;
+    height: auto !important;
+    visibility: visible;
+  }
+
+  .snackbar.show {
+    visibility: visible;
+    width: 50%;
+    -webkit-animation: fadein 1s, fadeout 0.5s 2.5s;
+    animation: fadein 1s, fadeout 0.5s 2.5s;
+  }
+
+  .table-responsive{
+    height: auto;
+    overflow-y:auto;
+  }
+
+}
+
+.snackbar {
+  z-index: 10;
+  position: fixed;
+  width: 100%;
+  left: 50%;
+  transform:translateX(-50%);
+  top: 60px;
+  padding: 0px 15px;
+  visibility: hidden;
+}
+
+.snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 1s, fadeout 0.5s 2.5s;
+  animation: fadein 1s, fadeout 0.5s 2.5s;
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+@keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+@-webkit-keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+.table > thead > tr > th {
+     vertical-align: middle;
+}
+
+.table > tbody > tr > th {
+     vertical-align: middle;
+}
+
+.table > tbody > tr > td {
+     vertical-align: middle;
+}
+
+.table-responsive{
+  height:auto;
+  overflow-y:auto;
+}
+
+.spinner-border{
+  position:relative;
+  top:50%;
+  left:50%;
+}
+
+thead tr th{
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  border-color:#dee2e6 !important;
+} 
+
+tbody tr {
+  cursor: pointer;
+}
+
+.page-header {
+  padding-top: 15px;
+  padding-bottom: 10px;
+  margin: 5px 5px;
+}
+
+.page-button {
+    padding-top: 0px;
+    padding-bottom: 10px;
+    margin: 5px 10px;
+    border-bottom: 1px solid #eee
+}
+.page-container {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: 5px 10px;
+}
+.sidebar .sidebar-search {
+  padding: 10px;
+  width: 100%; }
+.sidebar .list-group-item {
+  background: transparent;
+  border-width: 0 0 1px;
+  border-style: solid;
+  border-color: #e7e7e7;
+  padding: 0;
+  width: 100%; }
+.sidebar .list-group-item a {
+  display: block;
+  width: 100%;
+  padding: 10px 15px; }
+.sidebar .list-group-item a:hover, .sidebar .list-group-item a:focus {
+  text-decoration: none;
+  background-color: #eee; }
+.sidebar .list-group-item.active > a {
+  background-color: #eeeeee; }
+.sidebar .list-group-item a.active {
+  background-color: #eeeeee; }
+
+.list-group-item .fa.arrow {
+  border: solid #222;
+  border-width: 0 1px 1px 0;
+  display: inline;
+  cursor: pointer;
+  padding: 3px;
+  position: absolute;
+  right: 0;
+  margin-top: 10px;}
+.list-group-item a.collapsed .fa.arrow {
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+  transition: .2s transform ease-in-out; }
+.list-group-item a .fa.arrow {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transition: .2s transform ease-in-out; }
+
+.sidebar .nav-second-level li,
+.sidebar .nav-third-level li,
+.sidebar .nav-fourth-level li,
+.sidebar .nav-fifth-level li,
+.sidebar .nav-sixth-level li {
+  border-bottom: none !important; }
+.sidebar .nav-second-level li a {
+  padding-left: 30px; }
+.sidebar .nav-third-level li a {
+  padding-left: 50px; }
+  .sidebar .nav-fourth-level li a {
+  padding-left: 70px; }
+  .sidebar .nav-fifth-level li a {
+  padding-left: 90px; }
+  .sidebar .nav-sixth-level li a {
+  padding-left: 110px; }
+
