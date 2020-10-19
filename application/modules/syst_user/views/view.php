@@ -17,7 +17,6 @@
   </div>
 </div>
 
-
 <div class="content">
   <div class="container-fluid">
     <div class="row">
@@ -76,16 +75,7 @@
                           <td>Table cell</td>
                           <td>Table cell</td>
                           <td>Table cell</td>
-                          <td>tttt</td>
-                        </tr>
-                        <tr>
-                          <td>2</td>
-                          <td>Table cell</td>
-                          <td>Table cell</td>
-                          <td>Table cell</td>
-                          <td>Table cell</td>
-                          <td>Table cell</td>
-                          <td>Table cell</td>
+                          <td>tttuyuiut</td>
                         </tr>
                       </tbody>
                     </table>
