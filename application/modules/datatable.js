@@ -1,4 +1,4 @@
-//active row onclick
+//active-Row Onclick
 $(document).on('click','table tbody tr', function(event) {
     $(this).addClass('table-active').siblings().removeClass('table-active');
 });
