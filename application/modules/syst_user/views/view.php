@@ -53,37 +53,6 @@
                 </div>
                 <div class="datatable" id="tabla1">
                 </div>
-                <div class="datatable" id="tabla2">                 
-                  <div class="table-responsive">
-                    <table class="table table-sm">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>correo usuario talbe</th>
-                          <th>cvlee </th>
-                          <th>codigo usuaroot</th>
-                          <th>nombre documento identif</th>
-                          <th>estado</th>
-                          <th>tell</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>1</td>
-                          <td>Table cell</td>
-                          <td>Table cell</td>
-                          <td>Table cell</td>
-                          <td>Table cell</td>
-                          <td>Table cell</td>
-                          <td>tttuyuiut</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>  
-                  <nav>
-                    <ul class="pagination justify-content-center"></ul>
-                  </nav>
-                </div>
               </div>
               <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
               </div>
@@ -98,16 +67,16 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <form id="tab1_regi_usua_form" autocomplete="off">
+                  <form id="tab1_regi_usua_form" autocomplete="off" >
                     <div class="modal-body">
                       <div class="form-row">
                         <div class="col-md-6 mb-3">
                           <label for="txt_nomb">Nombres</label>
-                          <input type="text" class="form-control" id="tab1_regi_usua_txt_nomb" placeholder="Juan Carlos Marcesa Rivas" required>
+                          <input type="text" class="form-control" id="tab1_regi_usua_txt_nomb"  required>
                         </div>
                         <div class="col-md-2 mb-3">
                           <label for="txt_iden">DNI / CE</label>
-                          <input type="text" class="form-control" id="tab1_regi_usua_txt_docu" placeholder="11111111" required>
+                          <input type="text" class="form-control" id="tab1_regi_usua_txt_docu" required>
                         </div>
                         <div class="col-md-4 mb-3">
                           <label for="txt_corr">Correo</label>
@@ -115,7 +84,7 @@
                             <div class="input-group-prepend">
                               <span class="input-group-text" id="icon_corr">@</span>
                             </div>
-                            <input type="text" class="form-control" id="tab1_regi_usua_txt_corr" placeholder="jtorres@gmail.com" aria-describedby="icon_corr" required>
+                            <input type="text" class="form-control" id="tab1_regi_usua_txt_corr" aria-describedby="icon_corr" required>
                           </div>
                         </div>
                       </div>
@@ -131,7 +100,7 @@
                         </div>                                          
                         <div class="col-md-3 mb-3">
                           <label for="txt_usua">Usuario</label>
-                          <input type="text" class="form-control" codigo="" placeholder="juan_torres" autocomplete="off" required>
+                          <input type="text" class="form-control" id="tab1_regi_usua_txt_usua" autocomplete="off" required>
                         </div>
                         <div class="col-md-3 mb-3">
                           <label for="txt_clav">Password</label>
@@ -159,7 +128,7 @@
                         </div>
                         <div class="col-md-3 mb-3">
                           <small id="mens_pass" class="form-text text-muted">
-                            Su contraseña debe tener entre 6 y 20 caracteres, minusculas, mayusculas y numeros, sin espacios.
+                            Su contraseña entre 6 y 20 caracteres, con una combinación de letras, números y símbolos.
                           </small>
                         </div>
                       </div>
@@ -179,14 +148,33 @@
                         </div>
                       </div>
                     </div>
-
                     <div class="modal-footer">
                       <div class="input-group justify-content-end">
-                        <button type="submit" class="btn btn-outline-primary ml-2" id="tab1_regi_usua_btn_regi_usua">Registrar</button>
+                        <button type="submit" class="btn btn-outline-primary ml-2" data-toggle="modal" id="tab1_regi_usua_btn_regi_usua">Registrar</button>
                         <button type="button" class="btn btn-outline-secondary ml-2" data-dismiss="modal">Cancelar</button>
                       </div>
                     </div>
                   </form>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="ConfirmlLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    ¿Desear registrar los datos?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Aceptar</button>
+                  </div>
                 </div>
               </div>
             </div>

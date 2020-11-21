@@ -94,6 +94,7 @@ function table_load(json,datatable,datafields,options,rowindex) {
                 btn.classList.add('btn');
                 btn.classList.add('btn-'+opt['btn']);
                 btn.classList.add('btn-sm');
+                btn.classList.add(opt['fn']);
                 btn.classList.add('mb-1');
                 if(ind > 0){
                     btn.classList.add('ml-1');

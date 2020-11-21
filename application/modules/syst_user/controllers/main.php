@@ -21,9 +21,10 @@ class Main extends MX_Controller {
     public function syst_user_load(){
         $json = array('cod' => '','msg' => '','res' => array());
         try {
-            $json['res']['lst_user'][] = $$lista_default;
-            $json['res']['lst_empresa'][] = $$lista_empresa;
-            $json['res']['lst_rol'][] = $$lista_rol;
+            $json['res']['lst_user'] = $this->lista_default();
+            $json['res']['lst_empresa'] = $this->lista_empresa();
+            $json['res']['lst_rol'] = $this->lista_rol();
+            $json['res']['lst_estado'] = GET_LST_STATE();
             $json['cod'] = 200;
             $json['msg'] = "Ok";
         } catch (Exception $e) {
@@ -39,6 +40,7 @@ class Main extends MX_Controller {
         $this->db->limit(20);
         $this->db->select('*');
         $this->db->from('sysm_usuario');
+        $this->db->where('ind_del','0'); //No eliminados
         $this->db->order_by('num_usuario', 'DESC');
         $query = $this->db->get();
         $data = [];
@@ -56,8 +58,7 @@ class Main extends MX_Controller {
                     'doc' => mb_strtolower(trim($row['num_documento']),'UTF-8'),
                     'emp' => trim($row['num_empresa']),
                     'rol' => trim($row['num_rol']),
-                    'est' => GET_STATE(trim($row['cod_estado'])),
-                    'del' => GET_INDDEL(trim($row['ind_del']))
+                    'est' => trim($row['cod_estado'])
                 );   
                 $array[] = $item;
             }
@@ -69,7 +70,7 @@ class Main extends MX_Controller {
         $array = array();     
         $this->db->select('*');
         $this->db->from('sysm_empresa');
-        $this->db->where('cod_estado','01'); //Estado Activo
+        $this->db->where('ind_del','0'); //Estado Activo
         $this->db->order_by('des_empresa', 'ASC');
         $query = $this->db->get();
         $data = [];
@@ -80,8 +81,7 @@ class Main extends MX_Controller {
             foreach( $data as $row ) {
                 $item = array(
                     'num' => mb_strtolower(trim($row['num_empresa']),'UTF-8'),
-                    'doc' => mb_strtolower(trim($row['ruc_empresa']),'UTF-8'),
-                    'des' => mb_strtolower(trim($row['des_empresa']),'UTF-8')
+                    'des' => trim($row['des_empresa'].' - '.$row['ruc_empresa'])
                 );   
                 $array[] = $item;
             }
@@ -93,7 +93,7 @@ class Main extends MX_Controller {
         $array = array();     
         $this->db->select('*');
         $this->db->from('sysm_rolusua');
-        $this->db->where('cod_estado','01'); //Estado Activo
+        $this->db->where('ind_del','0'); //Estado Activo
         $this->db->order_by('des_rol', 'ASC');
         $query = $this->db->get();
         $data = [];
@@ -104,7 +104,6 @@ class Main extends MX_Controller {
             foreach( $data as $row ) {
                 $item = array(
                     'num' => mb_strtolower(trim($row['num_rol']),'UTF-8'),
-                    'cod' => mb_strtolower(trim($row['cod_rol']),'UTF-8'),
                     'des' => mb_strtolower(trim($row['des_rol']),'UTF-8')
                 );   
                 $array[] = $item;
@@ -117,19 +116,22 @@ class Main extends MX_Controller {
         $json = array('cod' => '','msg' => '','res' => array());
         $post = json_decode(file_get_contents('php://input'),true);
         $text = trim($post['data']);      
-        if($text ==''||strlen($text)<4){
+        if($text ==''||strlen($text)<3){
             if($text ==''){
                 $json['mensaje']= 'No hay descripción para buscar';
             }else{
                 $json['mensaje']= 'La descripción es muy corta';
             }
         }else{
-            $this->db->limit(50);
-            $this->db->select('*');
-            $this->db->from('sysm_usuario');
             if($text == 'default'){
+                $this->db->limit(20);
+                $this->db->select('*');
+                $this->db->from('sysm_usuario'); 
                 $this->db->order_by('num_usuario', 'DESC');
             }else{
+                $this->db->limit(50);
+                $this->db->select('*');
+                $this->db->from('sysm_usuario');          
                 $this->db->where("UPPER(CONCAT_WS('|',cod_usuario,des_nombre,dir_correo,num_documento)) LIKE UPPER('%".$text."%')");
                 $this->db->order_by('num_usuario', 'DESC');
             }
@@ -148,8 +150,9 @@ class Main extends MX_Controller {
                         'eml' => mb_strtolower(trim($row['dir_correo']),'UTF-8'),
                         'nom' => trim($row['des_nombre']),
                         'doc' => mb_strtolower(trim($row['num_documento']),'UTF-8'),
-                        'est' => GET_STATE(trim($row['cod_estado'])),
-                        'del' => GET_INDDEL(trim($row['ind_del']))
+                        'emp' => trim($row['num_empresa']),
+                        'rol' => trim($row['num_rol']),
+                        'est' => trim($row['cod_estado'])
                     );   
                     $json['cod'] = 200;
                     $json['msg'] = "Ok";
@@ -162,6 +165,8 @@ class Main extends MX_Controller {
         }
         echo json_encode($json);
     }
+
+    /*
     public function syst_admi_user_data() {
         $json = array('data' => array(), 'mensaje' => '');
         $data['id_usua'] = trim($_REQUEST['usua_data']);
@@ -188,6 +193,9 @@ class Main extends MX_Controller {
 
         echo json_encode($json);
     } 
+    */
+
+    /*
     public function syst_admi_user_save() {
         $json = array('data' => array(), 'mensaje' => '');
 
@@ -267,6 +275,8 @@ class Main extends MX_Controller {
         }
         echo json_encode($json);
     }
+    */
+
     public function syst_admi_user_dele() {
         $json = array('data' => array(), 'mensaje' => '');
         $data['id_usua'] = trim($_REQUEST['id_usua']);

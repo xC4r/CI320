@@ -42,3 +42,21 @@ if(!function_exists('GET_INDDEL'))
     }
   }
 }
+
+if(!function_exists('GET_LST_STATE'))
+{
+  function GET_LST_STATE()
+  {
+    $array = array(
+         array(
+             'cod' => '01',
+             'des' => 'Activo'
+         ),
+         array(
+             'cod' => '02',
+             'des' => 'Inactivo'
+         )
+    );
+    return $array;
+  }
+}

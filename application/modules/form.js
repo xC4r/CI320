@@ -84,7 +84,17 @@ function form_check_valid(form) {
     }
 }
 
-
+function select_load(id,list,value,html){
+    var selectContainer = document.getElementById(id);
+    selectContainer.innerHTML = '';
+    list.forEach(function(lst) {
+        var opt = document.createElement("option");
+        opt.value = lst[value];
+        opt.innerHTML = lst[html];
+        selectContainer.appendChild(opt);
+    });
+    selectContainer.selectedIndex = '-1';
+}
 
 
 
