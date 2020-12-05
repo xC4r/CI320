@@ -17,31 +17,131 @@ class Main extends MX_Controller {
             header('location: login');
         }
     }
+    public function syst_user_test(){
+        $json = array('cod' => '','msg' => '','res' => array());
+        $post = $this->input->post();
+        $json['msg'] = $post['txtNombres'];
+        /*
+        $this->output
+        ->set_status_header(401)
+        ->set_content_type('application/json', 'utf-8')
+        ->set_output(json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+        ->_display();
+        */
+
+        //http_response_code(401); //Opcional
+        //header('Content-Type: application/json','utf-8'); //Opcional
+        echo json_encode($json);
+    }
 
     public function syst_user_load(){
         $json = array('cod' => '','msg' => '','res' => array());
-        try {
-            $json['res']['lst_user'] = $this->lista_default();
-            $json['res']['lst_empresa'] = $this->lista_empresa();
-            $json['res']['lst_rol'] = $this->lista_rol();
-            $json['res']['lst_estado'] = GET_LST_STATE();
-            $json['cod'] = 200;
-            $json['msg'] = "Ok";
-        } catch (Exception $e) {
-            //echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-            $json['cod'] = 204;
-            $json['msg'] = 'Error:'.$e->getMessage().'\n';
+        //$post = json_decode(file_get_contents('php://input'),true);
+        $headers = $this->input->request_headers();
+        //$text = trim($post['data']);
+        $this->load->library('Auth');  
+        if($this->auth->verifyToken($headers['token']) == false){
+                    $json['cod'] = 401;
+                    $json['msg'] = 'Sesion Expirada';
+                    $this->session->sess_destroy();
+        }else{
+            try {
+                $json['res']['lst_user'] = $this->lista_usuario();
+                $json['res']['lst_empresa'] = $this->lista_empresa();
+                $json['res']['lst_rol'] = $this->lista_rol();
+                $json['res']['lst_estado'] = GET_LST_STATE();
+                $json['cod'] = 200;
+                $json['msg'] = "Ok";
+            } catch (Exception $e) {
+                $json['cod'] = 204;
+                $json['msg'] = 'Error:'.$e->getMessage().'\n';
+            }
         }
         echo json_encode($json);
     }
 
-    private function lista_default() {
+    public function syst_user_list() {
+        $json = array('cod' => '','msg' => '','res' => array());
+        $post = json_decode(file_get_contents('php://input'),true);
+        $text = trim($post['data']); 
+        if($text ==''||strlen($text)<3){
+            if($text ==''){
+                $json['mensaje']= 'No hay descripción para buscar';
+            }else{
+                $json['mensaje']= 'La descripción es muy corta';
+            }
+        }else{
+            try {
+                $json['res']['lst_user'] = $this->lista_usuario($text);
+                $json['cod'] = 200;
+                $json['msg'] = "Ok";
+            } catch (Exception $e) {
+                $json['cod'] = 204;
+                $json['msg'] = 'Error:'.$e->getMessage().'\n';
+            }
+        }
+        echo json_encode($json);       
+    }
+
+    public function syst_user_regi() {
+        $json = array('cod' => '','msg' => '','res' => array());
+        $post = json_decode(file_get_contents('php://input'),true);
+        try {
+            $data = array(
+            'cod_usuario' => $post['json']['cod'],
+            'pas_usuario' => $post['json']['pas'],
+            'dir_correo' => $post['json']['eml'],
+            'des_nombre' => $post['json']['nom'],
+            'num_documento' => $post['json']['doc'],
+            'num_empresa' => $post['json']['emp'],
+            'num_rol' => $post['json']['rol'],
+            'cod_estado' => $post['json']['est']
+            );
+            if($post['json']['num']){
+                $data['num_usuario'] = $post['json']['num'];
+            }
+            $this->db->replace('sysm_usuario',$data);
+            $json['res']['lst_user'] = $this->lista_usuario($post['txt']);
+            $json['cod'] = 200;
+            $json['msg'] = 'Ok';
+        } catch (Exception $e) {
+            $json['cod'] = 204;
+            $json['msg'] = 'Excepción capturada: '.$e->getMessage()."\n";
+        }
+        echo json_encode($json);
+    }
+
+    public function syst_user_dele() {
+        $json = array('cod' => '','msg' => '','res' => array());
+        $post = json_decode(file_get_contents('php://input'),true);
+        try {
+            $this->db->update('sysm_usuario', array('ind_del' => 1), array('num_usuario' => $post['del'],'num_documento'=>$post['doc']));
+            $json['res']['lst_user'] = $this->lista_usuario($post['txt']);
+            $json['cod'] = 200;
+            $json['msg'] = 'Ok';
+        } catch (Exception $e) {
+            $json['cod'] = 204;
+            $json['msg'] = 'Excepción capturada: '.$e->getMessage()."\n";
+        }
+        echo json_encode($json);
+    }
+
+    private function lista_usuario($text='default') {     
+        if($text == 'default'){
+            $this->db->limit(20);
+            $this->db->select('*');
+            $this->db->from('sysm_usuario');
+            $this->db->where('ind_del','0'); //No eliminados
+            $this->db->order_by('des_nombre', 'ASC');
+        }else{
+            $this->db->limit(50);
+            $this->db->select('*');
+            $this->db->from('sysm_usuario');  
+            $this->db->where("UPPER(CONCAT_WS('|',cod_usuario,des_nombre,dir_correo,num_documento)) LIKE UPPER('%".$text."%')");
+            $this->db->and('ind_del','0'); //No eliminados  
+            $this->db->order_by('des_nombre', 'ASC');
+        }
         $array = array();     
-        $this->db->limit(20);
-        $this->db->select('*');
-        $this->db->from('sysm_usuario');
-        $this->db->where('ind_del','0'); //No eliminados
-        $this->db->order_by('num_usuario', 'DESC');
         $query = $this->db->get();
         $data = [];
         foreach( $query->result_array() as $row ){
@@ -110,60 +210,6 @@ class Main extends MX_Controller {
             }
         }        
         return $array;
-    }
-
-    public function syst_user_list() {
-        $json = array('cod' => '','msg' => '','res' => array());
-        $post = json_decode(file_get_contents('php://input'),true);
-        $text = trim($post['data']);      
-        if($text ==''||strlen($text)<3){
-            if($text ==''){
-                $json['mensaje']= 'No hay descripción para buscar';
-            }else{
-                $json['mensaje']= 'La descripción es muy corta';
-            }
-        }else{
-            if($text == 'default'){
-                $this->db->limit(20);
-                $this->db->select('*');
-                $this->db->from('sysm_usuario'); 
-                $this->db->order_by('num_usuario', 'DESC');
-            }else{
-                $this->db->limit(50);
-                $this->db->select('*');
-                $this->db->from('sysm_usuario');          
-                $this->db->where("UPPER(CONCAT_WS('|',cod_usuario,des_nombre,dir_correo,num_documento)) LIKE UPPER('%".$text."%')");
-                $this->db->order_by('num_usuario', 'DESC');
-            }
-
-            $query = $this->db->get();
-            $data = [];
-            foreach( $query->result_array() as $row ){
-                $data[] = $row;
-            }
-            if(count($data)>0){
-                foreach( $data as $row ) {
-                    $item = array(
-                        'num' => mb_strtolower(trim($row['num_usuario']),'UTF-8'),
-                        'cod' => mb_strtolower(trim($row['cod_usuario']),'UTF-8'),
-                        'pas' => trim($row['pas_usuario']),
-                        'eml' => mb_strtolower(trim($row['dir_correo']),'UTF-8'),
-                        'nom' => trim($row['des_nombre']),
-                        'doc' => mb_strtolower(trim($row['num_documento']),'UTF-8'),
-                        'emp' => trim($row['num_empresa']),
-                        'rol' => trim($row['num_rol']),
-                        'est' => trim($row['cod_estado'])
-                    );   
-                    $json['cod'] = 200;
-                    $json['msg'] = "Ok";
-                    $json['res']['lst_user'][] = $item;
-                }
-            }else{
-                $json['cod'] = 204;
-                $json['msg'] = "Sin datos";
-            }
-        }
-        echo json_encode($json);
     }
 
     /*
@@ -407,8 +453,6 @@ class Main extends MX_Controller {
         }
         echo json_encode($json);
     }
-
-
     /*
     public function validar_numeros($cadena){
         $caracteres = "0123456789"; 

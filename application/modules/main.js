@@ -40,37 +40,30 @@ fetch('main/main_menu',{
     }else{
         alert(json.mensaje);
     }})
-.catch(error => console.error('Error:', error));
+.catch(error => {console.log('Error:'+ error)});
 
 function getPageFetch(uri,modulo){
-    fetch(uri,{
-        method: 'POST',
-        body: JSON.stringify({modu: modulo}),
-        headers:{
-            'Content-Type':'application/json'
-        }
-    })
-    .then(function(response){
-        return response.text()
+    fetch(uri,{method:'post',body:JSON.stringify({'modu':modulo})})
+    .then(function(data) {
+        return data.text();
     })
     .then(function(html) {
         document.getElementById('pagina').innerHTML = html;
         var scripts = document.getElementById("pagina").querySelectorAll("script");
         for (var i = 0; i < scripts.length; i++) {
             if (scripts[i].innerText) {
-              eval(scripts[i].innerText);
+                eval(scripts[i].innerText);
             } else {
-              fetch(scripts[i].src).then(function (data) {
-                data.text().then(function (r) {
-                    eval(r); //Try - Catch: Script Error
-                })
-              });
-            }
-        scripts[i].parentNode.removeChild(scripts[i]);
+                fetch(scripts[i].src).then(function(data) {
+                    data.text().then(function(r) {
+                        eval(r);
+                    })
+                });
+            }scripts[i].parentNode.removeChild(scripts[i]);
         }
-    })
-    .catch(error => console.error('Error:', error));
+    });
 }
+
 //load main menu
 function load_menu(menu_item,hash) {
     var html = $('<li/>');
@@ -155,6 +148,27 @@ function snack_alert(message,type) {
             snack.remove();
         }, 3000);
     }
+}
+
+function fetchPost(url,data){
+    fetch(url,{
+        method: 'POST',
+        body: data,
+        headers:{'token':localStorage.getItem("token")},
+    })
+    .then(response => response.json()) //verifyToken
+    .then(json => {return json;})
+    .catch(error => {console.log('Error:'+ error)});
+}
+
+function fetchGet(url){
+    fetch(url,{
+        method: 'GET',
+        headers:{'token':localStorage.getItem("token")},
+    })
+    .then(response => response.json()) //verifyToken
+    .then(json => {return json;})
+    .catch(error => {console.log('Error:'+ error)});
 }
 
 function form_alert_show(form,message) {

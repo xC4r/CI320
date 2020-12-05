@@ -43,7 +43,8 @@
                   })
                   .then(response => response.json())
                   .then(json => {
-                      if (json.mensaje == ''){ 
+                      if (json.mensaje == ''){
+                          localStorage.setItem("token",json.token);
                           document.location.href="main";
                       }else{
                           alert(json.mensaje); 

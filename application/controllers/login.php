@@ -8,18 +8,18 @@ class Login extends CI_Controller {
         $this->codi_usua = $this->session->userdata('codi_usua');
         if ($this->codi_usua != "") {
             header('location: main');
-            //header('location: ../');
         }
     }
     public function index() {
         $this->load->view('index');
     }
+
     public function sesi_sali() {
         $this->session->sess_destroy();
         header('location: ../');
     }    
     public function sesi_ingr() {
-        $json = array('mensaje' => '');
+        $json = array('mensaje' => '','token'=>'');
         // Takes raw data from the request
         $data = file_get_contents('php://input');
         // Converts it into a PHP object
@@ -27,8 +27,7 @@ class Login extends CI_Controller {
         //die(print_r($data));
         $data['username'] = trim($data[0]->user);
         $data['password'] = trim($data[0]->pass);
-        //$this->load->model('usua');
-        //$result = $this->usua->vali_data($data);
+
         $result = $this->db->get_where('sysm_usuario',array('cod_usuario'=>$data['username'],'pas_usuario'=>$data['password'],'cod_estado'=>REGISTRO_ACTIVO,'ind_del'=>REGISTRO_NO_ELIMINADO));
         if (count($result) == 0) {
             $json['mensaje'] = "* ERROR USUARIO Y/O CLAVE INCORRECTO.";
@@ -42,6 +41,8 @@ class Login extends CI_Controller {
                     'docu_usua'  => trim(mb_strtolower($row['num_documento'],'UTF-8'))
                 );
             }
+            $this->load->library('Auth');
+            $json['token'] = $this->auth->validToken($user_data);          
             $this->session->set_userdata($user_data);
         }
         echo json_encode($json);

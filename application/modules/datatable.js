@@ -45,6 +45,9 @@ function table_load(json,datatable,datafields,options,rowindex) {
         var th = document.createElement("th"); // TABLE HEADER.
         th.setAttribute( "scope", "col" );
         th.innerHTML = datafields[i]['name'];
+        if(typeof datafields[i]['hidden'] !== 'undefined'){
+            th.hidden = datafields[i]['hidden'];
+        }
         tr.appendChild(th);
     }
     if(options.length > 0){
@@ -82,6 +85,10 @@ function table_load(json,datatable,datafields,options,rowindex) {
                 td.innerHTML = fecha;
             }else{
                 td.innerHTML = json[i][datafields[j]['key']];
+            }
+            
+            if(typeof datafields[j]['hidden'] !== 'undefined'){
+                td.hidden = datafields[j]['hidden'];
             }
         }
 

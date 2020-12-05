@@ -61,6 +61,8 @@
 <script src="application/modules/main.js"></script>
 <script src="application/modules/datatable.js"></script>
 <script src="application/modules/form.js"></script>
+<script src="application/modules/comunMensajes.js"></script>
+<script src="application/modules/comunConstantes.js"></script>
 
 </body>
 

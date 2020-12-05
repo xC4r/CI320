@@ -24,16 +24,23 @@ class Main extends CI_Controller
     }
 
     public function main_apli(){
-        //$modu = $this->input->post('modu');
         $post = json_decode(file_get_contents('php://input'),true);
         $modu = $post['modu'];
-        echo $this->load->view($modu.'/view','',true);
+        $html = $this->load->view($modu.'/view','',true);
+        $html .= $this->load->view('comunForms','',true);
         $js_path = rtrim("application/modules/".$modu."/assets", '/');
         $js_files = glob("{".$js_path."/*.js}", GLOB_BRACE);
         for($i = 0; $i < count($js_files); $i++){
-            echo "<script src='".$js_files[$i]."'></script>";
+            $html .= '<script src="'.$js_files[$i].'"></script>';
         }
+        echo $html;
+    }
+    public function main_script(){
+        $json = array('js' => array());
+        $post = json_decode(file_get_contents('php://input'),true);
+        $modu = $post['modu'];
         
+        echo json_encode($json);
     }
     public function main_menu(){
         $json = array('menu' => array(), 'mensaje' => '');
