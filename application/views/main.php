@@ -11,7 +11,7 @@
     <link href="assets/libs/icon.ico" rel="icon">
     <link href="assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom Fonts --> 
-    <link href="assets/libs/font-awesome/css/all.min.css" rel="stylesheet">
+    <link href="assets/libs/font-awesome/css/font-awesome.min.css" rel="stylesheet" >
     <!-- Custom CSS -->
     <link href="assets/libs/custom.css" rel="stylesheet">
 </head>
