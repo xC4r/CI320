@@ -81,7 +81,7 @@ function admi_apro_prog_tabl_load(){
             }
         }, "json")
     .fail(function (xhr, textStatus, errorThrown) {
-        main_erro("admi_apro_prog_prog()", admi_apro_prog_nomb_cont + "admi_prog_list", xhr.responseText, jQuery("#codi_usua").html())
+        main_erro("admi_apro_prog_prog()", admi_apro_prog_nomb_cont + "admi_prog_list", xhr.responseText, jQuery("#codUser").html())
         jQuery("#admi_apro_prog_lbl_mens").html('* SU MENSAJE DE ERROR A SIDO ENVIADO A SISTEMAS.');
     });
 }

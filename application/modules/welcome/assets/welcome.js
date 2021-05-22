@@ -1,12 +1,12 @@
 ///* FUNTIONS SECTION  */
-function load_menu(menu_item,hash) {
+function load_menu(menuItem,hash) {
     var html = $('<li/>');
     html.addClass('list-group-item');
     html.append($('<a/>',{ href:'#'}));
-    html.find(' a').append($('<t/>',{ text:' '+menu_item.nomb_apli}));
-    html.find(' a').attr('name',menu_item.codi_apli);
-    html.find(' a').prepend($('<i/>',{ class: menu_item.icon_apli}));
-    if (menu_item.subm_apli) {
+    html.find(' a').append($('<t/>',{ text:' '+menuItem.nomb_apli}));
+    html.find(' a').attr('name',menuItem.codi_apli);
+    html.find(' a').prepend($('<i/>',{ class: menuItem.icon_apli}));
+    if (menuItem.subm_apli) {
         hash ++;
         html.find(' a').addClass('collapsed').attr('data-target','#sub'+hash.toString()).attr('data-toggle','collapse').attr('aria-expanded',false).attr('role','button');
         html.find(' a').append($('<span/>',{class:'fa arrow mr-3'}));
@@ -14,7 +14,7 @@ function load_menu(menu_item,hash) {
         //sub.addClass('list-group-item');
         sub.addClass('collapse');
 
-        $.each(menu_item.subm_apli, function () {
+        $.each(menuItem.subm_apli, function () {
             sub.append(load_menu(this,hash));
         });
         html.append(sub);
@@ -119,7 +119,7 @@ function load_select(json,dataselect,datafields) {
     }
 }
 
-function snack_alert(message,type) {
+function snackAlert(message,type) {
     var div = document.getElementById('toast');
     if(div !== null){
         var snack = document.createElement("div");
@@ -179,7 +179,7 @@ function snack_alert(message,type) {
     }
 }
 
-function form_alert_show(form,message) {
+function formAlertShow(form,message) {
     var div = document.getElementById(form).getElementsByClassName('invalid-feedback');
     if(div !== null &&  div.length!==0){
         div[0].innerHTML = message;
@@ -187,7 +187,7 @@ function form_alert_show(form,message) {
     }  
 }
 
-function form_alert_remove(form) {
+function formAlertRemove(form) {
     var div = document.getElementById(form).getElementsByClassName('invalid-feedback');
     if(div !== null && div.length!==0){
         div[0].innerHTML = '';
@@ -195,7 +195,7 @@ function form_alert_remove(form) {
     }  
 }
 
-function form_check_valid(form) {
+function formCheckValid(form) {
     var div = document.getElementById(form).getElementsByClassName('form-check-input');
     if(div !== null &&  div.length!==0){
         return div[0].checked;
@@ -214,10 +214,10 @@ function export_table_to_csv(table, filename) {
         csv.push(row.join(","));        
     }
     // Download CSV
-    download_csv(csv.join("\n"), filename);
+    downloadCSV(csv.join("\n"), filename);
 }
 
-function download_csv(csv, filename) {
+function downloadCSV(csv, filename) {
     var csvFile;
     var downloadLink;
     // CSV FILE

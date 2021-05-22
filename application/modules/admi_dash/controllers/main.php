@@ -5,13 +5,13 @@ ini_set('memory_limit', '-1');
 set_time_limit(0);
 
 class Main extends MX_Controller {
-    private $codi_usua;
-    private $nomb_usua;
+    private $codUser;
+    private $desUser;
     public function __construct() {
         parent::__construct();
-        $this->codi_usua = $this->session->userdata('codi_usua'); 
-        $this->nomb_usua = $this->session->userdata('nomb_usua');
-        if ($this->codi_usua == "") {
+        $this->codUser = $this->session->userdata('codUser'); 
+        $this->desUser = $this->session->userdata('desUser');
+        if ($this->codUser == "") {
             header('location: login');
         }
     }

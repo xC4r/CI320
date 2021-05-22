@@ -20,34 +20,34 @@ class Syst extends CI_Model {
     }
     function user_data($data){
     	$id_usua = $data['id_usua'];
-        //$codi_usua = $data['codi_usua'];
+        //$codUser = $data['codUser'];
         $query  = "SELECT * FROM master_user WHERE id_user='$id_usua' ";        
         $stm = $this->db->query($query);
         return $stm->result();
     }
-    function user_codi($codi_usua){
-        $query  = "SELECT id_user FROM master_user WHERE codi_usua='$codi_usua' ";        
+    function user_codi($codUser){
+        $query  = "SELECT id_user FROM master_user WHERE codUser='$codUser' ";        
         $stm = $this->db->query($query);
         return $stm->result();
     }
-    function user_docu($docu_usua){
-        $query  = "SELECT id_user FROM master_user WHERE docu_usua='$docu_usua' ";        
+    function user_docu($numDoc){
+        $query  = "SELECT id_user FROM master_user WHERE numDoc='$numDoc' ";        
         $stm = $this->db->query($query);
         return $stm->result();
     }
     function user_upda($data,$id_usua){
-        //$codi_usua = $data['codi_usua'];
+        //$codUser = $data['codUser'];
         $pass_usua = $data['pass_usua'];
         $mail_usua = $data['mail_usua'];
-        $nomb_usua = $data['nomb_usua'];
+        $desUser = $data['desUser'];
         $apel_usua = $data['apel_usua'];
-        $docu_usua = $data['docu_usua'];
+        $numDoc = $data['numDoc'];
         $role_usua = $data['role_usua'];
         $codi_empr = $data['codi_empr'];
         $esta_usua = $data['esta_usua'];
         $user_acti = $data['user_acti'];
         $query  = "UPDATE master_user SET pass_usua='$pass_usua',mail_usua='$mail_usua',
-                    nomb_usua='$nomb_usua',apel_usua='$apel_usua',docu_usua='$docu_usua', 
+                    desUser='$desUser',apel_usua='$apel_usua',numDoc='$numDoc', 
                     role_usua='$role_usua',codi_empr='$codi_empr',esta_usua='$esta_usua',
                     user_acti='$user_acti' 
                     WHERE id_user='$id_usua' ";
@@ -55,20 +55,20 @@ class Syst extends CI_Model {
         return $stm;
     }
     function user_save($data){
-        $codi_usua = $data['codi_usua'];
+        $codUser = $data['codUser'];
         $pass_usua = $data['pass_usua'];
         $mail_usua = $data['mail_usua'];
-        $nomb_usua = $data['nomb_usua'];
+        $desUser = $data['desUser'];
         $apel_usua = $data['apel_usua'];
-        $docu_usua = $data['docu_usua'];
+        $numDoc = $data['numDoc'];
         $role_usua = $data['role_usua'];
         $codi_empr = $data['codi_empr'];
         $esta_usua = $data['esta_usua'];
         $user_acti = $data['user_acti'];
-        $query  = "INSERT INTO master_user(codi_usua,pass_usua,mail_usua,nomb_usua,apel_usua,
-                                           docu_usua,role_usua,codi_empr,esta_usua,user_acti) 
-                   VALUES ('$codi_usua','$pass_usua','$mail_usua','$nomb_usua','$apel_usua',
-                           '$docu_usua','$role_usua','$codi_empr','$esta_usua','$user_acti') ";        
+        $query  = "INSERT INTO master_user(codUser,pass_usua,mail_usua,desUser,apel_usua,
+                                           numDoc,role_usua,codi_empr,esta_usua,user_acti) 
+                   VALUES ('$codUser','$pass_usua','$mail_usua','$desUser','$apel_usua',
+                           '$numDoc','$role_usua','$codi_empr','$esta_usua','$user_acti') ";        
         $stm = $this->db->query($query);
         return $stm;
     }

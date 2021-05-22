@@ -15,7 +15,7 @@ class Auth
         $key = $this->getSecretKey();
 		$payload = [
 			'iat' => $time,
-			'exp' => $time + (60),
+			'exp' => $time + (18000),
 			'data' => $data
 		];
 		$token = JWT::encode($payload, $key);//Codificamos el Token

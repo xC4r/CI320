@@ -123,14 +123,14 @@ class CI_Pagination {
 	 *
 	 * @var	string
 	 */
-	protected $next_link = '&gt;';
+	protected $next-link = '&gt;';
 
 	/**
 	 * Previous link
 	 *
 	 * @var	string
 	 */
-	protected $prev_link = '&lt;';
+	protected $prev-link = '&lt;';
 
 	/**
 	 * Last link
@@ -331,7 +331,7 @@ class CI_Pagination {
 	{
 		$this->CI =& get_instance();
 		$this->CI->load->language('pagination');
-		foreach (array('first_link', 'next_link', 'prev_link', 'last_link') as $key)
+		foreach (array('first_link', 'next-link', 'prev-link', 'last_link') as $key)
 		{
 			if (($val = $this->CI->lang->line('pagination_'.$key)) !== FALSE)
 			{
@@ -574,7 +574,7 @@ class CI_Pagination {
 		}
 
 		// Render the "Previous" link.
-		if ($this->prev_link !== FALSE && $this->cur_page !== 1)
+		if ($this->prev-link !== FALSE && $this->cur_page !== 1)
 		{
 			$i = ($this->use_page_numbers) ? $uri_page_number - 1 : $uri_page_number - $this->per_page;
 
@@ -584,13 +584,13 @@ class CI_Pagination {
 			{
 				// First page
 				$output .= $this->prev_tag_open.'<a href="'.$first_url.'"'.$attributes.$this->_attr_rel('prev').'>'
-					.$this->prev_link.'</a>'.$this->prev_tag_close;
+					.$this->prev-link.'</a>'.$this->prev_tag_close;
 			}
 			else
 			{
 				$append = $this->prefix.$i.$this->suffix;
 				$output .= $this->prev_tag_open.'<a href="'.$base_url.$append.'"'.$attributes.$this->_attr_rel('prev').'>'
-					.$this->prev_link.'</a>'.$this->prev_tag_close;
+					.$this->prev-link.'</a>'.$this->prev_tag_close;
 			}
 
 		}
@@ -629,14 +629,14 @@ class CI_Pagination {
 		}
 
 		// Render the "next" link
-		if ($this->next_link !== FALSE && $this->cur_page < $num_pages)
+		if ($this->next-link !== FALSE && $this->cur_page < $num_pages)
 		{
 			$i = ($this->use_page_numbers) ? $this->cur_page + 1 : $this->cur_page * $this->per_page;
 
 			$attributes = sprintf('%s %s="%d"', $this->_attributes, $this->data_page_attr, $this->cur_page + 1);
 
 			$output .= $this->next_tag_open.'<a href="'.$base_url.$this->prefix.$i.$this->suffix.'"'.$attributes
-				.$this->_attr_rel('next').'>'.$this->next_link.'</a>'.$this->next_tag_close;
+				.$this->_attr_rel('next').'>'.$this->next-link.'</a>'.$this->next_tag_close;
 		}
 
 		// Render the "Last" link

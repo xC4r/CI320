@@ -27,7 +27,7 @@
                 <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Perfil</a>
                 <a class="dropdown-item" href="#"><i class="fa fa-cog"></i> Ajustes</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="login/sesi_sali"><i class="fa fa-sign-out-alt"></i> Salir</a>
+                <a class="dropdown-item" href="login/logout"><i class="fa fa-sign-out-alt"></i> Salir</a>
               </div>
             </div>
         </div> 

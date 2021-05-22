@@ -24,9 +24,9 @@
         <div class="card">
           <div class="card-body collapse show p-3"> 
             <h4 class="card-title mb-3">Usuarios</h4>
+
             <div class="tab-content mb-3">
               <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
-
                 <div class="form-row">
                   <div class="col-md-6 mb-2"> 
                     <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus"></i></button>
@@ -36,12 +36,12 @@
                       <input type="text" class="form-control rounded" placeholder="Buscar" aria-label="Buscar" id="txtBuscar">
                       <button type="button" class="btn btn-secondary ml-1"><i class="fa fa-search" id="btnBuscar"></i></button>
                       <button type="button" class="btn btn-success ml-1" id="btnExport">CSV</button>
-                      <button type="button" class="btn btn-info ml-1" id="btnReload"><i class="fa fa-sync-alt"></i></button>
+                      <button type="button" class="btn btn-info ml-1" id="btnReload"><i class="fa fa-refresh"></i></button>
                     </div>
                   </div>
                 </div>
 
-                <div class="datatable" id="tablaUsuario">
+                <div class="datatable" id="tabUsuario">
                 </div>
 
               </div>
@@ -127,6 +127,7 @@
                 </div>
               </div>
             </div>
+
           </div>                 
         </div>
       </div>

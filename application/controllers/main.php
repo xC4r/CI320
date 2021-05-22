@@ -5,50 +5,47 @@ ini_set('memory_limit', '-1');
 set_time_limit(0);
 
 class Main extends CI_Controller
-{   private $codi_usua;
-    private $nomb_usua;
+{   //private $codUser;
+    //private $desUser;
     function __construct(){
         parent::__construct();
         $this->load->helper('constants_helper');
         $this->load->helper('functions_helper');
-        $this->codi_usua = $this->session->userdata('codi_usua'); 
-        $this->nomb_usua = $this->session->userdata('nomb_usua');
-        if ($this->codi_usua == "") {
+        $this->codUser = $this->session->userdata('codUser'); 
+        $this->desUser = $this->session->userdata('desUser');
+        if ($this->codUser == "") {
             header('location: login');
-            //redirect('../login', 'refresh');
         }
     }
-
     public function index() {    
         $this->load->view('main');
     }
-
-    public function main_apli(){
-        $post = json_decode(file_get_contents('php://input'),true);
-        $modu = $post['modu'];
-        $html = $this->load->view($modu.'/view','',true);
-        $html .= $this->load->view('comunForms','',true);
-        $js_path = rtrim("application/modules/".$modu."/assets", '/');
-        $js_files = glob("{".$js_path."/*.js}", GLOB_BRACE);
-        for($i = 0; $i < count($js_files); $i++){
-            $html .= '<script src="'.$js_files[$i].'"></script>';
+    public function modulo(){
+        //$post = json_decode(file_get_contents('php://input'),true);
+        //$modu = $post['mod'];
+        $modu = $this->input->get('mod', TRUE); 
+        $query = $this->db->get_where('syst_asignamod', array('cod_usuario' => $this->codUser,'cod_ruta' => $modu));
+        $html;
+        if($query->num_rows() > 0){
+            $html = $this->load->view($modu.'/view','',true);
+            $html .= $this->load->view('comunForms','',true);
+            $jsPath = rtrim("application/modules/".$modu."/assets", '/');
+            $jsFiles = glob("{".$jsPath."/*.js}", GLOB_BRACE);
+            for($i = 0; $i < count($jsFiles); $i++){
+                $html .= '<script src="'.$jsFiles[$i].'"></script>';
+            }
+        }else{
+            $html = 'No     ';
         }
         echo $html;
     }
-    public function main_script(){
-        $json = array('js' => array());
-        $post = json_decode(file_get_contents('php://input'),true);
-        $modu = $post['modu'];
-        
-        echo json_encode($json);
-    }
-    public function main_menu(){
+    public function menu(){
         $json = array('menu' => array(), 'mensaje' => '');
-        if($this->codi_usua ==''){
+        if($this->codUser ==''){
             $json['mensaje']= 'No hay usuario de session';
         }else{
-            $asignados = $this->db->get_where('syst_asignamod', array('cod_usuario' => $this->codi_usua,'ind_del'=>REGISTRO_NO_ELIMINADO));
-            $list_menu = [];
+            $asignados = $this->db->get_where('syst_asignamod', array('cod_usuario' => $this->codUser,'ind_del'=>REGISTRO_NO_ELIMINADO));
+            $listMenu = [];
             foreach( $asignados->result_array() as $row ){
                 $code = explode('_',$row['cod_ruta']);
                 $modulo;
@@ -58,13 +55,13 @@ class Main extends CI_Controller
                     }else{
                         $modulo = $modulo.'_'.$code[$i];
                     }
-                    $list_menu[] = $modulo;
+                    $listMenu[] = $modulo;
                 }
             }
 
             $this->db->select('*');
             $this->db->from('sysm_navmenu');
-            $this->db->where_in('cod_menu',$list_menu);
+            $this->db->where_in('cod_menu',$listMenu);
             $this->db->order_by('cod_menu');
             $result = $this->db->get();
             $data = $result->result_array();
@@ -143,7 +140,6 @@ class Main extends CI_Controller
                     }
                 }
             }
-
         }            
         echo json_encode($json);
     }

@@ -1,5 +1,5 @@
 
-function snack_alert(message,type) {
+function snackAlert(message,type) {
     var div = document.getElementById('toast');
     if(div !== null){
         var snack = document.createElement("div");
@@ -59,7 +59,7 @@ function snack_alert(message,type) {
     }
 }
 
-function form_alert_show(form,message) {
+function formAlertShow(form,message) {
     var div = document.getElementById(form).getElementsByClassName('invalid-feedback');
     if(div !== null &&  div.length!==0){
         div[0].innerHTML = message;
@@ -67,7 +67,7 @@ function form_alert_show(form,message) {
     }  
 }
 
-function form_alert_remove(form) {
+function formAlertRemove(form) {
     var div = document.getElementById(form).getElementsByClassName('invalid-feedback');
     if(div !== null && div.length!==0){
         div[0].innerHTML = '';
@@ -75,7 +75,7 @@ function form_alert_remove(form) {
     }  
 }
 
-function form_check_valid(form) {
+function formCheckValid(form) {
     var div = document.getElementById(form).getElementsByClassName('form-check-input');
     if(div !== null &&  div.length!==0){
         return div[0].checked;
@@ -84,7 +84,7 @@ function form_check_valid(form) {
     }
 }
 
-function select_load(id,list,value,html){
+function formSelectLoad(id,list,value,html){
     var selectContainer = document.getElementById(id);
     selectContainer.innerHTML = '';
     list.forEach(function(lst) {
