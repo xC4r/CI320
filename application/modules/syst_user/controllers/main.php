@@ -77,27 +77,67 @@ class Main extends MX_Controller {
         }
         echo json_encode($json);       
     }
-    public function registroUsuario(){
+    public function actualizarUsuario(){
         $json = array('cod' => '','msg' => '','res' => array());
-        //$post = json_decode(file_get_contents('php://input'),true);
         $post = $this->input->post(NULL, TRUE);
-        //print_r($post);
-        echo $post['txtNombres'];
-        die();
         try {
             $data = array(
-            'cod_usuario' => $post['json']['cod'],
-            'pas_usuario' => $post['json']['pas'],
-            'dir_correo' => $post['json']['eml'],
-            'des_nombre' => $post['json']['nom'],
-            'num_documento' => $post['json']['doc'],
-            'num_empresa' => $post['json']['emp'],
-            'num_rol' => $post['json']['rol'],
-            'cod_estado' => $post['json']['est']
+            'pas_usuario' => $post['txtPassword'],
+            'dir_correo' => $post['txtCorreo'],
+            'des_nombre' => $post['txtNombres'],
+            'num_documento' => $post['txtDocumento'],
+            'num_empresa' => $post['txtEmpresa'],
+            'num_rol' => $post['txtRol'],
+            'cod_estado' => $post['txtEstado']
             );
+            if($this->codUser == 'usuario_maestro'|| $this->codUser == $post['txtUsuario']){
+                $this->db->where('num_documento',$post['txtDocumento'])
+                $this->db->where_not_in('cod_usuario',$post['txtUsuario']);
+                $query = $this->db->get('sysm_usuario');
+                $findDoc = [];
+                foreach( $query->result_array() as $row ){$findDoc[] = $row;}
+                if(count($findDoc>0){
+                    $json['cod'] = 204;
+                    $json['msg'] = 'El documento ya se encuentra en uso';
+                }else{
+                    $this->db->where('cod_usuario', $post['txtUsuario']);
+                    $this->db->update('sysm_usuario', $data);
+                    $json['res']['lstUser'] = $this->listaUsuario($post['txt']);
+                    $json['cod'] = 200;
+                    $json['msg'] = 'Ok';
+                }
+            }else{
+                $json['cod'] = 204;
+                $json['msg'] = 'No autorizado';
+            }
+        } catch (Exception $e) {
+            $json['cod'] = 204;
+            $json['msg'] = 'Excepción capturada: '.$e->getMessage()."\n";
+        }
+        echo json_encode($json);
+    }
+
+    public function registroUsuario(){
+        $json = array('cod' => '','msg' => '','res' => array());
+        $post = $this->input->post(NULL, TRUE);
+        //print_r($post);
+        //echo $post['txtNombres'];
+        try {
+            $data = array(
+            'cod_usuario' => $post['txtUsuario'],
+            'pas_usuario' => $post['txtPassword'],
+            'dir_correo' => $post['txtCorreo'],
+            'des_nombre' => $post['txtNombres'],
+            'num_documento' => $post['txtDocumento'],
+            'num_empresa' => $post['txtEmpresa'],
+            'num_rol' => $post['txtRol'],
+            'cod_estado' => $post['txtEstado']
+            );
+            /*
             if($post['json']['num']){
                 $data['num_usuario'] = $post['json']['num'];
             }
+            */
             $this->db->replace('sysm_usuario',$data);
             $json['res']['lstUser'] = $this->listaUsuario($post['txt']);
             $json['cod'] = 200;
@@ -107,8 +147,8 @@ class Main extends MX_Controller {
             $json['msg'] = 'Excepción capturada: '.$e->getMessage()."\n";
         }
         echo json_encode($json);
-
     }
+
     public function desactivarUsuario(){
         $json = array('cod' => '','msg' => '','res' => array());
         $post = json_decode(file_get_contents('php://input'),true);

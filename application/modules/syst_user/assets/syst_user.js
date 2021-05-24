@@ -77,27 +77,15 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	$(progressForm).modal('show');
 	var accion = document.getElementById(confirmForm).getAttribute('accion');
 	var txt = document.getElementById('tabUsuario').getAttribute('data');
-	if(accion =='registrar'||accion == 'modificar'){  //Accion registrar - modificar
+	if(accion =='registrar'){  //Accion registrar
 		$('#addModal').modal('hide');
-		/*
-		var json = {
-			'num': document.getElementById('txtUsuario').getAttribute('num'),
-			'nom': document.getElementById('txtNombres').value,
-			'doc': document.getElementById('txtDocumento').value,
-			'eml': document.getElementById('txtCorreo').value,
-			'cod': document.getElementById('txtUsuario').value,
-			'pas': document.getElementById('txtPassword').value,
-			'emp': document.getElementById('txtEmpresa').value,
-			'rol': document.getElementById('txtRol').value,
-			'est': document.getElementById('txtEstado').value
-		}
-		*/
 		var formData = new FormData(document.getElementById('formRegistro'));
 		let count=0;
 		for (var val of formData.values()) {
 		   count++;
 		}
-		//console.log(count);
+		formData.append('txt',txt);
+		/*
 		if(count>0){
 			fetchPost(ruta +'registroUsuario',formData).then(json => {
 		        if(json.cod == 200){
@@ -106,6 +94,26 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 		        	}else{
 		        		snackAlert('Registro modificado satisfactoriamente','warning');
 		        	}
+		        	cargarListaUsuario(json.res.lstUser,'tabUsuario',txt);
+		        }else{
+		            snackAlert(json.msg,'danger');
+		        }
+			});
+
+		}else{
+		  	snackAlert('No hay datos para registrar','warning');
+		} */
+	}else if(accion == 'modificar'){
+		$('#addModal').modal('hide');
+		var formData = new FormData(document.getElementById('formRegistro'));
+		let count=0;
+		for (var val of formData.values()) {
+		   count++;
+		}
+		formData.append('txt',txt);
+		if(count>0){
+			fetchPost(ruta +'actualizarUsuario',formData).then(json => {
+		        if(json.cod == 200){
 		        	cargarListaUsuario(json.res.lstUser,'tabUsuario',txt);
 		        }else{
 		            snackAlert(json.msg,'danger');
@@ -140,6 +148,8 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 		}else{
 		  	snackAlert('No hay registro para eliminar','warning');
 		}
+	}else{
+		snackAlert('No hay accion para ejecutar');
 	}
 	$($confirmForm).modal('hide');
 	setTimeout(function(){ $(progressForm).modal('hide'); }, 500);
