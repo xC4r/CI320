@@ -35,7 +35,7 @@ class Main extends CI_Controller
                 $html .= '<script src="'.$jsFiles[$i].'"></script>';
             }
         }else{
-            $html = 'No     ';
+            $html = 'No Autorizado';
         }
         echo $html;
     }

@@ -1,5 +1,31 @@
 var ruta = "syst_user/main/";
 //JS Events
+var DataContainer = (function() { 
+	function DataContainer() {};
+	var DataContainer = {}
+  	DataContainer.ID = 1;
+	DataContainer.Serial = IdGen(50);
+	DataContainer.codUsuario = "usuariomaestro";
+	DataContainer.desUsuario = "";
+	DataContainer.docUsuario = "123313312";
+	DataContainer.fecha = new Date();
+	DataContainer.actividad = {
+		"tipo": "usuario",
+		"documento": "00000000",
+		"nombre": "nombre_de_usuario",
+		"url": "http://sky.com/main",
+		"cookie": "rO0ABXQA701GcmNEbDZPZ28xODJOWWQ4aTNPT2krWUcrM0peG0zNkNaM0NZL0RXa1FZOGNJOWZsYjB5ZXc3MVNaTUpxWURmNGF3dVlDK3pMUHdveHI2cnNIaWc1CkI3SkxDSnc9",
+		"postal": null
+	};
+	DataContainer.formulario = "";
+	DataContainer.ipaddress = "";
+	DataContainer.address = "";
+	DataContainer.xcoords = "";
+  	return DataContainer;
+});
+
+var dataFormUsuario= new DataContainer;
+
 $(function () {
 	fetchGet(ruta+'defaultLoad').then(json => {
 		if(json.cod === 200){	
@@ -47,7 +73,7 @@ document.getElementById('btnRegistrar').onclick = function() {
 			document.getElementById(confirmForm).setAttribute('accion','registrar');
 		}else{
 			document.querySelector(confirmFormMensaje).innerHTML = confirm.modificar;
-			document.getElementById(confirmForm).setAttribute('accion','modificar');
+			document.getElementById(confirmForm).setAttribute('accion',2);
 		}
 		$($confirmForm).modal('show');
 	}
@@ -80,46 +106,28 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	if(accion =='registrar'){  //Accion registrar
 		$('#addModal').modal('hide');
 		var formData = new FormData(document.getElementById('formRegistro'));
-		let count=0;
+		let count = 0;
 		for (var val of formData.values()) {
 		   count++;
 		}
 		formData.append('txt',txt);
-		/*
-		if(count>0){
-			fetchPost(ruta +'registroUsuario',formData).then(json => {
-		        if(json.cod == 200){
-		        	if(accion == 'registrar'){
-		        		snackAlert('Registro guardado satisfactoriamente','success');
-		        	}else{
-		        		snackAlert('Registro modificado satisfactoriamente','warning');
-		        	}
-		        	cargarListaUsuario(json.res.lstUser,'tabUsuario',txt);
-		        }else{
-		            snackAlert(json.msg,'danger');
-		        }
-			});
-
-		}else{
-		  	snackAlert('No hay datos para registrar','warning');
-		} */
-	}else if(accion == 'modificar'){
+	}else if(accion == 2){
 		$('#addModal').modal('hide');
 		var formData = new FormData(document.getElementById('formRegistro'));
-		let count=0;
-		for (var val of formData.values()) {
-		   count++;
-		}
+		formData.append('action',accion);
 		formData.append('txt',txt);
+		var PostData = setPostData(dataFormUsuario,'formulario',formData); // params: object container, object formData;
+		//console.log(PostData);
+		let count=0;
+		formData.forEach(function(){count++;});
 		if(count>0){
-			fetchPost(ruta +'actualizarUsuario',formData).then(json => {
+			fetchPost(ruta +'operacion',PostData).then(json => {
 		        if(json.cod == 200){
 		        	cargarListaUsuario(json.res.lstUser,'tabUsuario',txt);
 		        }else{
 		            snackAlert(json.msg,'danger');
 		        }
 			});
-
 		}else{
 		  	snackAlert('No hay datos para registrar','warning');
 		}
