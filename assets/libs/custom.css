@@ -6,6 +6,9 @@ body{
   background-color: #F8F8F8;
 }
 
+input.password {
+  -webkit-text-security: disc;
+}
 .sidebar{
   width: 100%;
   height:100%;

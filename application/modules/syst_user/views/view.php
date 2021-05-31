@@ -89,8 +89,14 @@
                         </div>
                         <div class="col-md-3 mb-3">
                           <label for="txtPassword">Password</label>
-                          <input type="password" class="form-control" id="txtPassword" name="txtPassword" aria-describedby="password-error" autocomplete="new-password" required>
+                          <div class="input-group">
+                            <input type="text" class="form-control password" id="txtPassword" name="txtPassword" aria-describedby="password-error" autocomplete="new-password" required>
+                            <div class="input-group-append"><span class="input-group-text"><i class="fa fa-eye-slash"></i></span></div>
+                          </div>
                         </div>
+
+                        <div class="input-group" id="show_hide_password">
+
                       </div>
                       <div class="form-row">
                         <div class="col-md-6 mb-3">

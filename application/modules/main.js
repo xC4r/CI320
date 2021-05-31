@@ -8,6 +8,14 @@ $('#side-menu').on('click','.item-menu', function(){
     $('#sidebar-collapse').collapse('hide');
     return false;
 });
+$(document).on('click','.fa-eye-slash',function(){
+    var input = ((($(this).parent()).parent()).parent()).find('input');
+    if(input.hasClass('password')){
+        input.removeClass('password');
+    }else{
+        input.addClass('password');
+    }
+});
 
 fetchGet('main/menu').then(json => {
     if(json.mensaje == ""){

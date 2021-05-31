@@ -1,5 +1,6 @@
 var ruta = "syst_user/main/";
 //JS Events
+var localData;
 var DataContainer = (function() { 
 	function DataContainer() {};
 	var DataContainer = {}
@@ -29,9 +30,8 @@ var dataFormUsuario= new DataContainer;
 $(function () {
 	fetchGet(ruta+'defaultLoad').then(json => {
 		if(json.cod === 200){	
-			var localData = {};
+			//localStorage.setItem("localData", JSON.stringify(localData));
 			localData = json.res;
-			localStorage.setItem("localData", JSON.stringify(localData));
 			cargarListaUsuario(json.res.lstUser,'tabUsuario');
 			formSelectLoad('txtEmpresa',json.res.lstEmpresa,'num','des');
 			formSelectLoad('txtRol',json.res.lstRol,'num','des');
@@ -68,12 +68,12 @@ document.getElementById('formRegistro').onsubmit = function(e) {
 
 document.getElementById('btnRegistrar').onclick = function() {
 	if(document.getElementById('formRegistro').checkValidity()){
-		if(document.getElementById('txtUsuario').getAttribute('num') === null ){
-			document.querySelector(confirmFormMensaje).innerHTML = confirm.guardar;
-			document.getElementById(confirmForm).setAttribute('accion','registrar');
+		if(!document.getElementById('txtUsuario').hasAttribute('ind')){
+			document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.guardar;
+			document.getElementById(confirmForm).setAttribute('act',1);
 		}else{
-			document.querySelector(confirmFormMensaje).innerHTML = confirm.modificar;
-			document.getElementById(confirmForm).setAttribute('accion',2);
+			document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.modificar;
+			document.getElementById(confirmForm).setAttribute('act',2);
 		}
 		$($confirmForm).modal('show');
 	}
@@ -84,7 +84,7 @@ $('#addModal').on('hidden.bs.modal', function () {
 	document.getElementById("txtEmpresa").selectedIndex = '-1';
 	document.getElementById("txtRol").selectedIndex = '-1';
 	document.getElementById("txtEstado").selectedIndex = '-1';
-	document.getElementById('txtUsuario').removeAttribute('num');
+	document.getElementById('txtUsuario').removeAttribute('ind');
 });
 
 $($confirmForm).on('show.bs.modal', function () {
@@ -93,87 +93,59 @@ $($confirmForm).on('show.bs.modal', function () {
 
 $($confirmForm).on('hide.bs.modal', function () {
 	document.getElementById("addModal").classList.add("show");
-	this.removeAttribute('accion');
-	this.removeAttribute('del');
-	this.removeAttribute('doc');
+	this.removeAttribute('act');
 	this.querySelector('div div div.modal-body').innerHTML = '';
 });
 
 document.querySelector(confirmFormAceptar).onclick = function() {
 	$(progressForm).modal('show');
-	var accion = document.getElementById(confirmForm).getAttribute('accion');
+	var act = document.getElementById(confirmForm).getAttribute('act');
 	var txt = document.getElementById('tabUsuario').getAttribute('data');
-	if(accion =='registrar'){  //Accion registrar
-		$('#addModal').modal('hide');
-		var formData = new FormData(document.getElementById('formRegistro'));
-		let count = 0;
-		for (var val of formData.values()) {
-		   count++;
-		}
-		formData.append('txt',txt);
-	}else if(accion == 2){
-		$('#addModal').modal('hide');
-		var formData = new FormData(document.getElementById('formRegistro'));
-		formData.append('action',accion);
-		formData.append('txt',txt);
-		var PostData = setPostData(dataFormUsuario,'formulario',formData); // params: object container, object formData;
-		//console.log(PostData);
-		let count=0;
-		formData.forEach(function(){count++;});
-		if(count>0){
-			fetchPost(ruta +'operacion',PostData).then(json => {
-		        if(json.cod == 200){
-		        	cargarListaUsuario(json.res.lstUser,'tabUsuario',txt);
-		        }else{
-		            snackAlert(json.msg,'danger');
-		        }
-			});
-		}else{
-		  	snackAlert('No hay datos para registrar','warning');
-		}
-	}else if(accion == 'eliminar'){  //Accion eliminar
-		var del = document.getElementById(confirmForm).getAttribute('del');
-		var doc = document.getElementById(confirmForm).getAttribute('doc');
-		if(del !== null && doc !== null){
-			fetch(ruta +'desactivarUsuario',{
-		        method: 'POST',
-		        body: JSON.stringify({'del': del,'doc': doc,'txt':txt}),
-		        headers:{
-		            'Content-Type':'application/json'
-		        },
-		        cache:'no-cache'
-		    })
-		    .then(response => response.json())
-		    .then(json => {
-		        if(json.cod == 200){
-		        	snackAlert('Registro eliminado satisfactoriamente','danger');
-		        	cargarListaUsuario(json.res.lstUser,'tabUsuario',txt);
-		        }else{
-		            snackAlert(json.msg,'danger');
-		        }
-		    })
-		    .catch(error => {console.log('Error:'+ error)});
-		}else{
-		  	snackAlert('No hay registro para eliminar','warning');
-		}
+	$('#addModal').modal('hide');
+	var msg;
+	if(act == 1){ 
+		msg = msgRespuesta.guardado;
+	}else if(act == 2){
+		msg = msgRespuesta.modificado;
+	}else if(act == 0){  
+		msg = msgRespuesta.eliminado;
 	}else{
 		snackAlert('No hay accion para ejecutar');
 	}
+	var formData = new FormData(document.getElementById('formRegistro'));
+	formData.append('act',act);
+	formData.append('txt',txt);
+	if (act == 0) formData.set('txtUsuario',document.getElementById(confirmForm).getAttribute('cod'));
+	var PostData = setPostData(dataFormUsuario,'formulario',formData); // params: object container, object formData;
+	let count = 0;
+	formData.forEach(function(){count++;});
+	if(count>0){
+		fetchPost(ruta +'operacion',PostData).then(json => {
+			if(json.cod == 200){
+				cargarListaUsuario(json.res.lstUser,'tabUsuario',txt);
+				snackAlert(msg,'success');
+			}else{
+				snackAlert(json.msg,'danger');
+			}
+		});
+	}else{
+		  snackAlert('No hay datos para registrar','warning');
+	}
+
 	$($confirmForm).modal('hide');
 	setTimeout(function(){ $(progressForm).modal('hide'); }, 500);
 }
 //Eventos opciones datatable
 $(document).on('click','#tabUsuario div table tbody tr td button.edit', function() {
-    var num = ((this.parentNode).parentNode).childNodes[1].innerHTML;
-	var data = (JSON.parse(localStorage.getItem("localData"))).lstUser;
-    data.forEach(function(row) {
-    	if(row['num'] == num){
-    		document.getElementById('txtUsuario').setAttribute('num',row['num']);
+    let cod = ((this.parentNode).parentNode).childNodes[1].innerHTML;
+    localData.lstUser.forEach(function(row) {
+    	if(row['cod'] == cod){
     		document.getElementById('txtNombres').value = row['nom'];
     		document.getElementById('txtDocumento').value = row['doc'];
     		document.getElementById('txtCorreo').value = row['eml'];
     		document.getElementById('txtEmpresa').value = row['emp'];
     		document.getElementById('txtUsuario').value = row['cod'];
+			document.getElementById('txtUsuario').setAttribute('ind','');
     		document.getElementById('txtPassword').value = row['pas'];
     		document.getElementById('txtRol').value = row['rol'];
     		document.getElementById('txtEstado').value = row['est'];
@@ -183,12 +155,10 @@ $(document).on('click','#tabUsuario div table tbody tr td button.edit', function
 });
 
 $(document).on('click','#tabUsuario div table tbody tr td button.del', function() { 
-    num = ((this.parentNode).parentNode).childNodes[1].innerHTML;
-    doc = ((this.parentNode).parentNode).childNodes[4].innerHTML;
-    document.getElementById(confirmForm).setAttribute('accion','eliminar');
-    document.getElementById(confirmForm).setAttribute('del',num);
-    document.getElementById(confirmForm).setAttribute('doc',doc);
-    document.querySelector(confirmFormMensaje).innerHTML = confirm.eliminar;
+    let cod = ((this.parentNode).parentNode).childNodes[1].innerHTML;
+	document.getElementById(confirmForm).setAttribute('cod',cod);
+    document.getElementById(confirmForm).setAttribute('act',0);
+    document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.eliminar;
     $($confirmForm).modal('show');
 });
 //Functions
@@ -208,11 +178,8 @@ function listarUsuario(datatable,txt='default'){
 	  	snackAlert('La descripción esta vacia','warning');
 	}
 }
-
 function cargarListaUsuario(lstUser,datatable,txt='default'){
-	localData = JSON.parse(localStorage.getItem('localData'));
-	localData['lstUser'] = lstUser;
-	localStorage.setItem("localData", JSON.stringify(localData));
+	localData.lstUser = lstUser;
 	for (var i = 0; i < lstUser.length; i++) {
 		lstUser[i]['desEmp'] = '';
 		lstUser[i]['desEst'] = '';
@@ -234,7 +201,7 @@ function cargarListaUsuario(lstUser,datatable,txt='default'){
 		});
 	}
 	var datafields = [
-	    {key: 'num', name: '#', type: 'number', hidden: true },
+	    {key: 'cod', name: 'Codigo', type: 'string', hidden: true},
 	    {key: 'nom', name: 'Nombres', type: 'string'},
 	    {key: 'eml', name: 'Correo Electronico', type: 'string'},
 	    {key: 'doc', name: 'Documento Identificación', type: 'string'},
@@ -248,5 +215,5 @@ function cargarListaUsuario(lstUser,datatable,txt='default'){
 	];
 	datatableLoad(lstUser,datatable,datafields,options,true);
 	document.getElementById(datatable).setAttribute('data',txt);
-	tablePagination(datatable,true,5);	//
+	tablePagination(datatable,true,5);
 }

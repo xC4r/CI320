@@ -97,16 +97,14 @@ class Main extends MX_Controller {
             if($post['codUsuario']!=NULL && !empty($post['codUsuario']) && $post['docUsuario']!=NULL && !empty($post['docUsuario']) && !empty($post['formulario']) && $post['formulario']!=NULL){
                 try {
                     $dataArray = json_decode(str_replace('\\','',$post['formulario']), true);
-                    if(isset($dataArray['action'])&&$dataArray['action'] == 1){
-    
+                    if(isset($dataArray['act'])&&$dataArray['act'] == 1){
+                        $json = $this->registrarUsuario($dataArray,$json);
 
+                    }else if(isset($dataArray['act'])&&$dataArray['act'] == 2){
+                        $json = $this->actualizarUsuario($dataArray,$json);
 
-                    }else if(isset($dataArray['action'])&&$dataArray['action'] =='2'){
-                        if($dataArray!=NULL){
-                            $json = $this->actualizarUsuario($dataArray,$json);
-                        }
-                    }else if(isset($dataArray['action'])&&$dataArray['action'] =='0'){
-    
+                    }else if(isset($dataArray['act'])&&$dataArray['act'] == 0){
+                        $json = $this->eliminarUsuario($dataArray,$json);
     
                     }else{
                         $json['cod'] = 204;
@@ -126,37 +124,54 @@ class Main extends MX_Controller {
         }
         echo json_encode($json);
     }
-
-    private function registroUsuario(){
-        $json = array('cod' => '','msg' => '','res' => array());
-        $post = $this->input->post(NULL, TRUE);
-        //print_r($post);
-        //echo $post['txtNombres'];
+    private function registrarUsuario($data,$json){
         try {
-            $data = array(
-            'cod_usuario' => $post['txtUsuario'],
-            'pas_usuario' => $post['txtPassword'],
-            'dir_correo' => $post['txtCorreo'],
-            'des_nombre' => $post['txtNombres'],
-            'num_documento' => $post['txtDocumento'],
-            'num_empresa' => $post['txtEmpresa'],
-            'num_rol' => $post['txtRol'],
-            'cod_estado' => $post['txtEstado']
-            );
-            /*
-            if($post['json']['num']){
-                $data['num_usuario'] = $post['json']['num'];
+            if($this->codUser == 'usuario_maestro'|| $this->codUser == 'supervisor_del_usuario'){
+                $this->db->where('num_documento',$data['txtDocumento']);
+                $this->db->where('cod_usuario',$data['txtUsuario']);
+                $queryPersona = $this->db->get('sysm_usuario');
+                $this->db->where('num_documento',$data['txtDocumento']);
+                $queryDocumento = $this->db->get('sysm_usuario');
+                $this->db->where('cod_usuario',$data['txtUsuario']);
+                $queryUsuario = $this->db->get('sysm_usuario');
+                if($queryPersona->num_rows()>0){
+                    $json['cod'] = 204;
+                    $json['msg'] = 'El usuario y documento ya existen';
+                }else { 
+                    if($queryDocumento->num_rows()>0){
+                        $json['cod'] = 204;
+                        $json['msg'] = 'El documento esta en uso';
+                    }else {
+                        if($queryUsuario->num_rows()>0){
+                            $json['cod'] = 204;
+                            $json['msg'] = 'EL usuario ya existe';
+                        }else {
+                            $insert = array(
+                                'cod_usuario' => $data['txtUsuario'],
+                                'pas_usuario' => $data['txtPassword'],
+                                'dir_correo' => $data['txtCorreo'],
+                                'des_nombre' => $data['txtNombres'],   
+                                'num_documento' => $data['txtDocumento'],
+                                'num_empresa' => $data['txtEmpresa'],
+                                'num_rol' => $data['txtRol'],
+                                'cod_estado' => $data['txtEstado']
+                            );
+                            $this->db->insert('sysm_usuario',$insert);
+                            $json['res']['lstUser'] = $this->listaUsuario($data['txt']);
+                            $json['cod'] = 200;
+                            $json['msg'] = 'Ok';
+                        }
+                    }
+                }    
+            }else{
+                $json['cod'] = 201;
+                $json['msg'] = 'No autorizado';
             }
-            */
-            $this->db->replace('sysm_usuario',$data);
-            $json['res']['lstUser'] = $this->listaUsuario($post['txt']);
-            $json['cod'] = 200;
-            $json['msg'] = 'Ok';
         } catch (Exception $e) {
             $json['cod'] = 204;
             $json['msg'] = 'Excepción capturada: '.$e->getMessage()."\n";
         }
-        echo json_encode($json);
+        return $json;
     }
     private function actualizarUsuario($data,$json){
         try {
@@ -193,19 +208,28 @@ class Main extends MX_Controller {
         }
         return $json;
     }
-    private function desactivarUsuario(){
-        $json = array('cod' => '','msg' => '','res' => array());
-        $post = json_decode(file_get_contents('php://input'),true);
+    private function eliminarUsuario($data,$json){
         try {
-            $this->db->update('sysm_usuario', array('ind_del' => 1), array('num_usuario' => $post['del'],'num_documento'=>$post['doc']));
-            $json['res']['lstUser'] = $this->listaUsuario($post['txt']);
-            $json['cod'] = 200;
-            $json['msg'] = 'Ok';
+            if($this->codUser == 'usuario_maestro'|| $this->codUser == 'supervisor_del_usuario'){
+                $eliminar = array(
+                    'num_empresa' => '1',
+                    'cod_estado' => '02',
+                    'ind_del' => '1'
+                );
+                $this->db->where('cod_usuario', $data['txtUsuario']);
+                $this->db->update('sysm_usuario', $eliminar);
+                $json['res']['lstUser'] = $this->listaUsuario($data['txt']);
+                $json['cod'] = 200;
+                $json['msg'] = 'Ok';
+            }else{
+                $json['cod'] = 201;
+                $json['msg'] = 'No autorizado';
+            }
         } catch (Exception $e) {
             $json['cod'] = 204;
             $json['msg'] = 'Excepción capturada: '.$e->getMessage()."\n";
         }
-        echo json_encode($json);
+        return $json;
     }
     private function listaUsuario($text='default') {     
         if($text == 'default'){
@@ -231,7 +255,7 @@ class Main extends MX_Controller {
         if(count($data)>0){
             foreach( $data as $row ) {
                 $item = array(
-                    'num' => mb_strtolower(trim($row['num_usuario']),'UTF-8'),
+                    //'num' => mb_strtolower(trim($row['num_usuario']),'UTF-8'),
                     'cod' => mb_strtolower(trim($row['cod_usuario']),'UTF-8'),
                     'pas' => trim($row['pas_usuario']),
                     'eml' => mb_strtolower(trim($row['dir_correo']),'UTF-8'),
@@ -290,27 +314,5 @@ class Main extends MX_Controller {
         }        
         return $array;
     }
-    /*
-    public function validar_numeros($cadena){
-        $caracteres = "0123456789"; 
-        $validez = 1; 
-        for ($i=0; $i<=strlen($cadena)-1; $i++) { 
-            if (strpos($caracteres,substr($cadena,$i,1))===false) {
-                $validez = 0;
-            } 
-        }
-        return $validez;    
-    } 
-    public function validar_array($array){
-        $validez = 1; 
-        for ($i=0; $i<count($array); $i++) {
-            $keys = array_keys($array);
-            if ($array[$keys[$i]]=="") {
-                $validez = 0;
-            } 
-        }
-        return $validez;    
-    }
-    */
     
 }
