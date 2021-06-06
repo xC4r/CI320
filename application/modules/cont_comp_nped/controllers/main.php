@@ -43,7 +43,7 @@ class Main extends MX_Controller {
                     $this->session->sess_destroy();
         }else{
             try {
-                $json['res']['lstUser'] = $this->listaUsuario();
+                $json['res']['lstNotas'] = $this->listaUsuario();
                 $json['res']['lstEmpresa'] = $this->listaEmpresa();
                 $json['res']['lstRol'] = $this->listaRol();
                 $json['res']['lstEstado'] = GET_LST_STATE();
@@ -67,7 +67,7 @@ class Main extends MX_Controller {
             }
         }else{
             try {
-                $json['res']['lstUser'] = $this->listaUsuario($text);
+                $json['res']['lstNotas'] = $this->listaUsuario($text);
                 $json['cod'] = 200;
                 $json['msg'] = "Ok";
             } catch (Exception $e) {
@@ -157,7 +157,7 @@ class Main extends MX_Controller {
                                 'cod_estado' => $data['txtEstado']
                             );
                             $this->db->insert('sysm_usuario',$insert);
-                            $json['res']['lstUser'] = $this->listaUsuario($data['txt']);
+                            $json['res']['lstNotas'] = $this->listaUsuario($data['txt']);
                             $json['cod'] = 200;
                             $json['msg'] = 'Ok';
                         }
@@ -194,7 +194,7 @@ class Main extends MX_Controller {
                     );
                     $this->db->where('cod_usuario', $data['txtUsuario']);
                     $this->db->update('sysm_usuario', $update);
-                    $json['res']['lstUser'] = $this->listaUsuario($data['txt']);
+                    $json['res']['lstNotas'] = $this->listaUsuario($data['txt']);
                     $json['cod'] = 200;
                     $json['msg'] = 'Ok';
                 }
@@ -218,7 +218,7 @@ class Main extends MX_Controller {
                 );
                 $this->db->where('cod_usuario', $data['txtUsuario']);
                 $this->db->update('sysm_usuario', $eliminar);
-                $json['res']['lstUser'] = $this->listaUsuario($data['txt']);
+                $json['res']['lstNotas'] = $this->listaUsuario($data['txt']);
                 $json['cod'] = 200;
                 $json['msg'] = 'Ok';
             }else{

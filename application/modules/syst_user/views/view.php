@@ -37,6 +37,7 @@
                       <button type="button" class="btn btn-secondary ml-1"><i class="fa fa-search" id="btnBuscar"></i></button>
                       <button type="button" class="btn btn-success ml-1" id="btnExport">CSV</button>
                       <button type="button" class="btn btn-info ml-1" id="btnReload"><i class="fa fa-refresh"></i></button>
+                      <button type="button" class="btn btn-danger ml-1" id="btnPDF">PDF</button>
                     </div>
                   </div>
                 </div>

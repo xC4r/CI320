@@ -49,6 +49,12 @@ function tableLoad(json,datatable,datafields,options,rowindex) {
         th.innerHTML = "#";
         tr.appendChild(th);      
     }
+    if(options.length > 0){
+        var th = document.createElement("th");
+        th.setAttribute( "scope", "col" );
+        th.innerHTML = "Opciones";
+        tr.appendChild(th);      
+    }
     for (var i = 0; i < datafields.length; i++) {
         var th = document.createElement("th"); // TABLE HEADER.
         th.setAttribute( "scope", "col" );
@@ -57,12 +63,6 @@ function tableLoad(json,datatable,datafields,options,rowindex) {
             th.hidden = datafields[i]['hidden'];
         }
         tr.appendChild(th);
-    }
-    if(options.length > 0){
-        var th = document.createElement("th");
-        th.setAttribute( "scope", "col" );
-        th.innerHTML = "Opciones";
-        tr.appendChild(th);      
     }
     table.appendChild(thead);
     // ADD JSON DATA TO THE TABLE AS ROWS.
@@ -74,6 +74,34 @@ function tableLoad(json,datatable,datafields,options,rowindex) {
             th.innerHTML = i + 1;
             th.setAttribute( "scope", "row" );
             tr.appendChild(th);
+        }
+        if(options.length > 0){
+            var td = document.createElement('td');
+			var btng = document.createElement('div');
+			btng.classList.add('btn-group');
+			btng.setAttribute( "role", "group" );
+            var ind = 0;
+            options.forEach(function(opt) {
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.classList.add('btn');
+                btn.classList.add('btn-'+opt['btn']);
+                btn.classList.add('btn-sm');
+                btn.classList.add(opt['fn']);
+                btn.classList.add('mb-1');
+                if(ind > 0){
+                    btn.classList.add('ml-1');
+                }
+                ind ++;
+                var fa = document.createElement('i');
+                fa.classList.add('fa');
+                fa.classList.add(opt['fa']);
+                btn.appendChild(fa);
+                btng.appendChild(btn);
+            });
+			td.appendChild(btng);
+            //td.innerHTML = i + 1;
+            tr.appendChild(td);
         }
         for (var j = 0; j < datafields.length; j++) {    
             var td = tr.insertCell(-1);
@@ -99,30 +127,6 @@ function tableLoad(json,datatable,datafields,options,rowindex) {
             }
         }
 
-        if(options.length > 0){
-            var td = document.createElement('td');
-            var ind = 0;
-            options.forEach(function(opt) {
-                var btn = document.createElement('button');
-                btn.type = 'button';
-                btn.classList.add('btn');
-                btn.classList.add('btn-'+opt['btn']);
-                btn.classList.add('btn-sm');
-                btn.classList.add(opt['fn']);
-                btn.classList.add('mb-1');
-                if(ind > 0){
-                    btn.classList.add('ml-1');
-                }
-                ind ++;
-                var fa = document.createElement('i');
-                fa.classList.add('fa');
-                fa.classList.add(opt['fa']);
-                btn.appendChild(fa);
-                td.appendChild(btn);
-            });
-            //td.innerHTML = i + 1;
-            tr.appendChild(td);
-        }
     }
     table.appendChild(tbody);
     return table;

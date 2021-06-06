@@ -1,4 +1,4 @@
-var ruta = "syst_user/main/";
+var ruta = "cont_comp_nped/main/";
 //JS Events
 var localData;
 var DataContainer = (function() { 
@@ -32,10 +32,10 @@ $(function () {
 		if(json.cod === 200){	
 			//localStorage.setItem("localData", JSON.stringify(localData));
 			localData = json.res;
-			cargarListaUsuario(json.res.lstUser,'tabUsuario');
-			formSelectLoad('txtEmpresa',json.res.lstEmpresa,'num','des');
-			formSelectLoad('txtRol',json.res.lstRol,'num','des');
-			formSelectLoad('txtEstado',json.res.lstEstado,'cod','des');
+			cargarListaUsuario(json.res.lstNotas,'tabNotaPedido');
+			//formSelectLoad('txtEmpresa',json.res.lstEmpresa,'num','des');
+			//formSelectLoad('txtRol',json.res.lstRol,'num','des');
+			//formSelectLoad('txtEstado',json.res.lstEstado,'cod','des');
 		}else if(json.cod == 401){
 			$(expiredSession).modal('show');
 		}else{
@@ -52,73 +52,33 @@ document.getElementById('btnPDF').onclick = function(){
 			var file = new Blob([blob], {type: "application/pdf"});
 			var fileURL = window.URL.createObjectURL(file);
 			window.open(fileURL, "_blank");
-			/*
-			var a = document.createElement('a');
-        	a.href = fileURL;
-            a.download = "Nota-Credito.pdf";
-			a.click();
-			*/
-			/*
-			newWindow = setTimeout(function() {
-				newWindow.document.title = isbFilename;
-			}, 100);
-			/*
-			var downloadLink = document.createElement("a");
-			// File name
-			downloadLink.download = 'nuevo.pdd';
-			// We have to create a link to the file
-			downloadLink.href = window.URL.createObjectURL(file);
-			// Make sure that the link is not displayed
-			downloadLink.style.display = "none";
-			// Add the link to your DOM
-			document.body.appendChild(downloadLink);
-			// Lanzamos
-			downloadLink.click();
-			*/
-
-			/*
-
-			*/	
-			/*
-			if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-				window.navigator.msSaveOrOpenBlob(file);
-				return;
-			} 
-			const url = window.URL.createObjectURL(file);
-			var a = document.createElement('a');
-			a.href = url;
-			a.download="file.pdf";
-			a.click();
-			*/
-
 	});
 }
 
 document.getElementById('txtBuscar').onkeyup = function(){
-	tableFilter('tabUsuario',this.value,5);
+	tableFilter('tabNotaPedido',this.value,5);
 }
 
 document.getElementById('btnBuscar').onclick = function(){
 	txt = document.getElementById('txtBuscar').value;
-	listarUsuario('tabUsuario',txt);
+	listarUsuario('tabNotaPedido',txt);
 }
 
 document.getElementById('btnExport').onclick = function(){
-	tableToCsv('tabUsuario','export.csv');
+	tableToCsv('tabNotaPedido','export.csv');
 }
 
 document.getElementById('btnReload').onclick = function(){
-	txt = document.getElementById('tabUsuario').getAttribute('data');
- 	listarUsuario('tabUsuario',txt);
+	txt = document.getElementById('tabNotaPedido').getAttribute('data');
+ 	listarUsuario('tabNotaPedido',txt);
 }
 // Modal Registro Eventos
-
-document.getElementById('formRegistro').onsubmit = function(e) {
+document.getElementById('formNotaPedido').onsubmit = function(e) {
 	e.preventDefault();
 }
 
 document.getElementById('btnRegistrar').onclick = function() {
-	if(document.getElementById('formRegistro').checkValidity()){
+	if(document.getElementById('formNotaPedido').checkValidity()){
 		if(!document.getElementById('txtUsuario').hasAttribute('ind')){
 			document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.guardar;
 			document.getElementById(confirmForm).setAttribute('act',1);
@@ -130,8 +90,8 @@ document.getElementById('btnRegistrar').onclick = function() {
 	}
 }
 //Bootstrap Events
-$('#addModal').on('hidden.bs.modal', function () {
-	document.getElementById("formRegistro").reset();
+$('#addNotaPedido').on('hidden.bs.modal', function () {
+	document.getElementById("formNotaPedido").reset();
 	document.getElementById("txtEmpresa").selectedIndex = '-1';
 	document.getElementById("txtRol").selectedIndex = '-1';
 	document.getElementById("txtEstado").selectedIndex = '-1';
@@ -139,11 +99,11 @@ $('#addModal').on('hidden.bs.modal', function () {
 });
 
 $($confirmForm).on('show.bs.modal', function () {
-	document.getElementById("addModal").classList.remove("show");
+	document.getElementById("addNotaPedido").classList.remove("show");
 });
 
 $($confirmForm).on('hide.bs.modal', function () {
-	document.getElementById("addModal").classList.add("show");
+	document.getElementById("addNotaPedido").classList.add("show");
 	this.removeAttribute('act');
 	this.querySelector('div div div.modal-body').innerHTML = '';
 });
@@ -151,8 +111,8 @@ $($confirmForm).on('hide.bs.modal', function () {
 document.querySelector(confirmFormAceptar).onclick = function() {
 	$(progressForm).modal('show');
 	var act = document.getElementById(confirmForm).getAttribute('act');
-	var txt = document.getElementById('tabUsuario').getAttribute('data');
-	$('#addModal').modal('hide');
+	var txt = document.getElementById('tabNotaPedido').getAttribute('data');
+	$('#addNotaPedido').modal('hide');
 	var msg;
 	if(act == 1){ 
 		msg = msgRespuesta.guardado;
@@ -163,7 +123,7 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	}else{
 		snackAlert('No hay accion para ejecutar');
 	}
-	var formData = new FormData(document.getElementById('btnRegistrar'));
+	var formData = new FormData(document.getElementById('formNotaPedido'));
 	formData.append('act',act);
 	formData.append('txt',txt);
 	if (act == 0) formData.set('txtUsuario',document.getElementById(confirmForm).getAttribute('cod'));
@@ -173,7 +133,7 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	if(count>0){
 		fetchPost(ruta +'operacion',PostData).then(json => {
 			if(json.cod == 200){
-				cargarListaUsuario(json.res.lstUser,'tabUsuario',txt);
+				cargarListaUsuario(json.res.lstNotas,'tabNotaPedido',txt);
 				snackAlert(msg,'success');
 			}else{
 				snackAlert(json.msg,'danger');
@@ -187,9 +147,9 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	setTimeout(function(){ $(progressForm).modal('hide'); }, 500);
 }
 //Eventos opciones datatable
-$(document).on('click','#tabUsuario div table tbody tr td div button.edit', function() {
-    let cod = (((this.parentNode).parentNode).parentNode).childNodes[2].innerHTML;
-    localData.lstUser.forEach(function(row) {
+$(document).on('click','#tabNotaPedido div table tbody tr td button.edit', function() {
+    let cod = ((this.parentNode).parentNode).childNodes[1].innerHTML;
+    localData.lstNotas.forEach(function(row) {
     	if(row['cod'] == cod){
     		document.getElementById('txtNombres').value = row['nom'];
     		document.getElementById('txtDocumento').value = row['doc'];
@@ -202,11 +162,11 @@ $(document).on('click','#tabUsuario div table tbody tr td div button.edit', func
     		document.getElementById('txtEstado').value = row['est'];
     	}
     });
-    $('#addModal').modal('show');
+    $('#addNotaPedido').modal('show');
 });
 
-$(document).on('click','#tabUsuario div table tbody tr td div button.del', function() { 
-    let cod = (((this.parentNode).parentNode).parentNode).childNodes[2].innerHTML;
+$(document).on('click','#tabNotaPedido div table tbody tr td button.del', function() { 
+    let cod = ((this.parentNode).parentNode).childNodes[1].innerHTML;
 	document.getElementById(confirmForm).setAttribute('cod',cod);
     document.getElementById(confirmForm).setAttribute('act',0);
     document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.eliminar;
@@ -218,7 +178,7 @@ function listarUsuario(datatable,txt='default'){
 	if(txt.length>=3){
 		fetchGet(ruta +'cargarUsuarios?txt='+txt).then(json => {
 	        if(json.cod == 200){
-	        	cargarListaUsuario(json.res.lstUser,datatable,txt);
+	        	cargarListaUsuario(json.res.lstNotas,datatable,txt);
 	        }else{
 	            snackAlert(json.msg,'warning');
 	        }
@@ -229,42 +189,43 @@ function listarUsuario(datatable,txt='default'){
 	  	snackAlert('La descripción esta vacia','warning');
 	}
 }
-function cargarListaUsuario(lstUser,datatable,txt='default'){
-	localData.lstUser = lstUser;
-	for (var i = 0; i < lstUser.length; i++) {
-		lstUser[i]['desEmp'] = '';
-		lstUser[i]['desEst'] = '';
-		lstUser[i]['desRol'] = '';
+function cargarListaUsuario(lstNotas,datatable,txt='default'){
+	localData.lstNotas = lstNotas;
+	for (var i = 0; i < lstNotas.length; i++) {
+		lstNotas[i]['desEmp'] = '';
+		lstNotas[i]['desEst'] = '';
+		lstNotas[i]['desRol'] = '';
 		localData.lstEmpresa.forEach(function(emp){
-			if(lstUser[i]['emp'] == emp['num']){
-				lstUser[i]['desEmp'] = emp['des'];
+			if(lstNotas[i]['emp'] == emp['num']){
+				lstNotas[i]['desEmp'] = emp['des'];
 			}
 		});
 		localData.lstEstado.forEach(function(est){
-			if(lstUser[i]['est'] == est['cod']){
-				lstUser[i]['desEst'] = est['des'];
+			if(lstNotas[i]['est'] == est['cod']){
+				lstNotas[i]['desEst'] = est['des'];
 			}
 		});
 		localData.lstRol.forEach(function(rol){
-			if(lstUser[i]['rol'] == rol['num']){
-				lstUser[i]['desRol'] = rol['des'];
+			if(lstNotas[i]['rol'] == rol['num']){
+				lstNotas[i]['desRol'] = rol['des'];
 			}
 		});
 	}
 	var datafields = [
 	    {key: 'cod', name: 'Codigo', type: 'string', hidden: true},
-	    {key: 'nom', name: 'Nombres y apellidos', type: 'string'},
+	    {key: 'nom', name: 'Nombres', type: 'string'},
 	    {key: 'eml', name: 'Correo Electronico', type: 'string'},
-	    {key: 'doc', name: 'Doc.Ident', type: 'string'},
+	    {key: 'doc', name: 'Documento Identificación', type: 'string'},
 	    {key: 'desEmp', name: 'Empresa', type: 'string'},
 	    {key: 'desEst', name: 'Estado', type: 'string'},
 	    {key: 'desRol', name: 'Rol', type: 'string'}
 	];
 	var options = [
 	    {btn:'primary', fa:'fa-pencil', fn:'edit'},
+		{btn:'secondary', fa:'fa-file-pdf-o', fn:'pdf'},
 	    {btn:'danger', fa:'fa-trash-o', fn:'del'}
 	];
-	datatableLoad(lstUser,datatable,datafields,options,true);
+	datatableLoad(lstNotas,datatable,datafields,options,true);
 	document.getElementById(datatable).setAttribute('data',txt);
 	tablePagination(datatable,true,5);
 }

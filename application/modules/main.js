@@ -44,10 +44,10 @@ function fetchGetHTML(url){
                     data.text().then(function(r) {
                         eval(r);
                     })
-                }).catch(error => {console.log('Error:'+ error)});
+                }).catch(error => console.log('Error:'+ error));
             }scripts[i].parentNode.removeChild(scripts[i]);
         }
-    }).catch(error => {console.log('Error:'+ error)});
+    }).catch(error => console.log('Error:'+ error));
 }
 
 function fetchGet(url){
@@ -56,7 +56,7 @@ function fetchGet(url){
         headers:{'token':localStorage.getItem("token")},
     })
     .then(response => response.json())
-    .catch(error => {console.log('Error:'+ error)});
+    .catch(error => console.log('Error:'+ error));
 }
 
 function fetchPost(url,data){
@@ -66,7 +66,7 @@ function fetchPost(url,data){
         headers:{'token':localStorage.getItem("token")},
     })
     .then(response => response.json())
-    .catch(error => {console.log('Error:'+ error)});
+    .catch(error => console.log('Error:'+ error));
 }
 
 function setMenu(menuItem,hash) {
@@ -127,6 +127,5 @@ function setPostData(objectContainer,index,formData){
     var str=JSON.stringify(obj);
     obj = str.replace(/"/g, '"\\\\');
     dataForm.set(index,obj); 
-    //console.log(obj);
     return dataForm;
 }
