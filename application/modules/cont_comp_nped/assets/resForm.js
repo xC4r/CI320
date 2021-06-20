@@ -25,17 +25,13 @@ var DataContainer = (function() {
   	return DataContainer;
 });
 
-var dataFormUsuario= new DataContainer;
-
+var dataFormulario= new DataContainer;
+/*
 $(function () {
 	fetchGet(ruta+'defaultLoad').then(json => {
 		if(json.cod === 200){	
-			//localStorage.setItem("localData", JSON.stringify(localData));
 			localData = json.res;
-			cargarListaUsuario(json.res.lstNotas,'tabNotaPedido');
-			//formSelectLoad('txtEmpresa',json.res.lstEmpresa,'num','des');
-			//formSelectLoad('txtRol',json.res.lstRol,'num','des');
-			//formSelectLoad('txtEstado',json.res.lstEstado,'cod','des');
+			cargarNotasPedido(json.res.lstUser,'tabNotaPedido');
 		}else if(json.cod == 401){
 			$(expiredSession).modal('show');
 		}else{
@@ -43,25 +39,15 @@ $(function () {
 		}
 	});
 });
-
-document.getElementById('btnPDF').onclick = function(){
-	
-	fetch(ruta+'generarPDF')
-	.then(response => response.blob())
-	.then(blob => {
-			var file = new Blob([blob], {type: "application/pdf"});
-			var fileURL = window.URL.createObjectURL(file);
-			window.open(fileURL, "_blank");
-	});
-}
-
+*/
+// Default Events
 document.getElementById('txtBuscar').onkeyup = function(){
 	tableFilter('tabNotaPedido',this.value,5);
 }
 
 document.getElementById('btnBuscar').onclick = function(){
 	txt = document.getElementById('txtBuscar').value;
-	listarUsuario('tabNotaPedido',txt);
+	listarNotasPedido('tabNotaPedido',txt);
 }
 
 document.getElementById('btnExport').onclick = function(){
@@ -70,16 +56,30 @@ document.getElementById('btnExport').onclick = function(){
 
 document.getElementById('btnReload').onclick = function(){
 	txt = document.getElementById('tabNotaPedido').getAttribute('data');
- 	listarUsuario('tabNotaPedido',txt);
+ 	listarNotasPedido('tabNotaPedido',txt);
 }
 // Modal Registro Eventos
 document.getElementById('formNotaPedido').onsubmit = function(e) {
 	e.preventDefault();
 }
 
+//Generar PDF 
+/*
+document.getElementById('btnPDF').onclick = function(){
+	fetch(ruta+'generarPDF')
+	.then(response => response.blob())
+	.then(blob => {
+			var file = new Blob([blob], {type: "application/pdf"});
+			var fileURL = window.URL.createObjectURL(file);
+			window.open(fileURL, "_blank");
+	});
+}
+*/
+
+//Eventos modulo
 document.getElementById('btnRegistrar').onclick = function() {
 	if(document.getElementById('formNotaPedido').checkValidity()){
-		if(!document.getElementById('txtUsuario').hasAttribute('ind')){
+		if(!document.getElementById('txtNumeroCP').hasAttribute('ind')){
 			document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.guardar;
 			document.getElementById(confirmForm).setAttribute('act',1);
 		}else{
@@ -89,21 +89,16 @@ document.getElementById('btnRegistrar').onclick = function() {
 		$($confirmForm).modal('show');
 	}
 }
-//Bootstrap Events
-$('#addNotaPedido').on('hidden.bs.modal', function () {
-	document.getElementById("formNotaPedido").reset();
-	document.getElementById("txtEmpresa").selectedIndex = '-1';
-	document.getElementById("txtRol").selectedIndex = '-1';
-	document.getElementById("txtEstado").selectedIndex = '-1';
-	document.getElementById('txtUsuario').removeAttribute('ind');
-});
 
-$($confirmForm).on('show.bs.modal', function () {
-	document.getElementById("addNotaPedido").classList.remove("show");
+//Bootstrap Events
+$('#modalNota').on('hidden.bs.modal', function () {
+	document.getElementById("formNotaPedido").reset();
+	document.getElementById("selSerieCP").selectedIndex = '-1';
+	document.getElementById('txtNumeroCP').removeAttribute('ind');
+	//agregar limpiar grilla de productos
 });
 
 $($confirmForm).on('hide.bs.modal', function () {
-	document.getElementById("addNotaPedido").classList.add("show");
 	this.removeAttribute('act');
 	this.querySelector('div div div.modal-body').innerHTML = '';
 });
@@ -112,7 +107,7 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	$(progressForm).modal('show');
 	var act = document.getElementById(confirmForm).getAttribute('act');
 	var txt = document.getElementById('tabNotaPedido').getAttribute('data');
-	$('#addNotaPedido').modal('hide');
+	$('#modalNota').modal('hide');
 	var msg;
 	if(act == 1){ 
 		msg = msgRespuesta.guardado;
@@ -126,14 +121,14 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	var formData = new FormData(document.getElementById('formNotaPedido'));
 	formData.append('act',act);
 	formData.append('txt',txt);
-	if (act == 0) formData.set('txtUsuario',document.getElementById(confirmForm).getAttribute('cod'));
-	var PostData = setPostData(dataFormUsuario,'formulario',formData); // params: object container, object formData;
+	if (act == 0) formData.set('txtNumeroCP',document.getElementById(confirmForm).getAttribute('cod'));
+	var PostData = setPostData(dataFormulario,'formulario',formData); // params: object container, object formData;
 	let count = 0;
 	formData.forEach(function(){count++;});
 	if(count>0){
 		fetchPost(ruta +'operacion',PostData).then(json => {
 			if(json.cod == 200){
-				cargarListaUsuario(json.res.lstNotas,'tabNotaPedido',txt);
+				cargarNotasPedido(json.res.lstUser,'tabNotaPedido',txt);
 				snackAlert(msg,'success');
 			}else{
 				snackAlert(json.msg,'danger');
@@ -147,25 +142,25 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	setTimeout(function(){ $(progressForm).modal('hide'); }, 500);
 }
 //Eventos opciones datatable
-$(document).on('click','#tabNotaPedido div table tbody tr td button.edit', function() {
+$(document).on('click','#tabNotaPedido div table tbody tr td div button.edit', function() {
     let cod = ((this.parentNode).parentNode).childNodes[1].innerHTML;
-    localData.lstNotas.forEach(function(row) {
+    localData.lstUser.forEach(function(row) {
     	if(row['cod'] == cod){
     		document.getElementById('txtNombres').value = row['nom'];
     		document.getElementById('txtDocumento').value = row['doc'];
     		document.getElementById('txtCorreo').value = row['eml'];
     		document.getElementById('txtEmpresa').value = row['emp'];
-    		document.getElementById('txtUsuario').value = row['cod'];
-			document.getElementById('txtUsuario').setAttribute('ind','');
+    		document.getElementById('txtNumeroCP').value = row['cod'];
+			document.getElementById('txtNumeroCP').setAttribute('ind','');
     		document.getElementById('txtPassword').value = row['pas'];
     		document.getElementById('txtRol').value = row['rol'];
     		document.getElementById('txtEstado').value = row['est'];
     	}
     });
-    $('#addNotaPedido').modal('show');
+    $('#modalNota').modal('show');
 });
 
-$(document).on('click','#tabNotaPedido div table tbody tr td button.del', function() { 
+$(document).on('click','#tabNotaPedido div table tbody tr td div button.del', function() { 
     let cod = ((this.parentNode).parentNode).childNodes[1].innerHTML;
 	document.getElementById(confirmForm).setAttribute('cod',cod);
     document.getElementById(confirmForm).setAttribute('act',0);
@@ -173,12 +168,12 @@ $(document).on('click','#tabNotaPedido div table tbody tr td button.del', functi
     $($confirmForm).modal('show');
 });
 //Functions
-function listarUsuario(datatable,txt='default'){
+function listarNotasPedido(datatable,txt='default'){
 	txt = txt.trim();
 	if(txt.length>=3){
-		fetchGet(ruta +'cargarUsuarios?txt='+txt).then(json => {
+		fetchGet(ruta +'cargarNotasPedido?txt='+txt).then(json => {
 	        if(json.cod == 200){
-	        	cargarListaUsuario(json.res.lstNotas,datatable,txt);
+	        	cargarNotasPedido(json.res.lstUser,datatable,txt);
 	        }else{
 	            snackAlert(json.msg,'warning');
 	        }
@@ -189,25 +184,25 @@ function listarUsuario(datatable,txt='default'){
 	  	snackAlert('La descripción esta vacia','warning');
 	}
 }
-function cargarListaUsuario(lstNotas,datatable,txt='default'){
-	localData.lstNotas = lstNotas;
-	for (var i = 0; i < lstNotas.length; i++) {
-		lstNotas[i]['desEmp'] = '';
-		lstNotas[i]['desEst'] = '';
-		lstNotas[i]['desRol'] = '';
+function cargarNotasPedido(lstUser,datatable,txt='default'){
+	localData.lstUser = lstUser;
+	for (var i = 0; i < lstUser.length; i++) {
+		lstUser[i]['desEmp'] = '';
+		lstUser[i]['desEst'] = '';
+		lstUser[i]['desRol'] = '';
 		localData.lstEmpresa.forEach(function(emp){
-			if(lstNotas[i]['emp'] == emp['num']){
-				lstNotas[i]['desEmp'] = emp['des'];
+			if(lstUser[i]['emp'] == emp['num']){
+				lstUser[i]['desEmp'] = emp['des'];
 			}
 		});
 		localData.lstEstado.forEach(function(est){
-			if(lstNotas[i]['est'] == est['cod']){
-				lstNotas[i]['desEst'] = est['des'];
+			if(lstUser[i]['est'] == est['cod']){
+				lstUser[i]['desEst'] = est['des'];
 			}
 		});
 		localData.lstRol.forEach(function(rol){
-			if(lstNotas[i]['rol'] == rol['num']){
-				lstNotas[i]['desRol'] = rol['des'];
+			if(lstUser[i]['rol'] == rol['num']){
+				lstUser[i]['desRol'] = rol['des'];
 			}
 		});
 	}
@@ -225,7 +220,7 @@ function cargarListaUsuario(lstNotas,datatable,txt='default'){
 		{btn:'secondary', fa:'fa-file-pdf-o', fn:'pdf'},
 	    {btn:'danger', fa:'fa-trash-o', fn:'del'}
 	];
-	datatableLoad(lstNotas,datatable,datafields,options,true);
+	datatableLoad(lstUser,datatable,datafields,options,true);
 	document.getElementById(datatable).setAttribute('data',txt);
 	tablePagination(datatable,true,5);
 }

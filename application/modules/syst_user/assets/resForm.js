@@ -30,9 +30,8 @@ var dataFormUsuario= new DataContainer;
 $(function () {
 	fetchGet(ruta+'defaultLoad').then(json => {
 		if(json.cod === 200){	
-			//localStorage.setItem("localData", JSON.stringify(localData));
 			localData = json.res;
-			cargarListaUsuario(json.res.lstUser,'tabUsuario');
+			//cargarListaUsuario(json.res.lstUser,'tabUsuario');
 			formSelectLoad('txtEmpresa',json.res.lstEmpresa,'num','des');
 			formSelectLoad('txtRol',json.res.lstRol,'num','des');
 			formSelectLoad('txtEstado',json.res.lstEstado,'cod','des');
@@ -45,7 +44,6 @@ $(function () {
 });
 
 document.getElementById('btnPDF').onclick = function(){
-	
 	fetch(ruta+'generarPDF')
 	.then(response => response.blob())
 	.then(blob => {
@@ -137,13 +135,13 @@ $('#addModal').on('hidden.bs.modal', function () {
 	document.getElementById("txtEstado").selectedIndex = '-1';
 	document.getElementById('txtUsuario').removeAttribute('ind');
 });
-
+/*
 $($confirmForm).on('show.bs.modal', function () {
 	document.getElementById("addModal").classList.remove("show");
 });
-
+*/
 $($confirmForm).on('hide.bs.modal', function () {
-	document.getElementById("addModal").classList.add("show");
+	//document.getElementById("addModal").classList.add("show");
 	this.removeAttribute('act');
 	this.querySelector('div div div.modal-body').innerHTML = '';
 });

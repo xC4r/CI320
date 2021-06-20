@@ -43,8 +43,75 @@
                 </div>
 
                 <div class="datatable" id="tabUsuario">
+					<div class="table-responsive">
+					   <table class="table">
+						  <thead>
+							 <tr>
+								<th scope="col">#</th>
+								<th scope="col">Opciones</th>
+								<th scope="col">Nombres y apellidos</th>
+								<th scope="col">Correo Electronico</th>
+								<th scope="col">Doc.Ident</th>
+								<th scope="col">Empresa</th>
+								<th scope="col">Estado</th>
+								<th scope="col">Rol</th>
+							 </tr>
+						  </thead>
+						  <tbody>
+							 <tr style="">
+								<th scope="row">1</th>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							 </tr>
+							 <tr style="">
+								<th scope="row">2</th>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							 </tr>
+							 <tr style="">
+								<th scope="row">3</th>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							 </tr>
+							 <tr style="">
+								<th scope="row">4</th>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							 </tr>
+							 <tr style="">
+								<th scope="row">5</th>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							 </tr>
+						  </tbody>
+					   </table>
+					</div>				
                 </div>
-
               </div>
             </div>
             <!-- Modal -->

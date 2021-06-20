@@ -23,6 +23,7 @@
         <div class="card">
           <div class="card-body collapse show p-3"> 
             <h4 class="card-title mb-3">Lista Notas</h4>
+            
             <div class="tab-content mb-3">
               <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
                 <div class="form-row">
@@ -35,17 +36,85 @@
                     </div>
                   </div>
                   <div class="col-md-6 mb-2"> 
-                    <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#modNuevo">Nuevo</button>
+                    <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#modalNota">Nuevo</button>
                   </div>
                 </div>
 
                 <div class="datatable" id="tabNotaPedido">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Opciones</th>
+                        <th scope="col">Nro Nota</th>
+                        <th scope="col">Fecha Emision</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Doc.Ident</th>
+                        <th scope="col">Importe</th>
+                        <th scope="col">Estado</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr style="">
+                        <th scope="row">1</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      <tr style="">
+                        <th scope="row">2</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      <tr style="">
+                        <th scope="row">3</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      <tr style="">
+                        <th scope="row">4</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      <tr style="">
+                        <th scope="row">5</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>	
                 </div>
 
               </div>
             </div>
             <!-- Modal -->
-            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modNuevoLabel" aria-hidden="true" id="modNuevo">
+            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalNotaLabel" aria-hidden="true" id="modalNota">
               <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -103,7 +172,7 @@
                         </div>
                         <div class="form-row">
                           <div class="input-group justify-content-end">
-                            <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#addProducto">Agregar</button> 
+                            <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#modalProducto">Agregar</button> 
                           </div>
                         </div> 
                         <div class="form-row">
@@ -223,7 +292,7 @@
               </div>
             </div>
             <!-- Modal -->
-            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addProductoLabel" aria-hidden="true" id="addProducto">
+            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalProductoLabel" aria-hidden="true" id="modalProducto">
               <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -273,6 +342,7 @@
                 </div>
               </div>
             </div>
+
           </div>                 
         </div>
       </div>

@@ -31,18 +31,34 @@ class Login extends CI_Controller {
         } else {
             $userData = [];
             foreach($result->result_array() AS $row) {
-                $userData = array(
-                    'codUser'  => trim(mb_strtolower($row['cod_usuario'],'UTF-8')),
-                    'desUser'  => trim(mb_strtolower($row['des_nombre'],'UTF-8')),
-                    'desMail'  => trim(mb_strtolower($row['dir_correo'],'UTF-8')),
-                    'numDoc'  => trim(mb_strtolower($row['num_documento'],'UTF-8'))
-                );
+                $query = $this->db->get_where('sysm_empresa',array('num_empresa' => $row['num_empresa']));
+                if (count($query->result_array()) == 0) {
+                    $json['cod'] = 401;
+                    $json['msg'] = "Error en datos del usuario";
+                }else{
+                    $empresa = $query->result_array();
+                    $userData = array(
+                        'codUser'  => trim(mb_strtolower($row['cod_usuario'],'UTF-8')),
+                        'desUser'  => trim($row['des_nombre']),
+                        'desMail'  => trim(mb_strtolower($row['dir_correo'],'UTF-8')),
+                        'numDocu'  =>  trim(mb_strtolower($row['num_documento'],'UTF-8')),
+                        'codEmpr'  =>  trim(mb_strtolower($empresa[0]['cod_empresa'],'UTF-8')),
+                        'rucEmpr'  =>  trim($empresa[0]['ruc_empresa']),
+                        'desEmpr'  =>  trim($empresa[0]['des_empresa']),
+                        'dirEmpr'  =>  trim($empresa[0]['dir_empresa'])
+                    );
+                }
             }
-            $this->load->library('Auth');
-            $json['cod'] = 200;
-            $json['msg'] = "ok";
-            $json['res']['tkn'] = $this->auth->validToken($userData);          
-            $this->session->set_userdata($userData);
+            if($json['cod'] == 401){
+                $json['cod'] = 401;
+                $json['msg'] = "Error en datos del usuario";
+            }else{
+                $this->load->library('Auth');
+                $json['cod'] = 200;
+                $json['msg'] = "Ok";
+                $json['res']['tkn'] = $this->auth->validToken($userData);          
+                $this->session->set_userdata($userData);
+            }
         }
         //echo json_encode($json);
         $this->output->set_content_type('application/json')->set_output(json_encode($json))->set_status_header($json['cod']);

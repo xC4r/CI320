@@ -17,6 +17,20 @@ $(document).on('click','.fa-eye-slash',function(){
     }
 });
 
+$(document).on('show.bs.modal', '.modal', function (event) {
+	var zIndex = 1040 + (10 * $('.modal:visible').length);
+	$(this).css('z-index', zIndex);
+	setTimeout(function() {
+		$('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+	}, 0);
+});
+
+$(document).on('hidden.bs.modal', function (event) {
+  if ($('.modal:visible').length) {
+    $('body').addClass('modal-open');
+  }
+});
+
 fetchGet('main/menu').then(json => {
     if(json.mensaje == ""){
         var $menu = $("#side-menu");

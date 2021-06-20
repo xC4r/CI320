@@ -13,6 +13,7 @@ class Main extends MX_Controller {
         $this->load->helper('functions_helper');
         $this->codUser = $this->session->userdata('codUser'); 
         $this->desUser = $this->session->userdata('desUser');
+        $this->rucEmpr = $this->session->userdata('rucEmpr');
         if ($this->codUser == "") {
             header('location: login');
         }
@@ -43,9 +44,9 @@ class Main extends MX_Controller {
                     $this->session->sess_destroy();
         }else{
             try {
-                $json['res']['lstNotas'] = $this->listaUsuario();
-                $json['res']['lstEmpresa'] = $this->listaEmpresa();
-                $json['res']['lstRol'] = $this->listaRol();
+                $json['res']['lstNotas'] = $this->listaNotas();
+                //$json['res']['lstEmpresa'] = $this->listaEmpresa();
+                //$json['res']['lstRol'] = $this->listaRol();
                 $json['res']['lstEstado'] = GET_LST_STATE();
                 $json['cod'] = 200;
                 $json['msg'] = "Ok";
@@ -56,7 +57,7 @@ class Main extends MX_Controller {
         }
         echo json_encode($json);
     }
-    public function cargarUsuarios(){
+    public function cargarNotasPedido(){
         $json = array('cod' => '','msg' => '','res' => array());
         $text = trim($this->input->get('txt', TRUE)); 
         if($text ==''||strlen($text)<3){
@@ -67,7 +68,7 @@ class Main extends MX_Controller {
             }
         }else{
             try {
-                $json['res']['lstNotas'] = $this->listaUsuario($text);
+                $json['res']['lstNotas'] = $this->listaNotas($text);
                 $json['cod'] = 200;
                 $json['msg'] = "Ok";
             } catch (Exception $e) {
@@ -157,7 +158,7 @@ class Main extends MX_Controller {
                                 'cod_estado' => $data['txtEstado']
                             );
                             $this->db->insert('sysm_usuario',$insert);
-                            $json['res']['lstNotas'] = $this->listaUsuario($data['txt']);
+                            $json['res']['lstNotas'] = $this->listaNotas($data['txt']);
                             $json['cod'] = 200;
                             $json['msg'] = 'Ok';
                         }
@@ -194,7 +195,7 @@ class Main extends MX_Controller {
                     );
                     $this->db->where('cod_usuario', $data['txtUsuario']);
                     $this->db->update('sysm_usuario', $update);
-                    $json['res']['lstNotas'] = $this->listaUsuario($data['txt']);
+                    $json['res']['lstNotas'] = $this->listaNotas($data['txt']);
                     $json['cod'] = 200;
                     $json['msg'] = 'Ok';
                 }
@@ -218,7 +219,7 @@ class Main extends MX_Controller {
                 );
                 $this->db->where('cod_usuario', $data['txtUsuario']);
                 $this->db->update('sysm_usuario', $eliminar);
-                $json['res']['lstNotas'] = $this->listaUsuario($data['txt']);
+                $json['res']['lstNotas'] = $this->listaNotas($data['txt']);
                 $json['cod'] = 200;
                 $json['msg'] = 'Ok';
             }else{
@@ -231,23 +232,27 @@ class Main extends MX_Controller {
         }
         return $json;
     }
-    private function listaUsuario($text='default') {     
-        if($text == 'default'){
-            $this->db->limit(20);
-            $this->db->select('*');
-            $this->db->from('sysm_usuario');
-            $this->db->where('ind_del','0'); //No eliminados
-            $this->db->order_by('des_nombre', 'ASC');
-        }else{
-            $this->db->limit(50);
-            $this->db->select('*');
-            $this->db->from('sysm_usuario');  
-            $this->db->where("UPPER(CONCAT_WS('|',cod_usuario,des_nombre,dir_correo,num_documento)) LIKE UPPER('%".$text."%')");
-            $this->db->where('ind_del','0'); //No eliminados  
-            $this->db->order_by('des_nombre','ASC');
+    private function listaNotas($param = []) {   
+        $sql = 'SELECT LIMIT 25 * FROM cont_cpe WHERE num_ruc = '.$this->rucEmpr.' AND cod_cpe ="00"';
+
+        if(isset($param['numSerie']) && !empty($param['numSerie'])){
+            $sql .=' AND num_serie = '.$param['numSerie'];
         }
+        if(isset($param['numCpe']) && !empty($param['numCpe'])){
+            $sql .=' AND num_cpe = '.$param['numCpe'];
+        }
+        if(isset($param['fecDesde']) && !empty($param['fecDesde']) && isset($param['fecHasta']) && !empty($param['fecHasta'])){
+            $sql .=' AND fec_emision BETWEEN DATE('.$param['fecDesde'].') AND DATE('. $param['fecHasta'].')';
+        }
+        if(isset($param['numDocrec']) && !empty($param['numDocrec'])){
+            $sql .=' AND num_docrecep = '.$param['numDocrec'];
+        }
+        if(isset($param['desNomrec']) && !empty($param['desNomrec'])){
+            $sql .=' AND des_nomrecep LIKE= "%'.$param['desNomrec'].'%"';
+        } 
+        $this->db->order_by('fec_emision', 'DESC');      
+        $query = $this->db->query($sql);
         $array = array();     
-        $query = $this->db->get();
         $data = [];
         foreach( $query->result_array() as $row ){
             $data[] = $row;
@@ -255,15 +260,20 @@ class Main extends MX_Controller {
         if(count($data)>0){
             foreach( $data as $row ) {
                 $item = array(
-                    //'num' => mb_strtolower(trim($row['num_usuario']),'UTF-8'),
-                    'cod' => mb_strtolower(trim($row['cod_usuario']),'UTF-8'),
-                    'pas' => trim($row['pas_usuario']),
-                    'eml' => mb_strtolower(trim($row['dir_correo']),'UTF-8'),
-                    'nom' => trim($row['des_nombre']),
-                    'doc' => mb_strtolower(trim($row['num_documento']),'UTF-8'),
-                    'emp' => trim($row['num_empresa']),
-                    'rol' => trim($row['num_rol']),
-                    'est' => trim($row['cod_estado'])
+                    'cod' => trim($row['cod_cpe']),
+                    'ser' => trim($row['num_serie']),
+                    'num' => trim($row['num_cpe']),
+                    'fec' => trim($row['fec_emision']),
+                    'doc' => trim($row['cod_tipdocrec']),
+                    'rec' => trim($row['num_docrecep']),
+                    'des' => trim($row['des_nomrecep']),
+                    'mon' => trim($row['cod_moneda']),
+                    'tca' => trim($row['mto_tipocambio']),
+                    'vta' => trim($row['mto_totalvta']),
+                    'igv' => trim($row['mto_totaligv']),
+                    'tot' => trim($row['mto_imptotal']),
+                    'obs' => trim($row['des_observa']),
+                    'xml' => trim($row['num_xml'])
                 );   
                 $array[] = $item;
             }
