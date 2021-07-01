@@ -1,3 +1,4 @@
+
 <?php
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
@@ -233,7 +234,7 @@ class Main extends MX_Controller {
         return $json;
     }
     private function listaNotas($param = []) {   
-        $sql = 'SELECT LIMIT 25 * FROM cont_cpe WHERE num_ruc = '.$this->rucEmpr.' AND cod_cpe ="00"';
+        $sql = 'SELECT * FROM cont_cpe WHERE num_ruc = '.$this->rucEmpr.' AND cod_cpe ="00"';
 
         if(isset($param['numSerie']) && !empty($param['numSerie'])){
             $sql .=' AND num_serie = '.$param['numSerie'];
@@ -250,16 +251,37 @@ class Main extends MX_Controller {
         if(isset($param['desNomrec']) && !empty($param['desNomrec'])){
             $sql .=' AND des_nomrecep LIKE= "%'.$param['desNomrec'].'%"';
         } 
-        $this->db->order_by('fec_emision', 'DESC');      
+        //$this->db->order_by('fec_emision', 'DESC');      
         $query = $this->db->query($sql);
         $array = array();     
         $data = [];
-        foreach( $query->result_array() as $row ){
-            $data[] = $row;
+        foreach( $query->result_array() as $reg ){
+            $data[] = $reg;
         }
         if(count($data)>0){
             foreach( $data as $row ) {
-                $item = array(
+                $params = array(
+                    'num_ruc' => trim($row['num_ruc']),
+                    'cod_cpe' => trim($row['cod_cpe']),
+                    'num_serie' => trim($row['num_serie']),
+                    'num_cpe' => trim($row['num_cpe'])
+                );
+                $qry = $this->db->get_where('cont_cpedata',$params);
+                $items = [];
+                $lstItem = array();
+                foreach( $qry->result_array() as $res ){
+                    $items[] = $res;
+                }
+                if(count($items)>0){
+                    foreach( $items as $line ) {
+                        $lstItem[$line['num_item']][] = array(
+                            'rub' => trim($line['cod_rubro']),
+                            'val' => trim($line['mto_rubro']),
+                            'des' => trim($line['des_rubro'])
+                        );
+                    }
+                }
+                $docs = array(
                     'cod' => trim($row['cod_cpe']),
                     'ser' => trim($row['num_serie']),
                     'num' => trim($row['num_cpe']),
@@ -273,9 +295,10 @@ class Main extends MX_Controller {
                     'igv' => trim($row['mto_totaligv']),
                     'tot' => trim($row['mto_imptotal']),
                     'obs' => trim($row['des_observa']),
-                    'xml' => trim($row['num_xml'])
+                    'xml' => trim($row['num_xml']),
+                    'itm' => $lstItem
                 );   
-                $array[] = $item;
+                $array[] = $docs;
             }
         }        
         return $array;

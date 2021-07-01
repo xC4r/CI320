@@ -26,12 +26,12 @@ var DataContainer = (function() {
 });
 
 var dataFormulario= new DataContainer;
-/*
+
 $(function () {
 	fetchGet(ruta+'defaultLoad').then(json => {
 		if(json.cod === 200){	
 			localData = json.res;
-			cargarNotasPedido(json.res.lstUser,'tabNotaPedido');
+			cargarNotasPedido(json.res.lstNotas,'tabNotaPedido');
 		}else if(json.cod == 401){
 			$(expiredSession).modal('show');
 		}else{
@@ -39,7 +39,7 @@ $(function () {
 		}
 	});
 });
-*/
+
 // Default Events
 document.getElementById('txtBuscar').onkeyup = function(){
 	tableFilter('tabNotaPedido',this.value,5);
@@ -128,7 +128,7 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	if(count>0){
 		fetchPost(ruta +'operacion',PostData).then(json => {
 			if(json.cod == 200){
-				cargarNotasPedido(json.res.lstUser,'tabNotaPedido',txt);
+				cargarNotasPedido(json.res.lstNotas,'tabNotaPedido',txt);
 				snackAlert(msg,'success');
 			}else{
 				snackAlert(json.msg,'danger');
@@ -143,18 +143,41 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 }
 //Eventos opciones datatable
 $(document).on('click','#tabNotaPedido div table tbody tr td div button.edit', function() {
-    let cod = ((this.parentNode).parentNode).childNodes[1].innerHTML;
-    localData.lstUser.forEach(function(row) {
-    	if(row['cod'] == cod){
-    		document.getElementById('txtNombres').value = row['nom'];
-    		document.getElementById('txtDocumento').value = row['doc'];
-    		document.getElementById('txtCorreo').value = row['eml'];
-    		document.getElementById('txtEmpresa').value = row['emp'];
-    		document.getElementById('txtNumeroCP').value = row['cod'];
-			document.getElementById('txtNumeroCP').setAttribute('ind','');
-    		document.getElementById('txtPassword').value = row['pas'];
-    		document.getElementById('txtRol').value = row['rol'];
-    		document.getElementById('txtEstado').value = row['est'];
+    let ser = ((this.parentNode).parentNode).childNodes[1].innerHTML;
+    let num = ((this.parentNode).parentNode).childNodes[2].innerHTML;
+    localData.lstNotas.forEach(function(row) {
+    	if(row['ser'] == ser && row['num'] == num){
+    		document.getElementById('selSerieCP').value = row['ser'];
+    		document.getElementById('txtNumeroCP').value = row['num'];
+    		document.getElementById('txtFecha').value = row['fec'];
+    		document.getElementById('txtNombre').value = row['des'];
+    		//document.getElementById('txtDireccion').value = row['itm'][0][0]['des'];
+    		document.getElementById('txtDocumento').value = row['rec'];
+			//document.getElementById('txtDocumento').setAttribute('ind','');
+    		document.getElementById('txtObservacion').value = row['obs'];
+    		row.itm.forEach(function(item) {
+    			if(item == 0){
+    				item.forEach(function(rubro) {
+    					if(rubro['rub']=='01'){
+    						document.getElementById('txtDireccion').value = rubro['des'];
+    					}
+    				}
+    			}else{
+    				var lstItems = [
+					    {key: 'ser', name: 'Serie', type: 'string'},
+					    {key: 'num', name: 'Número', type: 'string'},
+					    {key: 'fec', name: 'Fecha Emisión', type: 'date'},
+					    {key: 'rec', name: 'Documento', type: 'string'},
+					    {key: 'des', name: 'Nombre / Razon Social', type: 'string'},
+					    {key: 'tot', name: 'Total', type: 'number'}
+					];
+					item.forEach(function(rubro) {
+    					if(rubro['rub']=='01'){
+    						
+    					}
+    				}
+    			}
+    		}
     	}
     });
     $('#modalNota').modal('show');
@@ -173,7 +196,7 @@ function listarNotasPedido(datatable,txt='default'){
 	if(txt.length>=3){
 		fetchGet(ruta +'cargarNotasPedido?txt='+txt).then(json => {
 	        if(json.cod == 200){
-	        	cargarNotasPedido(json.res.lstUser,datatable,txt);
+	        	cargarNotasPedido(json.res.lstNotas,datatable,txt);
 	        }else{
 	            snackAlert(json.msg,'warning');
 	        }
@@ -184,43 +207,32 @@ function listarNotasPedido(datatable,txt='default'){
 	  	snackAlert('La descripción esta vacia','warning');
 	}
 }
-function cargarNotasPedido(lstUser,datatable,txt='default'){
-	localData.lstUser = lstUser;
-	for (var i = 0; i < lstUser.length; i++) {
-		lstUser[i]['desEmp'] = '';
-		lstUser[i]['desEst'] = '';
-		lstUser[i]['desRol'] = '';
-		localData.lstEmpresa.forEach(function(emp){
-			if(lstUser[i]['emp'] == emp['num']){
-				lstUser[i]['desEmp'] = emp['des'];
-			}
-		});
+function cargarNotasPedido(lstNotas,datatable,txt='default'){
+	localData.lstNotas = lstNotas;
+	/*
+	for (var i = 0; i < lstNotas.length; i++) {
+		lstNotas[i]['desEst'] = '';
 		localData.lstEstado.forEach(function(est){
-			if(lstUser[i]['est'] == est['cod']){
-				lstUser[i]['desEst'] = est['des'];
-			}
-		});
-		localData.lstRol.forEach(function(rol){
-			if(lstUser[i]['rol'] == rol['num']){
-				lstUser[i]['desRol'] = rol['des'];
+			if(lstNotas[i]['est'] == est['cod']){
+				lstNotas[i]['desEst'] = est['des'];
 			}
 		});
 	}
+	*/
 	var datafields = [
-	    {key: 'cod', name: 'Codigo', type: 'string', hidden: true},
-	    {key: 'nom', name: 'Nombres', type: 'string'},
-	    {key: 'eml', name: 'Correo Electronico', type: 'string'},
-	    {key: 'doc', name: 'Documento Identificación', type: 'string'},
-	    {key: 'desEmp', name: 'Empresa', type: 'string'},
-	    {key: 'desEst', name: 'Estado', type: 'string'},
-	    {key: 'desRol', name: 'Rol', type: 'string'}
+	    {key: 'ser', name: 'Serie', type: 'string'},
+	    {key: 'num', name: 'Número', type: 'string'},
+	    {key: 'fec', name: 'Fecha Emisión', type: 'date'},
+	    {key: 'rec', name: 'Documento', type: 'string'},
+	    {key: 'des', name: 'Nombre / Razon Social', type: 'string'},
+	    {key: 'tot', name: 'Total', type: 'number'}
 	];
 	var options = [
 	    {btn:'primary', fa:'fa-pencil', fn:'edit'},
 		{btn:'secondary', fa:'fa-file-pdf-o', fn:'pdf'},
 	    {btn:'danger', fa:'fa-trash-o', fn:'del'}
 	];
-	datatableLoad(lstUser,datatable,datafields,options,true);
+	datatableLoad(lstNotas,datatable,datafields,options,true);
 	document.getElementById(datatable).setAttribute('data',txt);
 	tablePagination(datatable,true,5);
 }

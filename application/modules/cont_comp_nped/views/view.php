@@ -47,12 +47,12 @@
                       <tr>
                         <th scope="col">#</th>
                         <th scope="col">Opciones</th>
-                        <th scope="col">Nro Nota</th>
-                        <th scope="col">Fecha Emision</th>
-                        <th scope="col">Cliente</th>
-                        <th scope="col">Doc.Ident</th>
-                        <th scope="col">Importe</th>
-                        <th scope="col">Estado</th>
+                        <th scope="col">Serie</th>
+                        <th scope="col">Número</th>
+                        <th scope="col">Fecha Emisión</th>
+                        <th scope="col">Documento</th>
+                        <th scope="col">Nombre / Razón Social</th>
+                        <th scope="col">Total</th>
                       </tr>
                       </thead>
                       <tbody>
@@ -131,9 +131,9 @@
                                 <div class="input-group">
                                   <div class="input-group-prepend">
                                     <select class="custom-select" id="selSerieCP" name="selSerieCP">
-                                      <option value="1">0001</option>
-                                      <option value="2">0002</option>
-                                      <option value="3">0003</option>
+                                      <option value="N001">N001</option>
+                                      <option value="N002">N002</option>
+                                      <option value="N003">N003</option>
                                     </select> 
                                   </div>
                                   <input type="text" class="form-control" id="txtNumeroCP" name="txtNumeroCP" required>
@@ -154,25 +154,24 @@
                                 <label for="txtNombre">Nombre</label>
                                 <input type="text" class="form-control" id="txtNombre" name="txtNombre" autocomplete="off" required>
                               </div>
-
                         </div>
                         <div class="form-row">
                           <div class="col-md-6 mb-3">
                               <label for="txtDireccion">Direccion</label>
                               <input type="text" class="form-control" id="txtDireccion" name="txtDireccion" autocomplete="off" required>                                     
                           </div>                                          
-                          <div class="col-md-2 mb-3">
-                              <label for="txtDocumento">DNI / RUC</label>
+                          <div class="col-md-3 mb-3">
+                              <label for="txtDocumento">DNI/RUC</label>
                               <input type="text" class="form-control" id="txtDocumento" name="txtDocumento" autocomplete="off" required>                                     
                           </div> 
-                          <div class="col-md-4 mb-3">
-                              <label for="txtReferencia">Referencia - Guia</label>
-                              <input type="text" class="form-control" id="txtReferencia" name="txtReferencia" autocomplete="off" required>                                     
+                          <div class="col-md-3 mb-3">
+                              <label for="txtReferencia">Observ - Ref</label>
+                              <input type="text" class="form-control" id="txtObservacion" name="txtReferencia" autocomplete="off" required>                                     
                           </div> 
                         </div>
                         <div class="form-row">
                           <div class="input-group justify-content-end">
-                            <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#modalProducto">Agregar</button> 
+                            <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#modalProducto">+Producto</button> 
                           </div>
                         </div> 
                         <div class="form-row">
