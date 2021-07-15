@@ -30,6 +30,39 @@ var dataFormulario= new DataContainer;
 $(function () {
 	fetchGet(ruta+'defaultLoad').then(json => {
 		if(json.cod === 200){	
+			json.res.lstNotas.forEach(function(row,x) {
+				var list = [];
+				row.itm.forEach(function(item,y) {
+					if(y == 0){
+						item.forEach(function(rubro) {
+							if(rubro['rub']=='01'){
+								json.res.lstNotas[x].dir = rubro['des'];
+							}
+						});
+					}else{
+						var i = {};
+						item.forEach(function(rubro) {
+							if(rubro['rub']=='81'){
+								i.cnt = rubro['val'];
+							}
+							if(rubro['rub']=='83'){
+								i.cod = rubro['des'];
+							}
+							if(rubro['rub']=='84'){
+								i.des = rubro['des'];
+							}
+							if(rubro['rub']=='85'){
+								i.pun = rubro['val'];
+							}
+							if(rubro['rub']=='99'){
+								i.imp = rubro['val'];
+							}
+						});
+						list.push(i);
+					}
+				});
+				json.res.lstNotas[x].lst = list;
+			});
 			localData = json.res;
 			cargarNotasPedido(json.res.lstNotas,'tabNotaPedido');
 		}else if(json.cod == 401){
@@ -41,6 +74,10 @@ $(function () {
 });
 
 // Default Events
+document.getElementById('txtFecha').value = dateToday();
+document.getElementById('txtFecha').setAttribute('min',dateSubtractYear(dateToday(),1)); //No working Safari
+document.getElementById('txtFecha').setAttribute('max',dateToday());//No working Safari
+
 document.getElementById('txtBuscar').onkeyup = function(){
 	tableFilter('tabNotaPedido',this.value,5);
 }
@@ -50,36 +87,28 @@ document.getElementById('btnBuscar').onclick = function(){
 	listarNotasPedido('tabNotaPedido',txt);
 }
 
-document.getElementById('btnExport').onclick = function(){
-	tableToCsv('tabNotaPedido','export.csv');
-}
-
 document.getElementById('btnReload').onclick = function(){
 	txt = document.getElementById('tabNotaPedido').getAttribute('data');
  	listarNotasPedido('tabNotaPedido',txt);
 }
+
+document.getElementById('btnExport').onclick = function(){
+	tableToCsv('tabNotaPedido','export.csv');
+}
+
 // Modal Registro Eventos
 document.getElementById('formNotaPedido').onsubmit = function(e) {
 	e.preventDefault();
 }
 
-//Generar PDF 
-/*
-document.getElementById('btnPDF').onclick = function(){
-	fetch(ruta+'generarPDF')
-	.then(response => response.blob())
-	.then(blob => {
-			var file = new Blob([blob], {type: "application/pdf"});
-			var fileURL = window.URL.createObjectURL(file);
-			window.open(fileURL, "_blank");
-	});
+document.getElementById('formAddProducto').onsubmit = function(e) {
+	e.preventDefault();
 }
-*/
 
 //Eventos modulo
 document.getElementById('btnRegistrar').onclick = function() {
 	if(document.getElementById('formNotaPedido').checkValidity()){
-		if(!document.getElementById('txtNumeroCP').hasAttribute('ind')){
+		if(!document.getElementById('formNotaPedido').hasAttribute('cpe')){
 			document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.guardar;
 			document.getElementById(confirmForm).setAttribute('act',1);
 		}else{
@@ -90,15 +119,75 @@ document.getElementById('btnRegistrar').onclick = function() {
 	}
 }
 
+document.getElementById('btnAgregar').onclick = function() {
+	if(document.getElementById('formAddProducto').checkValidity()){
+		formAlertRemove('formAddProducto');
+		let coditem = document.getElementById('txtCodigo').value;
+		var rows = document.querySelectorAll('#tabItems div table tbody tr');
+		var itemExist = false;
+		var json = {
+			cod: document.getElementById('txtCodigo').value, 
+			des: document.getElementById('txtProducto').value,
+			cnt: document.getElementById('txtCantidad').value, 
+			pun: document.getElementById('txtPrecio').value, 
+			imp: document.getElementById('txtCantidad').value * document.getElementById('txtPrecio').value
+		};
+		var datafields = [
+			{key: 'cod', name: 'Código', type: 'string'},
+			{key: 'des', name: 'Descripción', type: 'string'},
+			{key: 'cnt', name: 'Cant', type: 'decimal'},
+			{key: 'pun', name: 'P.Unit', type: 'decimal'},
+			{key: 'imp', name: 'Importe', type: 'decimal'}
+		];
+		var options = [
+			{btn:'danger', fa:'fa-trash-o', fn:'del'}
+		];
+
+		if(coditem.trim() !==''){
+			rows.forEach(function(row) {
+				if((row.children[1].innerHTML).trim() == coditem.trim()){
+					itemExist = true;
+				}
+			});
+			if(itemExist){
+				formAlertShow('formAddProducto','Ya tiene el producto en la lista');
+			}else{
+				tableAddRow('tabItems',datafields,json,options,false);
+				if (rows.length>4){
+					tablePagination('tabItems',true,5);
+				}
+			}
+		}else{
+			tableAddRow('tabItems',datafields,json,options,false);
+			if (rows.length>4){
+				tablePagination('tabItems',true,5);
+			}
+		}
+	}
+}
+
 //Bootstrap Events
 $('#modalNota').on('hidden.bs.modal', function () {
 	document.getElementById("formNotaPedido").reset();
-	document.getElementById("selSerieCP").selectedIndex = '-1';
-	document.getElementById('txtNumeroCP').removeAttribute('ind');
+	document.getElementById('formNotaPedido').removeAttribute('cpe');
+	document.getElementById('txtFecha').value = dateToday();
+	var datafields = [
+		{key: 'cod', name: 'Código'},
+		{key: 'des', name: 'Descripción'},
+		{key: 'cnt', name: 'Cant'},
+		{key: 'pun', name: 'P.Unit'},
+		{key: 'imp', name: 'Importe'}
+	];
+	datatableLoad('tabItems',datafields);
+	tablePagination('tabItems',true,5);
+});
+
+$('#modalProducto').on('hidden.bs.modal', function () {
+	document.getElementById("formAddProducto").reset();
 	//agregar limpiar grilla de productos
 });
 
-$($confirmForm).on('hide.bs.modal', function () {
+$($confirmForm).on('hidden.bs.modal', function () {
 	this.removeAttribute('act');
 	this.querySelector('div div div.modal-body').innerHTML = '';
 });
@@ -141,55 +230,63 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	$($confirmForm).modal('hide');
 	setTimeout(function(){ $(progressForm).modal('hide'); }, 500);
 }
+
 //Eventos opciones datatable
 $(document).on('click','#tabNotaPedido div table tbody tr td div button.edit', function() {
-    let ser = ((this.parentNode).parentNode).childNodes[1].innerHTML;
-    let num = ((this.parentNode).parentNode).childNodes[2].innerHTML;
+    let ser = (((this.parentNode).parentNode).parentNode).childNodes[2].innerHTML;
+    let num = (((this.parentNode).parentNode).parentNode).childNodes[3].innerHTML;
+	document.getElementById('formNotaPedido').setAttribute('cpe',ser.trim()+'-'+num.trim());
     localData.lstNotas.forEach(function(row) {
     	if(row['ser'] == ser && row['num'] == num){
     		document.getElementById('selSerieCP').value = row['ser'];
     		document.getElementById('txtNumeroCP').value = row['num'];
     		document.getElementById('txtFecha').value = row['fec'];
     		document.getElementById('txtNombre').value = row['des'];
-    		//document.getElementById('txtDireccion').value = row['itm'][0][0]['des'];
+    		document.getElementById('txtDireccion').value = row['dir'];
     		document.getElementById('txtDocumento').value = row['rec'];
-			//document.getElementById('txtDocumento').setAttribute('ind','');
     		document.getElementById('txtObservacion').value = row['obs'];
-    		row.itm.forEach(function(item) {
-    			if(item == 0){
-    				item.forEach(function(rubro) {
-    					if(rubro['rub']=='01'){
-    						document.getElementById('txtDireccion').value = rubro['des'];
-    					}
-    				}
-    			}else{
-    				var lstItems = [
-					    {key: 'ser', name: 'Serie', type: 'string'},
-					    {key: 'num', name: 'Número', type: 'string'},
-					    {key: 'fec', name: 'Fecha Emisión', type: 'date'},
-					    {key: 'rec', name: 'Documento', type: 'string'},
-					    {key: 'des', name: 'Nombre / Razon Social', type: 'string'},
-					    {key: 'tot', name: 'Total', type: 'number'}
-					];
-					item.forEach(function(rubro) {
-    					if(rubro['rub']=='01'){
-    						
-    					}
-    				}
-    			}
-    		}
+			var datafields = [
+				{key: 'cod', name: 'Código', type: 'string'},
+				{key: 'des', name: 'Descripción', type: 'string'},
+				{key: 'cnt', name: 'Cant', type: 'decimal'},
+				{key: 'pun', name: 'P.Unit', type: 'decimal'},
+				{key: 'imp', name: 'Importe', type: 'decimal'}
+			];
+			var options = [
+				{btn:'danger', fa:'fa-trash-o', fn:'del'}
+			];
+			datatableLoad('tabItems',datafields,row.lst,options,false,'table-sm','thead-light','');
+			document.getElementById('tabItems').setAttribute('cpe',row['ser']+'-'+row['num']);
+			tablePagination('tabItems',true,5);
     	}
     });
     $('#modalNota').modal('show');
 });
 
 $(document).on('click','#tabNotaPedido div table tbody tr td div button.del', function() { 
-    let cod = ((this.parentNode).parentNode).childNodes[1].innerHTML;
-	document.getElementById(confirmForm).setAttribute('cod',cod);
+	let ser = (((this.parentNode).parentNode).parentNode).childNodes[2].innerHTML;
+    let num = (((this.parentNode).parentNode).parentNode).childNodes[3].innerHTML;
+	document.getElementById(confirmForm).setAttribute('cpe',ser.trim()+'-'+num.trim());
     document.getElementById(confirmForm).setAttribute('act',0);
     document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.eliminar;
     $($confirmForm).modal('show');
 });
+//Generar PDF 
+$(document).on('click','#tabNotaPedido div table tbody tr td div button.pdf', function() {
+	fetch(ruta+'generarPDF')
+	.then(response => response.blob())
+	.then(blob => {
+			var file = new Blob([blob], {type: "application/pdf"});
+			var fileURL = window.URL.createObjectURL(file);
+			window.open(fileURL, "_blank");
+	});
+});
+
+$(document).on('click','#tabItems div table tbody tr td div button.del', function() {
+	(((this.parentNode).parentNode).parentNode).remove();
+	tablePagination('tabItems',true,5);
+});
+
 //Functions
 function listarNotasPedido(datatable,txt='default'){
 	txt = txt.trim();
@@ -225,14 +322,14 @@ function cargarNotasPedido(lstNotas,datatable,txt='default'){
 	    {key: 'fec', name: 'Fecha Emisión', type: 'date'},
 	    {key: 'rec', name: 'Documento', type: 'string'},
 	    {key: 'des', name: 'Nombre / Razon Social', type: 'string'},
-	    {key: 'tot', name: 'Total', type: 'number'}
+	    {key: 'tot', name: 'Total', type: 'decimal'}
 	];
 	var options = [
 	    {btn:'primary', fa:'fa-pencil', fn:'edit'},
 		{btn:'secondary', fa:'fa-file-pdf-o', fn:'pdf'},
 	    {btn:'danger', fa:'fa-trash-o', fn:'del'}
 	];
-	datatableLoad(lstNotas,datatable,datafields,options,true);
+	datatableLoad(datatable,datafields,lstNotas,options,true);
 	document.getElementById(datatable).setAttribute('data',txt);
 	tablePagination(datatable,true,5);
 }

@@ -123,6 +123,35 @@ function getIpClient() {
     });
 }
 
+function dateToday() {
+	let now = new Date();
+	let m = (now.getMonth()+1).toLocaleString('en-US',{minimumIntegerDigits: 2});
+	let d = (now.getDate()).toLocaleString('en-US',{minimumIntegerDigits: 2});
+	let date = now.getFullYear()+'-'+m+'-'+d;
+	//let date = now.getFullYear()+'-'+(now.getMonth()+1)+'-'+now.getDate();
+	return date;
+}
+
+function dateSubtractYear(str,num) {
+	let input = str.split('-');
+	let fecha = new Date(input[0],input[1]-1,input[2]);
+	fecha.setYear(fecha.getFullYear() - num );
+	let m = (fecha.getMonth()+1).toLocaleString('en-US',{minimumIntegerDigits: 2});
+	let d = (fecha.getDate()).toLocaleString('en-US',{minimumIntegerDigits: 2});
+	let date = fecha.getFullYear()+'-'+m+'-'+d;
+	return date;
+}
+
+function dateAddYear(str,num) {
+	let input = str.split('-');
+	var fecha = new Date(input[0],input[1]-1,input[2]);
+	fecha.setYear(fecha.getFullYear() + num );
+	let m = (fecha.getMonth()+1).toLocaleString('en-US',{minimumIntegerDigits: 2});
+	let d = (fecha.getDate()).toLocaleString('en-US',{minimumIntegerDigits: 2});
+	let date = fecha.getFullYear()+'-'+m+'-'+d;
+	return date;
+}
+
 function setPostData(objectContainer,index,formData){
     var dataForm = new FormData();
     for ( var key in objectContainer ) {

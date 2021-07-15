@@ -134,7 +134,7 @@
                                 </div>
                               </div>
                                <div class="form-row">
-                                <div class="form-group">
+                                <div class="col-md-12">
                                   <div class="invalid-feedback">
                                     Message invalid feedback.
                                   </div>
@@ -204,7 +204,7 @@
                                 </div>                                
                               </div>
                               <div class="form-row">
-                                <div class="form-group">
+                                <div class="col-md-12">
                                   <div class="invalid-feedback">
                                     Message invalid feedback.
                                   </div>

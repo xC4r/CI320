@@ -115,7 +115,7 @@
             </div>
             <!-- Modal -->
             <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalNotaLabel" aria-hidden="true" id="modalNota">
-              <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h4 class="modal-title">Nota de Pedido</h4>
@@ -123,7 +123,7 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <form id="formNotaPedido" autocomplete="off" >
+                  <form id="formNotaPedido">
                     <div class="modal-body">
                         <div class="form-row">
                               <div class="col-md-3 mb-3">
@@ -142,7 +142,7 @@
                               <div class="col-md-3 mb-3">
                                 <label for="txtFecha">Fecha</label>
                                 <div class="input-group">
-                                  <input type="text" class="form-control" id="txtFecha" name="txtFecha" required>
+                                  <input type="date"  class="form-control" id="txtFecha" name="txtFecha" required>
                                   <div class="input-group-append">
                                     <div class="input-group-text">
                                       <input type="checkbox">
@@ -152,132 +152,101 @@
                               </div>
                               <div class="col-md-6 mb-3">
                                 <label for="txtNombre">Nombre</label>
-                                <input type="text" class="form-control" id="txtNombre" name="txtNombre" autocomplete="off" required>
+                                <input type="text" class="form-control" id="txtNombre" name="txtNombre" required>
                               </div>
                         </div>
                         <div class="form-row">
                           <div class="col-md-6 mb-3">
                               <label for="txtDireccion">Direccion</label>
-                              <input type="text" class="form-control" id="txtDireccion" name="txtDireccion" autocomplete="off" required>                                     
+                              <input type="text" class="form-control" id="txtDireccion" name="txtDireccion" required>                                     
                           </div>                                          
                           <div class="col-md-3 mb-3">
                               <label for="txtDocumento">DNI/RUC</label>
-                              <input type="text" class="form-control" id="txtDocumento" name="txtDocumento" autocomplete="off" required>                                     
+                              <input type="text" class="form-control" id="txtDocumento" name="txtDocumento" required>                                     
                           </div> 
                           <div class="col-md-3 mb-3">
                               <label for="txtReferencia">Observ - Ref</label>
-                              <input type="text" class="form-control" id="txtObservacion" name="txtReferencia" autocomplete="off" required>                                     
+                              <input type="text" class="form-control" id="txtObservacion" name="txtReferencia" required>                                     
                           </div> 
                         </div>
                         <div class="form-row">
-                          <div class="input-group justify-content-end">
-                            <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#modalProducto">+Producto</button> 
-                          </div>
-                        </div> 
-                        <div class="form-row">
-                          <div class="form-group">
-                            <div class="invalid-feedback">
-                              Message invalid feedback.
+                            <div class="col-md-12">
+                              <div class="input-group">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalProducto">Agregar</button> 
+                              </div>
                             </div>
-                          </div>
                         </div>
-                        <div class="datatable">
+                        <div class="form-row">
+                            <div class="col-md-12 mb-3">
+                              <div class="invalid-feedback d-block">
+                                  Message invalid feedback.
+                              </div>
+                            </div>
+                        </div>
+                        <div class="datatable" id="tabItems">
                           <div class="table-responsive">
                             <table class="table table-sm">
-                                <thead class="thead-dark">
+                                <thead class="thead-light">
                                   <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Options</th>
+                                    <th scope="col">Opción</th>
+                                    <th scope="col">Código</th>
                                     <th scope="col">Descripción</th>
-                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Cant</th>
                                     <th scope="col">P.Unit</th>
                                     <th scope="col">Importe</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <tr>
-                                    <th scope="row">1</th>
-                                    <td>
-                                      <div class="btn-group" role="group" aria-label="Basic example">
-                                      <button type="button" class="btn btn-primary btn-sm edit mb-1">
-                                        <i class="fa fa-pencil"> </i>
-                                      </button>
-                                      <button type="button" class="btn btn-danger btn-sm edit mb-1">
-                                        <i class="fa fa-trash-o"> </i>
-                                      </button>
-                                      <button type="button" class="btn btn-danger btn-sm edit mb-1">
-                                        <i class="fa fa-trash-o"> </i>
-                                      </button>
-                                      </div>
-                                    </td> 
+                                    <td><div class="btn-group" role="group"><button type="button" class="btn btn-danger btn-sm del mb-1"><i class="fa fa-trash-o"></i></button></div></td>
+                                    <td>P001</td>
                                     <td>Fierro 1/2 AA</td>
-                                    <td>10</td>
+                                    <td>10.30</td>
                                     <td>28.00</td>
                                     <td>280.00</td>
                                   </tr>
                                   <tr>
-                                    <th scope="row">2</th>
-                                    <td>
-                                      <button type="button" class="btn btn-primary btn-sm edit mb-1">
-                                        <i class="fa fa-pencil"></i>
-                                      </button>
-                                      <button type="button" class="btn btn-danger btn-sm edit mb-1">
-                                        <i class="fa fa-trash-o"> </i>
-                                      </button>
-                                    </td> 
-                                    <td>Fierro 3/8 Acerl</td>
-                                    <td>10</td>
+                                    <td><div class="btn-group" role="group"><button type="button" class="btn btn-danger btn-sm del mb-1"><i class="fa fa-trash-o"></i></button></div></td>
+                                    <td>P002</td>
+                                    <td>Carretilla Simple Contruccion</td>
+                                    <td>10.50</td>
                                     <td>16.00</td>
                                     <td>160.00</td>
                                   </tr>
                                   <tr>
-                                    <th scope="row">3</th>
-                                    <td>
-                                      <button type="button" class="btn btn-primary btn-sm edit mb-1">
-                                        <i class="fa fa-pencil"></i>
-                                      </button>
-                                      <button type="button" class="btn btn-danger btn-sm edit mb-1">
-                                        <i class="fa fa-trash-o"> </i>
-                                      </button>
-                                    </td> 
+                                    <td><div class="btn-group" role="group"><button type="button" class="btn btn-danger btn-sm del mb-1"><i class="fa fa-trash-o"></i></button></div></td>
+                                    <td>P003</td>
                                     <td>Calamina 022</td>
-                                    <td>10</td>
+                                    <td>10.00</td>
                                     <td>22.00</td>
                                     <td>220.00</td>
                                   </tr>
                                   <tr>
-                                    <th scope="row">4</th>
-                                    <td>
-                                      <button type="button" class="btn btn-primary btn-sm edit mb-1">
-                                        <i class="fa fa-pencil"></i>
-                                      </button>
-                                      <button type="button" class="btn btn-danger btn-sm edit mb-1">
-                                        <i class="fa fa-trash-o"> </i>
-                                      </button>
-                                    </td> 
-                                    <td>Calamina 022</td>
-                                    <td>10</td>
+                                    <td><div class="btn-group" role="group"><button type="button" class="btn btn-danger btn-sm del mb-1"><i class="fa fa-trash-o"></i></button></div></td> 
+                                    <td>P004</td>
+                                    <td>Calamina Galv 022 x 360</td>
+                                    <td>10.20</td>
                                     <td>22.00</td>
                                     <td>220.00</td>
                                   </tr>
                                   <tr>
-                                    <th scope="row">5</th>
-                                    <td>
-                                      <button type="button" class="btn btn-primary btn-sm edit mb-1">
-                                        <i class="fa fa-pencil"></i>
-                                      </button>
-                                      <button type="button" class="btn btn-danger btn-sm edit mb-1">
-                                        <i class="fa fa-trash-o"> </i>
-                                      </button>
-                                    </td> 
+                                    <td><div class="btn-group" role="group"><button type="button" class="btn btn-danger btn-sm del mb-1"><i class="fa fa-trash-o"></i></button></div></td>
+                                    <td>P005</td>
                                     <td>Calamina 022</td>
-                                    <td>10</td>
+                                    <td>10.20</td>
                                     <td>22.00</td>
                                     <td>220.00</td>
                                   </tr>
                                 </tbody>
                             </table>
-                          </div> 
+                          </div>
+                          <nav>
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled"><a class="page-link prev-link active" href="#"><i class="fa fa-arrow-left"></i></a></li>
+                                <li class="page-item active"><a class="page-link num-link" href="#">1</a></li>
+                                <li class="page-item disabled"><a class="page-link next-link" href="#"><i class="fa fa-arrow-right"></i></a></li>
+                            </ul>
+                          </nav>
                         </div> 
                     </div>
                     <div class="modal-footer">
@@ -300,36 +269,39 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <form id="formAddProducto" autocomplete="off" >
+                  <form id="formAddProducto">
                     <div class="modal-body">
-                        <div class="form-row">
-                          <div class="col-md-6 mb-3">
-                            <label for="txtProducto">Producto</label>
-                            <input type="text" class="form-control" id="txtProducto" name="txtProducto" autocomplete="off" required>
+                      <div class="form-row">
+                        <div class="col-md-7 mb-3">
+                          <label for="txtProducto">Producto</label>
+                          <div class="input-group">
+                            <input type="text" class="form-control w-25" id="txtCodigo" name="txtCodigo">
+                            <input type="text" class="form-control w-75" id="txtProducto" name="txtProducto" required>
                           </div>
-                          <div class="col-md-3 mb-3">
-                            <label for="txtCantidad">Cantidad</label>
-                            <input type="text" class="form-control" id="txtCantidad" name="txtCantidad" value="01" required>
-                          </div>
-                          <div class="col-md-3 mb-3">
-                            <label for="txtPrecio">Precio</label>
-                            <div class="input-group">
-                              <input type="text" class="form-control" id="txtPrecio" name="txtPrecio" required>
-                              <div class="input-group-append">
-                                <div class="input-group-text">
-                                  <input type="checkbox">
-                                </div>
+                        </div>
+                        <div class="col-md-2 mb-3">
+                          <label for="txtCantidad">Cantidad</label>
+                          <input type="text" class="form-control" id="txtCantidad" name="txtCantidad" value="1.00" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                          <label for="txtPrecio">Precio</label>
+                          <div class="input-group">
+                            <input type="text" class="form-control" id="txtPrecio" name="txtPrecio" required>
+                            <div class="input-group-append">
+                              <div class="input-group-text" style="padding-right:10px; padding-left:10px;">
+                                <input type="checkbox">
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div class="form-row">
-                          <div class="form-group">
-                            <div class="invalid-feedback">
-                              Message invalid feedback.
-                            </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="col-md-12">
+                          <div class="invalid-feedback">
+                            Message invalid feedback.
                           </div>
                         </div>
+                      </div>
                     </div>
                     <div class="modal-footer">
                       <div class="input-group justify-content-end">

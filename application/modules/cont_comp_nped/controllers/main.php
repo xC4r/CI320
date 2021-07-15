@@ -48,7 +48,7 @@ class Main extends MX_Controller {
                 $json['res']['lstNotas'] = $this->listaNotas();
                 //$json['res']['lstEmpresa'] = $this->listaEmpresa();
                 //$json['res']['lstRol'] = $this->listaRol();
-                $json['res']['lstEstado'] = GET_LST_STATE();
+                //$json['res']['lstEstado'] = GET_LST_STATE();
                 $json['cod'] = 200;
                 $json['msg'] = "Ok";
             } catch (Exception $e) {
@@ -303,6 +303,7 @@ class Main extends MX_Controller {
         }        
         return $array;
     }
+    /*
     private function listaEmpresa() {
         $array = array();     
         $this->db->select('*');
@@ -347,6 +348,7 @@ class Main extends MX_Controller {
         }        
         return $array;
     }
+    */
     public function generarPDF() {
         $array = array(
             'ID' => null,

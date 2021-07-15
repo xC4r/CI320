@@ -262,7 +262,7 @@ function cargarListaUsuario(lstUser,datatable,txt='default'){
 	    {btn:'primary', fa:'fa-pencil', fn:'edit'},
 	    {btn:'danger', fa:'fa-trash-o', fn:'del'}
 	];
-	datatableLoad(lstUser,datatable,datafields,options,true);
+	datatableLoad(datatable,datafields,lstUser,options,true);
 	document.getElementById(datatable).setAttribute('data',txt);
 	tablePagination(datatable,true,5);
 }
