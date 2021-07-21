@@ -1,86 +1,52 @@
--- phpMyAdmin SQL Dump
--- version 4.8.4
--- https://www.phpmyadmin.net/
---
--- Servidor: 127.0.0.1
--- Tiempo de generación: 20-06-2021 a las 18:43:46
--- Versión del servidor: 10.1.37-MariaDB
--- Versión de PHP: 5.6.40
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
---
--- Base de datos: `db_sky`
---
 CREATE DATABASE IF NOT EXISTS `db_sky` DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci;
-USE `db_sky`;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `cont_cpe`
---
+USE db_sky;
 
 CREATE TABLE `cont_cpe` (
-  `num_ruc` char(11) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_cpe` char(2) COLLATE utf8_spanish_ci NOT NULL,
-  `num_serie` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
+  `num_ruc` char(11) NOT NULL,
+  `cod_cpe` char(2) NOT NULL,
+  `num_serie` varchar(20) NOT NULL,
   `num_cpe` int(11) NOT NULL,
   `fec_emision` date NOT NULL,
-  `cod_tipdocrec` char(2) COLLATE utf8_spanish_ci NOT NULL,
-  `num_docrecep` char(16) COLLATE utf8_spanish_ci NOT NULL,
-  `des_nomrecep` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_moneda` char(3) COLLATE utf8_spanish_ci NOT NULL,
+  `cod_tipdocrec` char(2) NOT NULL,
+  `num_docrecep` char(16) NOT NULL,
+  `des_nomrecep` varchar(100) NOT NULL,
+  `cod_moneda` char(3) NOT NULL,
   `mto_tipocambio` decimal(3,2) NOT NULL,
   `mto_totalvta` decimal(15,2) NOT NULL DEFAULT '0.00',
   `mto_totaligv` decimal(15,2) NOT NULL DEFAULT '0.00',
   `mto_imptotal` decimal(15,2) NOT NULL DEFAULT '0.00',
-  `des_observa` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `des_observa` varchar(100) NOT NULL,
   `num_xml` int(11) DEFAULT NULL,
-  `ind_estado` char(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0',
-  `cod_usumod` char(20) COLLATE utf8_spanish_ci NOT NULL DEFAULT 'noUser',
-  `fec_modif` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `cont_cpe`
---
+  `ind_estado` char(1) NOT NULL DEFAULT '0',
+  `cod_usumod` char(20) NOT NULL DEFAULT 'noUser',
+  `fec_modif` datetime NOT NULL
+) ;
 
 INSERT INTO `cont_cpe` (`num_ruc`, `cod_cpe`, `num_serie`, `num_cpe`, `fec_emision`, `cod_tipdocrec`, `num_docrecep`, `des_nomrecep`, `cod_moneda`, `mto_tipocambio`, `mto_totalvta`, `mto_totaligv`, `mto_imptotal`, `des_observa`, `num_xml`, `ind_estado`, `cod_usumod`, `fec_modif`) VALUES
 ('20601344557', '00', 'N001', 1, '2021-06-11', '06', '11111111111', 'Empresa prueba 1', 'PEN', '0.00', '1100.00', '0.00', '1100.00', 'sin observaciones', 0, '0', 'noUser', '2021-06-13 13:09:26'),
 ('20601344557', '00', 'N001', 2, '2021-06-13', '06', '22222222222', 'Empresa prueba 2', 'PEN', '0.00', '1200.00', '0.00', '1200.00', 'sin observaciones', NULL, '0', 'noUser', '2021-06-13 10:30:48');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `cont_cpedata`
---
-
 CREATE TABLE `cont_cpedata` (
-  `num_ruc` char(11) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_cpe` char(2) COLLATE utf8_spanish_ci NOT NULL,
-  `num_serie` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
+  `num_ruc` char(11) NOT NULL,
+  `cod_cpe` char(2) NOT NULL,
+  `num_serie` varchar(20) NOT NULL,
   `num_cpe` int(11) NOT NULL,
   `num_item` int(11) NOT NULL,
-  `cod_rubro` char(2) COLLATE utf8_spanish_ci NOT NULL,
+  `cod_rubro` char(2) NOT NULL,
   `mto_rubro` decimal(15,2) DEFAULT NULL,
-  `des_rubro` varchar(250) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_usureg` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `fec_registro` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `cont_cpedata`
---
+  `des_rubro` varchar(250) NOT NULL,
+  `cod_usureg` varchar(20) NOT NULL,
+  `fec_registro` datetime NOT NULL
+) ;
 
 INSERT INTO `cont_cpedata` (`num_ruc`, `cod_cpe`, `num_serie`, `num_cpe`, `num_item`, `cod_rubro`, `mto_rubro`, `des_rubro`, `cod_usureg`, `fec_registro`) VALUES
 ('20601344557', '00', 'N001', 1, 0, '01', NULL, 'Av universitaria 3418 los ceros 104 ', '', '2021-06-13 10:30:36'),
@@ -93,67 +59,37 @@ INSERT INTO `cont_cpedata` (`num_ruc`, `cod_cpe`, `num_serie`, `num_cpe`, `num_i
 ('20601344557', '00', 'N001', 1, 1, '85', '100.00', '', '', '2021-06-18 00:08:26'),
 ('20601344557', '00', 'N001', 1, 1, '99', '1200.00', '', '', '2021-06-18 00:09:12');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `cont_docrubro`
---
-
 CREATE TABLE `cont_docrubro` (
-  `cod_docrubro` char(2) COLLATE utf8_spanish_ci NOT NULL,
-  `des_docrubro` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
-  `des_rubros` varchar(250) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_usureg` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `fec_registro` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `cont_docrubro`
---
+  `cod_docrubro` char(2) NOT NULL,
+  `des_docrubro` varchar(50) NOT NULL,
+  `des_rubros` varchar(250) NOT NULL,
+  `cod_usureg` varchar(20) NOT NULL,
+  `fec_registro` datetime NOT NULL
+) ;
 
 INSERT INTO `cont_docrubro` (`cod_docrubro`, `des_docrubro`, `des_rubros`, `cod_usureg`, `fec_registro`) VALUES
 ('00', 'Nota Pedido', '01,31,80,81,82,83,84,85,99', 'batch', '2021-06-17 23:51:00');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `sysm_catalogo`
---
-
 CREATE TABLE `sysm_catalogo` (
-  `cod_catalogo` char(2) COLLATE utf8_spanish_ci NOT NULL,
-  `des_catalogo` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `des_acronimo` char(10) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_usureg` char(20) COLLATE utf8_spanish_ci NOT NULL,
-  `fec_registro` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `sysm_catalogo`
---
+  `cod_catalogo` char(2) NOT NULL,
+  `des_catalogo` varchar(100) NOT NULL,
+  `des_acronimo` char(10) NOT NULL,
+  `cod_usureg` char(20) NOT NULL,
+  `fec_registro` datetime NOT NULL
+) ;
 
 INSERT INTO `sysm_catalogo` (`cod_catalogo`, `des_catalogo`, `des_acronimo`, `cod_usureg`, `fec_registro`) VALUES
 ('A0', 'Estado de Registro', 'EST', 'batch', '2021-06-17 13:12:52'),
 ('A1', 'Catalogo Rubros CP', 'RUBR', 'batch', '2021-06-17 10:42:51');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `sysm_datacat`
---
-
 CREATE TABLE `sysm_datacat` (
-  `cod_catalogo` char(2) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_param` char(2) COLLATE utf8_spanish_ci NOT NULL,
-  `des_param` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `des_larga` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_usureg` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `fec_registro` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `sysm_datacat`
---
+  `cod_catalogo` char(2) NOT NULL,
+  `cod_param` char(2) NOT NULL,
+  `des_param` varchar(20) NOT NULL,
+  `des_larga` varchar(200) NOT NULL,
+  `cod_usureg` varchar(20) NOT NULL,
+  `fec_registro` datetime NOT NULL
+) ;
 
 INSERT INTO `sysm_datacat` (`cod_catalogo`, `cod_param`, `des_param`, `des_larga`, `cod_usureg`, `fec_registro`) VALUES
 ('A1', '00', 'Datos Adicionales', 'Datos Adicionales del cliente', 'batch', '2021-06-17 12:38:39'),
@@ -203,25 +139,15 @@ INSERT INTO `sysm_datacat` (`cod_catalogo`, `cod_param`, `des_param`, `des_larga
 ('A1', '98', 'Monto ICBPER', 'Monto ICBPER', 'batch', '2021-06-17 12:29:28'),
 ('A1', '99', 'Importe de Venta', 'Importe de Item', 'batch', '2021-06-17 12:29:28');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `sysm_empresa`
---
-
 CREATE TABLE `sysm_empresa` (
   `num_empresa` int(11) NOT NULL,
-  `cod_empresa` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `ruc_empresa` char(11) COLLATE utf8_spanish_ci NOT NULL,
-  `des_empresa` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `dir_empresa` varchar(150) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_estado` char(2) COLLATE utf8_spanish_ci NOT NULL DEFAULT '01',
-  `ind_del` char(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `sysm_empresa`
---
+  `cod_empresa` varchar(20) NOT NULL,
+  `ruc_empresa` char(11) NOT NULL,
+  `des_empresa` varchar(100) NOT NULL,
+  `dir_empresa` varchar(150) NOT NULL,
+  `cod_estado` char(2) NOT NULL DEFAULT '01',
+  `ind_del` char(1) NOT NULL DEFAULT '0'
+) ;
 
 INSERT INTO `sysm_empresa` (`num_empresa`, `cod_empresa`, `ruc_empresa`, `des_empresa`, `dir_empresa`, `cod_estado`, `ind_del`) VALUES
 (1, 'sin_empresa', '00000000000', '_Sin Empresa', 'Av Sin Direccion', '01', '0'),
@@ -230,27 +156,17 @@ INSERT INTO `sysm_empresa` (`num_empresa`, `cod_empresa`, `ruc_empresa`, `des_em
 (4, 'empresa_prueba3', '33333333333', 'Empresa Prueba 03', 'Av Pruebas 03', '01', '0'),
 (5, 'abascom_matias', '20601344557', 'ABASTECEDORA Y COMERCIALIZADORA MATIAS E.I.R.L.', 'AV UNIVERSITARIA #3418 URB CAYHUAYNA - HUANUCO', '01', '0');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `sysm_navmenu`
---
-
 CREATE TABLE `sysm_navmenu` (
   `num_menu` int(11) NOT NULL,
-  `cod_menu` char(30) COLLATE utf8_spanish_ci NOT NULL,
-  `des_menu` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
-  `des_icono` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
-  `des_larga` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
-  `ind_nivel` char(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0',
-  `ind_modulo` char(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0',
-  `cod_estado` char(2) COLLATE utf8_spanish_ci NOT NULL DEFAULT '01',
-  `ind_del` char(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `sysm_navmenu`
---
+  `cod_menu` char(30) NOT NULL,
+  `des_menu` varchar(30) NOT NULL,
+  `des_icono` varchar(30) NOT NULL,
+  `des_larga` varchar(50) NOT NULL,
+  `ind_nivel` char(1) NOT NULL DEFAULT '0',
+  `ind_modulo` char(1) NOT NULL DEFAULT '0',
+  `cod_estado` char(2) NOT NULL DEFAULT '01',
+  `ind_del` char(1) NOT NULL DEFAULT '0'
+) ;
 
 INSERT INTO `sysm_navmenu` (`num_menu`, `cod_menu`, `des_menu`, `des_icono`, `des_larga`, `ind_nivel`, `ind_modulo`, `cod_estado`, `ind_del`) VALUES
 (1, 'admi', 'Administracion', 'fa fa-tachometer', 'Modulo Administracion', '1', '0', '01', '0'),
@@ -282,24 +198,14 @@ INSERT INTO `sysm_navmenu` (`num_menu`, `cod_menu`, `des_menu`, `des_icono`, `de
 (1701, 'tcar_cser_prof_vent_ordn', 'orden', 'fa fa-check', '', '5', '0', '01', '0'),
 (1901, 'tcar_cser_prof_vent_ordn_prim', 'primaria', 'fa fa-check', '', '6', '1', '01', '0');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `sysm_rolusua`
---
-
 CREATE TABLE `sysm_rolusua` (
   `num_rol` int(11) NOT NULL,
-  `cod_rol` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `des_rol` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_categoria` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_estado` char(2) COLLATE utf8_spanish_ci NOT NULL DEFAULT '01',
-  `ind_del` char(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `sysm_rolusua`
---
+  `cod_rol` varchar(20) NOT NULL,
+  `des_rol` varchar(100) NOT NULL,
+  `cod_categoria` varchar(20) NOT NULL,
+  `cod_estado` char(2) NOT NULL DEFAULT '01',
+  `ind_del` char(1) NOT NULL DEFAULT '0'
+) ;
 
 INSERT INTO `sysm_rolusua` (`num_rol`, `cod_rol`, `des_rol`, `cod_categoria`, `cod_estado`, `ind_del`) VALUES
 (1, 'admin', 'Administrador', 'Primero', '01', '0'),
@@ -307,32 +213,22 @@ INSERT INTO `sysm_rolusua` (`num_rol`, `cod_rol`, `des_rol`, `cod_categoria`, `c
 (3, 'Asis', 'Asistente', 'Secundario', '01', '0'),
 (4, 'Aux', 'Auxiliar', 'Secundario', '01', '0');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `sysm_usuario`
---
-
 CREATE TABLE `sysm_usuario` (
   `num_usuario` int(11) NOT NULL,
-  `cod_usuario` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `pas_usuario` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `dir_correo` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
-  `des_nombre` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
-  `num_documento` char(8) COLLATE utf8_spanish_ci NOT NULL,
+  `cod_usuario` varchar(20) NOT NULL,
+  `pas_usuario` varchar(20) NOT NULL,
+  `dir_correo` varchar(50) NOT NULL,
+  `des_nombre` varchar(50) NOT NULL,
+  `num_documento` char(8) NOT NULL,
   `num_empresa` int(11) NOT NULL,
   `num_rol` int(11) NOT NULL,
-  `cod_supervisor` char(20) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_estado` char(2) COLLATE utf8_spanish_ci NOT NULL DEFAULT '01',
-  `ind_del` char(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `sysm_usuario`
---
+  `cod_supervisor` char(20) NOT NULL,
+  `cod_estado` char(2) NOT NULL DEFAULT '01',
+  `ind_del` char(1) NOT NULL DEFAULT '0'
+) ;
 
 INSERT INTO `sysm_usuario` (`num_usuario`, `cod_usuario`, `pas_usuario`, `dir_correo`, `des_nombre`, `num_documento`, `num_empresa`, `num_rol`, `cod_supervisor`, `cod_estado`, `ind_del`) VALUES
-(1, 'usuario_maestro', 'internet', 'matikasrf@gmail.com', 'USUARIO', '11111110', 1, 1, '', '01', '0'),
+(1, 'usuario_maestro', 'internet', 'matikasrf@gmail.com', 'USUARIO', '11111110', 5, 1, '', '01', '0'),
 (2, 'usuario_prueba', 'internet', 'usuario.prueba@gmail.com', 'USUARIO', '22222220', 3, 2, '', '01', '1'),
 (3, 'usuario_prueba1', 'internet', 'armdf@gmail.com', 'Kelvin Arthas Menetil Son', '11111111', 2, 3, '', '01', '0'),
 (4, 'usuario_prueba2', 'internet', 'aeeff@fasdf.com', 'salUSUinas', '22222222', 1, 3, '', '01', '0'),
@@ -348,22 +244,12 @@ INSERT INTO `sysm_usuario` (`num_usuario`, `cod_usuario`, `pas_usuario`, `dir_co
 (14, 'Sol_blas', 'dadddak', 'awdwdad@lkd.com', 'CLin raton', '21343232', 3, 1, '', '01', '0'),
 (15, 'patriciostar', '12e12e', 'trapri@fad.com', 'patricio Etrella', '12334324', 4, 1, '', '01', '0');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `syst_asignamod`
---
-
 CREATE TABLE `syst_asignamod` (
-  `cod_usuario` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_ruta` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
-  `fec_asignacion` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ind_del` char(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `syst_asignamod`
---
+  `cod_usuario` varchar(20) NOT NULL,
+  `cod_ruta` varchar(50) NOT NULL,
+  `fec_asignacion` datetime NOT NULL,
+  `ind_del` char(1) NOT NULL DEFAULT '0'
+) ;
 
 INSERT INTO `syst_asignamod` (`cod_usuario`, `cod_ruta`, `fec_asignacion`, `ind_del`) VALUES
 ('usuario_maestro', 'admi_dash', '0000-00-00 00:00:00', '0'),
@@ -376,116 +262,66 @@ INSERT INTO `syst_asignamod` (`cod_usuario`, `cod_ruta`, `fec_asignacion`, `ind_
 ('usuario_maestro', 'tcar_cser', '0000-00-00 00:00:00', '0'),
 ('usuario_maestro', 'tcar_cser_prof_vent_ordn_prim', '2020-07-14 21:16:36', '0');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `vmat_inventario`
---
-
 CREATE TABLE `vmat_inventario` (
   `num_inventario` int(11) NOT NULL,
-  `cod_producto` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
+  `cod_producto` varchar(10) NOT NULL,
   `cnt_stock` int(11) NOT NULL DEFAULT '0',
   `cnt_preciocompra` decimal(12,2) NOT NULL DEFAULT '0.00',
   `cnt_precioventa` decimal(12,2) NOT NULL DEFAULT '0.00',
-  `cod_proveedor` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_estado` char(2) COLLATE utf8_spanish_ci NOT NULL DEFAULT '01',
-  `ind_del` char(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `vmat_inventario`
---
+  `cod_proveedor` varchar(10) NOT NULL,
+  `cod_estado` char(2) NOT NULL DEFAULT '01',
+  `ind_del` char(1) NOT NULL DEFAULT '0'
+) ;
 
 INSERT INTO `vmat_inventario` (`num_inventario`, `cod_producto`, `cnt_stock`, `cnt_preciocompra`, `cnt_precioventa`, `cod_proveedor`, `cod_estado`, `ind_del`) VALUES
 (1, '0001', 1200, '25.50', '27.80', '01', '01', '0'),
 (2, '0002', 1800, '14.50', '16.80', '01', '01', '0');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `vmat_producto`
---
-
 CREATE TABLE `vmat_producto` (
   `num_produco` int(11) NOT NULL,
-  `cod_producto` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
-  `des_producto` varchar(60) COLLATE utf8_spanish_ci NOT NULL,
-  `des_larga` varchar(200) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_categoria` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_tipo` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_familia` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_marca` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
-  `num_medidas` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
+  `cod_producto` varchar(10) NOT NULL,
+  `des_producto` varchar(60) NOT NULL,
+  `des_larga` varchar(200) NOT NULL,
+  `cod_categoria` varchar(10) NOT NULL,
+  `cod_tipo` varchar(10) NOT NULL,
+  `cod_familia` varchar(10) NOT NULL,
+  `cod_marca` varchar(10) NOT NULL,
+  `num_medidas` varchar(20) NOT NULL,
   `cnt_peso` decimal(6,2) NOT NULL DEFAULT '0.00',
-  `ind_del` char(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
-
---
--- Volcado de datos para la tabla `vmat_producto`
---
+  `ind_del` char(1) NOT NULL DEFAULT '0'
+) ;
 
 INSERT INTO `vmat_producto` (`num_produco`, `cod_producto`, `des_producto`, `des_larga`, `cod_categoria`, `cod_tipo`, `cod_familia`, `cod_marca`, `num_medidas`, `cnt_peso`, `ind_del`) VALUES
 (1, '0001', 'Fierro 1/2 AA', 'Fierro Corrugado 1/2 Aceros Arequipa x 9mts', '01', '01', '01', '01', '1/2 x 9 mts', '5.80', '0'),
 (2, '0002', 'Fierro 3/8 AA', 'Fierro Corrugado 3/8 Aceros Arequipa x 9mts', '01', '01', '01', '01', '3/8 x 9 mts', '4.10', '0');
 
---
--- Índices para tablas volcadas
---
 
---
--- Indices de la tabla `cont_cpe`
---
 ALTER TABLE `cont_cpe`
   ADD UNIQUE KEY `pk_cpe` (`num_ruc`,`cod_cpe`,`num_serie`,`num_cpe`);
 
---
--- Indices de la tabla `cont_cpedata`
---
 ALTER TABLE `cont_cpedata`
   ADD UNIQUE KEY `pk_rubrocpe` (`num_ruc`,`cod_cpe`,`num_serie`,`num_cpe`,`num_item`,`cod_rubro`);
 
---
--- Indices de la tabla `cont_docrubro`
---
 ALTER TABLE `cont_docrubro`
   ADD PRIMARY KEY (`cod_docrubro`);
 
---
--- Indices de la tabla `sysm_catalogo`
---
 ALTER TABLE `sysm_catalogo`
   ADD PRIMARY KEY (`cod_catalogo`);
 
---
--- Indices de la tabla `sysm_datacat`
---
 ALTER TABLE `sysm_datacat`
   ADD UNIQUE KEY `pk_datacat` (`cod_catalogo`,`cod_param`);
 
---
--- Indices de la tabla `sysm_empresa`
---
 ALTER TABLE `sysm_empresa`
   ADD PRIMARY KEY (`num_empresa`),
   ADD UNIQUE KEY `ind_uni_empresa` (`cod_empresa`,`ruc_empresa`);
 
---
--- Indices de la tabla `sysm_navmenu`
---
 ALTER TABLE `sysm_navmenu`
   ADD PRIMARY KEY (`num_menu`);
 
---
--- Indices de la tabla `sysm_rolusua`
---
 ALTER TABLE `sysm_rolusua`
   ADD PRIMARY KEY (`num_rol`),
   ADD UNIQUE KEY `cod_rol` (`cod_rol`);
 
---
--- Indices de la tabla `sysm_usuario`
---
 ALTER TABLE `sysm_usuario`
   ADD PRIMARY KEY (`num_usuario`),
   ADD UNIQUE KEY `cod_usuario` (`cod_usuario`),
@@ -493,72 +329,36 @@ ALTER TABLE `sysm_usuario`
   ADD KEY `num_empresa` (`num_empresa`),
   ADD KEY `num_rol` (`num_rol`);
 
---
--- Indices de la tabla `syst_asignamod`
---
 ALTER TABLE `syst_asignamod`
-  ADD UNIQUE KEY `cod_usuario_ruta` (`cod_usuario`,`cod_ruta`) USING BTREE;
+  ADD UNIQUE KEY `cod_usuario_ruta` (`cod_usuario`,`cod_ruta`);
 
---
--- Indices de la tabla `vmat_inventario`
---
 ALTER TABLE `vmat_inventario`
   ADD PRIMARY KEY (`num_inventario`);
 
---
--- Indices de la tabla `vmat_producto`
---
 ALTER TABLE `vmat_producto`
   ADD PRIMARY KEY (`num_produco`),
   ADD UNIQUE KEY `cod_producto` (`cod_producto`);
 
---
--- AUTO_INCREMENT de las tablas volcadas
---
 
---
--- AUTO_INCREMENT de la tabla `sysm_empresa`
---
 ALTER TABLE `sysm_empresa`
-  MODIFY `num_empresa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `num_empresa` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT de la tabla `sysm_navmenu`
---
 ALTER TABLE `sysm_navmenu`
-  MODIFY `num_menu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1902;
+  MODIFY `num_menu` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT de la tabla `sysm_rolusua`
---
 ALTER TABLE `sysm_rolusua`
-  MODIFY `num_rol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `num_rol` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT de la tabla `sysm_usuario`
---
 ALTER TABLE `sysm_usuario`
-  MODIFY `num_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `num_usuario` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT de la tabla `vmat_inventario`
---
 ALTER TABLE `vmat_inventario`
-  MODIFY `num_inventario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `num_inventario` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- AUTO_INCREMENT de la tabla `vmat_producto`
---
 ALTER TABLE `vmat_producto`
-  MODIFY `num_produco` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `num_produco` int(11) NOT NULL AUTO_INCREMENT;
 
---
--- Restricciones para tablas volcadas
---
 
---
--- Filtros para la tabla `sysm_usuario`
---
 ALTER TABLE `sysm_usuario`
   ADD CONSTRAINT `sysm_usuario_ibfk_1` FOREIGN KEY (`num_empresa`) REFERENCES `sysm_empresa` (`num_empresa`),
   ADD CONSTRAINT `sysm_usuario_ibfk_2` FOREIGN KEY (`num_rol`) REFERENCES `sysm_rolusua` (`num_rol`);
