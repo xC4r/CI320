@@ -115,7 +115,7 @@
             </div>
             <!-- Modal -->
             <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalNotaLabel" aria-hidden="true" id="modalNota">
-              <div class="modal-dialog modal-xl" role="document">
+              <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h4 class="modal-title">Nota de Pedido</h4>

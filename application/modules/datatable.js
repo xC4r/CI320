@@ -4,14 +4,23 @@ $(document).on('click','table tbody tr', function(event) {
 });
 //rezise table on change screen
 $(window).on('resize', function(e) {    
-    var tables = document.getElementsByTagName('table');    
-    if($(window).width()<768){
+    var tables = document.getElementsByTagName('table');
+    Array.prototype.forEach.call(tables, function(elem) {
+		if(!elem.classList.contains('table-sm')){
+			elem.classList.add("nts");
+		}
+    });
+    if($(window).width()<992){
         Array.prototype.forEach.call(tables, function(elem) {
-            elem.classList.add("table-sm");
+        	if(elem.classList.contains('nts')){
+        		elem.classList.add("table-sm");
+        	}
         });
     }else{
         Array.prototype.forEach.call(tables, function(elem) {
-            elem.classList.remove("table-sm");
+        	if(elem.classList.contains('nts')){
+        		elem.classList.remove("table-sm");
+        	}
         });
     }
 });
@@ -48,8 +57,9 @@ function tableLoad(datafields=[],json=[],options=[],rowindex=false,tableSet='',t
 			table.classList.add(opt);
 		});
 	}
-    if($(window).width()<768){
+    if($(window).width()<992){
         table.classList.add("table-sm");
+        if(!tableSet.includes('table-sm')){table.classList.add('nts');}
     }
     var thead = document.createElement("thead");
 	if(theadSet !== ''){

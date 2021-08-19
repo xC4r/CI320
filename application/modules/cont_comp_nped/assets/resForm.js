@@ -255,7 +255,7 @@ $(document).on('click','#tabNotaPedido div table tbody tr td div button.edit', f
 			var options = [
 				{btn:'danger', fa:'fa-trash-o', fn:'del'}
 			];
-			datatableLoad('tabItems',datafields,row.lst,options,false,'table-sm','thead-light','');
+			datatableLoad('tabItems',datafields,row.lst,options,false,'table-sm text-nowrap','thead-light','');
 			document.getElementById('tabItems').setAttribute('cpe',row['ser']+'-'+row['num']);
 			tablePagination('tabItems',true,5);
     	}
@@ -329,7 +329,7 @@ function cargarNotasPedido(lstNotas,datatable,txt='default'){
 		{btn:'secondary', fa:'fa-file-pdf-o', fn:'pdf'},
 	    {btn:'danger', fa:'fa-trash-o', fn:'del'}
 	];
-	datatableLoad(datatable,datafields,lstNotas,options,true);
+	datatableLoad(datatable,datafields,lstNotas,options,true,'text-nowrap');
 	document.getElementById(datatable).setAttribute('data',txt);
 	tablePagination(datatable,true,5);
 }

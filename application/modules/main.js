@@ -45,68 +45,17 @@ fetchGet('main/menu').then(json => {
 });
 
 document.getElementById('btnThemeChange').onclick = function(){
-    var theme = document.getElementById('wrapper').getAttribute('class');
-    var navs = document.getElementsByClassName('navbar');
-    for(var i = 0; i < navs.length; i++){    
-        if(theme == 'light'){
-            navs[i].classList.replace("navbar-light","navbar-dark");
-            navs[i].classList.replace("bg-light","bg-dark");
-        }else if (theme == 'dark'){
-            navs[i].classList.replace("navbar-dark","navbar-light");
-            navs[i].classList.replace("bg-dark","bg-light");
-        }
-    }
-    
-    var side = document.getElementsByClassName('sidebar');
-    for(var i = 0; i < side.length; i++){
-        if(theme == 'light'){
-            side[i].classList.replace("bg-white","bg-dark");
-        }else if (theme == 'dark'){
-            side[i].classList.replace("bg-dark","bg-white");
-        }
-        var li = side[i].getElementsByTagName('li');
-        for(var l = 0; l < li.length; l++){
-            if(theme == 'light'){
-                li[l].classList.replace("bc-light","bc-dark");
-            }else if (theme == 'dark'){
-                li[l].classList.replace("bc-dark","bc-light");
-            }
-        }
-        var as = side[i].getElementsByTagName('a');
-        for(var j = 0; j < as.length; j++){
-            if(theme == 'light'){
-                as[j].classList.replace("text-dark","text-white");
-            }else if (theme == 'dark'){
-                as[j].classList.replace("text-white","text-dark");
-            }
-            var span = as[j].getElementsByTagName('span');
-            for(var k = 0; k < span.length; k++){
-                if(theme == 'light'){
-                    span[k].classList.replace("border-dark","border-white");
-                }else if (theme == 'dark'){
-                    span[k].classList.replace("border-white","border-dark");
-                }
-            }
-        }
-    }
-    
-    var icons = document.querySelectorAll('#btnThemeChange i');
-    if(theme == 'light'){
-        icons[0].classList.replace("fa-moon-o","fa-sun-o");
-        document.getElementById('btnThemeChange').classList.replace("btn-light","btn-dark");
-        document.getElementById('btnUserDrop').classList.replace("btn-light","btn-dark");
-        document.getElementById('toast').classList.replace("bg-light","bg-dark");
-        document.getElementById('pagina').classList.replace("bg-white","bg-black");
-        
-        document.getElementById('wrapper').setAttribute('class','dark');
-    }else if (theme == 'dark'){
-        icons[0].classList.replace("fa-sun-o","fa-moon-o");
-        document.getElementById('btnThemeChange').classList.replace("btn-dark","btn-light");
-        document.getElementById('btnUserDrop').classList.replace("btn-dark","btn-light");
-        document.getElementById('toast').classList.replace("bg-dark","bg-light");
-        document.getElementById('pagina').classList.replace("bg-black","bg-white");
-
-        document.getElementById('wrapper').setAttribute('class','light');
+    var theme = document.body.getAttribute('class');
+    var nav = document.getElementsByClassName('navbar')[0];
+    var ico = document.querySelectorAll('#btnThemeChange i')[0];
+    if(theme == 'dark'){
+        nav.classList.replace("navbar-dark","navbar-light");
+        ico.classList.replace("fa-sun-o","fa-moon-o");
+        document.body.classList.remove('dark');
+    }else{
+        nav.classList.replace("navbar-light","navbar-dark");
+        ico.classList.replace("fa-moon-o","fa-sun-o");
+        document.body.classList.add('dark');
     }
 }
 
@@ -152,9 +101,9 @@ function fetchPost(url,data){
 function setMenu(menuItem,hash) {
     var html = $('<li/>');
     html.addClass('list-group-item');
-    html.addClass('bg-transparent');
-    html.addClass('bc-light');
-    html.append($('<a/>',{ href:'#',class:'text-dark'}));
+    //html.addClass('bg-transparent');
+    //html.addClass('bc-light');
+    html.append($('<a/>',{ href:'#'}));
     html.find(' a').append($('<t/>',{ text:' '+menuItem.nom}));
     html.find(' a').attr('name',menuItem.cod);
     html.find(' a').prepend($('<i/>',{ class: menuItem.ico}));
@@ -163,7 +112,6 @@ function setMenu(menuItem,hash) {
         html.find(' a').addClass('collapsed').attr('data-target','#sub'+hash.toString()).attr('data-toggle','collapse').attr('aria-expanded',false).attr('role','button');
         html.find(' a').append($('<span/>',{class:'fa arrow border-dark mr-3'}));
         var sub = $('<ul/>',{ id:'sub'+hash.toString()});
-        //sub.addClass('list-group-item');
         sub.addClass('collapse');
         sub.addClass('list-group-flush');
         $.each(menuItem.sub, function () {
