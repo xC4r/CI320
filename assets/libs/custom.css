@@ -3,16 +3,11 @@
  * Copyright 2013-2019 Start Bootstrap bY xC4r
  */
 
-
-body.dark{
-  background-color: #f9f9f9;
-}
 /* Navbar Settings */
 .navbar {
   background-color: #eeeff0;
   border-bottom: 1px solid #E5E5E5;
 }
-
 /*! Global Theme Dark Settings */
 body.dark {
   background-color: #181818 !important;
@@ -43,6 +38,15 @@ body.dark input,textarea{
   background-color: #121212;
   color: #FFF;
 }
+body.dark input.form-control:disabled,
+body.dark input.form-control[readonly]{
+  background-color: #313131;
+}
+
+body.dark input:focus,textarea:focus{
+  background-color: #121212;
+  color: #FFF;
+}
 body.dark input[type=date]::-webkit-calendar-picker-indicator{
   filter: invert(1);
   margin: 0px;
@@ -51,6 +55,15 @@ body.dark input[type=date]::-webkit-calendar-picker-indicator{
 body.dark table{
   color: #FFF;
 }
+
+body.dark table tbody tr.table-active{
+  background-color: #383838;
+}
+
+body.dark table tbody tr:hover{
+  background-color: #2b2b2b;
+}
+
 body.dark select{
   background-color: #313131;
   color: #FFF;
@@ -115,7 +128,7 @@ body.dark .sidebar a{
   padding: 10px;
   width: 100%; }
 .sidebar .list-group-item {
-  background: transparent;
+  background:transparent;
   border-left: none;
   border-right: none;
   padding: 0;
@@ -228,6 +241,11 @@ input.password {
   .modal-sm,.modal-md{
     max-width: 50%;
   }
+  .table-responsive{
+    min-height: 70px;
+    height: auto;
+    overflow-y:auto;
+  }
 
 }
 /* windows after 992px settings*/
@@ -252,6 +270,11 @@ input.password {
     display: block;
     height: auto !important;
     visibility: visible;
+  }
+  .table-responsive{
+    min-height: 100px;
+    height: auto;
+    overflow-y:auto;
   }
 }
 
@@ -316,11 +339,8 @@ input.password {
 
 /* Datatable settings*/
 .table-responsive{
+  min-height: 70px;
   height: auto;
-  overflow-y:auto;
-}
-.table-responsive{
-  height:auto;
   overflow-y:auto;
 }
 .spinner-border{

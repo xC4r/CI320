@@ -163,6 +163,7 @@ document.getElementById('btnAgregar').onclick = function() {
 				tablePagination('tabItems',true,5);
 			}
 		}
+		$('#modalProducto').modal('hide');
 	}
 }
 
@@ -178,7 +179,7 @@ $('#modalNota').on('hidden.bs.modal', function () {
 		{key: 'pun', name: 'P.Unit'},
 		{key: 'imp', name: 'Importe'}
 	];
-	datatableLoad('tabItems',datafields);
+	datatableLoad('tabItems',datafields,'','','','table-sm');
 	tablePagination('tabItems',true,5);
 });
 
@@ -255,7 +256,7 @@ $(document).on('click','#tabNotaPedido div table tbody tr td div button.edit', f
 			var options = [
 				{btn:'danger', fa:'fa-trash-o', fn:'del'}
 			];
-			datatableLoad('tabItems',datafields,row.lst,options,false,'table-sm text-nowrap','thead-light','');
+			datatableLoad('tabItems',datafields,row.lst,options,false,'table-sm text-nowrap');
 			document.getElementById('tabItems').setAttribute('cpe',row['ser']+'-'+row['num']);
 			tablePagination('tabItems',true,5);
     	}

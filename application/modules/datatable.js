@@ -42,15 +42,17 @@ function datatableLoad(datatable='',datafields=[],json=[],options=[],rowindex=fa
     var ul = document.createElement("ul");
     ul.classList.add("pagination");
     ul.classList.add("justify-content-center");
+    ul.classList.add("mb-0");
     nav.appendChild(ul);
     divContainer.innerHTML = "";
     divContainer.appendChild(tableResponsive);
     divContainer.appendChild(nav);
 }
 //generate table
-function tableLoad(datafields=[],json=[],options=[],rowindex=false,tableSet='',theadSet='') {
+function tableLoad(datafields,json=[],options=[],rowindex=false,tableSet='',theadSet='') {
     var table = document.createElement("table");
     table.classList.add("table");
+    table.classList.add("mb-0");
 	if(tableSet !== ''){
 		var lista = tableSet.split(' ');
 		lista.forEach(function(opt) {
@@ -101,6 +103,7 @@ function tableLoad(datafields=[],json=[],options=[],rowindex=false,tableSet='',t
     var tbody = document.createElement("tbody");
 	
 	if(!json.length > 0){
+        /*
 		for (var i = 0; i < 5; i++) {
 			tr = tbody.insertRow(-1);
 			for (var j = 0; j < datafields.length+1; j++) {    
@@ -111,7 +114,7 @@ function tableLoad(datafields=[],json=[],options=[],rowindex=false,tableSet='',t
 					td.innerHTML = '';
 				}
 			}
-		}
+		}*/
 	}else{
 		for (var i = 0; i < json.length; i++) {
 			tr = tbody.insertRow(-1);
@@ -348,6 +351,9 @@ $.fn.pageMe = function(opts){
     }
     var numItems = children.length;
     var numPages = Math.ceil(numItems/perPage);
+
+    if(numPages == 0){ numPages=1;}
+
     pager.data("curr",0);
     if (settings.showPrevNext){
         $('<li class="page-item"><a class="page-link prev-link" href="#"><i class="fa fa-arrow-left"></i></a></li>').appendTo(pager);

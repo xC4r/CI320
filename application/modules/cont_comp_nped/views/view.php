@@ -42,7 +42,7 @@
 
                 <div class="datatable" id="tabNotaPedido">
                   <div class="table-responsive">
-                    <table class="table">
+                    <table class="table mb-0">
                       <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -170,9 +170,21 @@
                           </div> 
                         </div>
                         <div class="form-row">
-                            <div class="col-md-12">
-                              <div class="input-group">
+                            <div class="col-md-6 mb-3">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalProducto">Agregar</button> 
+                            </div>
+                            <div class="col-md-2 mb-3"></div>
+                            <div class="col-md-4 mb-3">
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="txtTotal">Total</span>
+                                </div>
+                                <input type="text" class="form-control text-right" id="txtTotal" name="txtTotal" value="15000.00" disabled required>
+                                <div class="input-group-append">
+                                  <div class="input-group-text">
+                                    <input type="checkbox">
+                                  </div>
+                                </div>
                               </div>
                             </div>
                         </div>
@@ -185,8 +197,8 @@
                         </div>
                         <div class="datatable" id="tabItems">
                           <div class="table-responsive">
-                            <table class="table table-sm">
-                                <thead class="thead-light">
+                            <table class="table table-sm mb-0">
+                                <thead>
                                   <tr>
                                     <th scope="col">Opción</th>
                                     <th scope="col">Código</th>
@@ -197,6 +209,7 @@
                                   </tr>
                                 </thead>
                                 <tbody>
+                                  <!-- 
                                   <tr>
                                     <td><div class="btn-group" role="group"><button type="button" class="btn btn-danger btn-sm del mb-1"><i class="fa fa-trash-o"></i></button></div></td>
                                     <td>P001</td>
@@ -236,18 +249,18 @@
                                     <td>10.20</td>
                                     <td>22.00</td>
                                     <td>220.00</td>
-                                  </tr>
+                                  </tr> -->
                                 </tbody>
                             </table>
                           </div>
                           <nav>
-                            <ul class="pagination justify-content-center">
+                            <ul class="pagination justify-content-center mb-0">
                                 <li class="page-item disabled"><a class="page-link prev-link active" href="#"><i class="fa fa-arrow-left"></i></a></li>
                                 <li class="page-item active"><a class="page-link num-link" href="#">1</a></li>
                                 <li class="page-item disabled"><a class="page-link next-link" href="#"><i class="fa fa-arrow-right"></i></a></li>
                             </ul>
                           </nav>
-                        </div> 
+                        </div>
                     </div>
                     <div class="modal-footer">
                       <div class="input-group justify-content-end">
@@ -281,7 +294,7 @@
                         </div>
                         <div class="col-md-2 mb-3">
                           <label for="txtCantidad">Cantidad</label>
-                          <input type="text" class="form-control" id="txtCantidad" name="txtCantidad" value="1.00" required>
+                          <input type="text" class="form-control" id="txtCantidad" name="txtCantidad" value="1" required>
                         </div>
                         <div class="col-md-3 mb-3">
                           <label for="txtPrecio">Precio</label>
