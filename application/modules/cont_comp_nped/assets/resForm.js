@@ -156,14 +156,15 @@ document.getElementById('btnAgregar').onclick = function() {
 				if (rows.length>4){
 					tablePagination('tabItems',true,5);
 				}
+				$('#modalProducto').modal('hide');
 			}
 		}else{
 			tableAddRow('tabItems',datafields,json,options,false);
 			if (rows.length>4){
 				tablePagination('tabItems',true,5);
 			}
+			$('#modalProducto').modal('hide');
 		}
-		$('#modalProducto').modal('hide');
 	}
 }
 
