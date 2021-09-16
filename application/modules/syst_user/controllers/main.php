@@ -246,9 +246,11 @@ class Main extends MX_Controller {
             $this->db->where('ind_del','0'); //No eliminados  
             $this->db->order_by('des_nombre','ASC');
         }
+
         $array = array();     
         $query = $this->db->get();
         $data = [];
+
         foreach( $query->result_array() as $row ){
             $data[] = $row;
         }

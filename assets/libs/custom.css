@@ -34,15 +34,23 @@ body.dark .navbar .dropdown-menu a.dropdown-item:hover {
 body.dark .page-wrapper {
   background: #181818;
 }
-body.dark input,textarea{
+body.dark input,textarea {
   background-color: #121212;
   color: #FFF;
+}
+body.dark input:-webkit-autofill,
+body.dark input:-webkit-autofill:hover, 
+body.dark input:-webkit-autofill:focus, 
+body.dark input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #121212 inset !important;
+}
+body.dark input:-webkit-autofill {
+  -webkit-text-fill-color: #FFF !important;
 }
 body.dark input.form-control:disabled,
 body.dark input.form-control[readonly]{
   background-color: #313131;
 }
-
 body.dark input:focus,textarea:focus{
   background-color: #121212;
   color: #FFF;
@@ -65,8 +73,8 @@ body.dark table tbody tr:hover{
 }
 
 body.dark select{
-  background-color: #313131;
-  color: #FFF;
+  background-color: #313131 !important;
+  color: #FFF !important;
 }
 body.dark .breadcrumb{
   background-color: #313131;

@@ -28,6 +28,24 @@
               <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
                 <div class="form-row">
                   <div class="col-md-6 mb-2">
+                    <label for="selPeriodo">Periodo</label>
+                    <div class="d-flex">
+                      <div class="mr-auto">
+                        <select class="form-control" id="selPeriodo" name="selPeriodo">
+                          <option value="202109">202109</option>
+                          <option value="202108">202108</option>
+                          <option value="202107">202107</option>
+                          <option value="202107">-------</option>
+                        </select>
+                      </div>
+                      <div class="ml-1">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalNota">Nuevo</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#othermod">otropl</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <label for="txtBuscar">Buscar</label>
                     <div class="input-group">
                       <input type="text" class="form-control rounded" placeholder="Buscar" aria-label="Buscar" id="txtBuscar">
                       <button type="button" class="btn btn-secondary ml-1"><i class="fa fa-search" id="btnBuscar"></i></button>
@@ -35,9 +53,7 @@
                       <button type="button" class="btn btn-info ml-1" id="btnReload"><i class="fa fa-refresh"></i></button>
                     </div>
                   </div>
-                  <div class="col-md-6 mb-2"> 
-                    <button type="button" class="btn btn-primary mb-1" data-toggle="modal" data-target="#modalNota">Nuevo</button>
-                  </div>
+
                 </div>
 
                 <div class="datatable" id="tabNotaPedido">
@@ -130,7 +146,7 @@
                                 <label for="txtDocumento">Serie - Numero</label>
                                 <div class="input-group">
                                   <div class="input-group-prepend">
-                                    <select class="custom-select" id="selSerieCP" name="selSerieCP">
+                                    <select class="form-control" id="selSerieCP" name="selSerieCP">
                                       <option value="N001">N001</option>
                                       <option value="N002">N002</option>
                                       <option value="N003">N003</option>

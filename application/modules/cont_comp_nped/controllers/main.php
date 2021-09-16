@@ -19,20 +19,17 @@ class Main extends MX_Controller {
             header('location: login');
         }
     }
-    public function test01(){
-        $json = array('cod' => '','msg' => '','res' => array());
-        $post = $this->input->post();
-        $json['msg'] = $post['txtNombres'];
-        /*
-        $this->output
-        ->set_status_header(401)
-        ->set_content_type('application/json', 'utf-8')
-        ->set_output(json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
-        ->_display();
-        */
-
-        //http_response_code(401); //Opcional
-        //header('Content-Type: application/json','utf-8'); //Opcional
+    public function funcionBasica(){
+        $json = array('cod' => '','msg' => '','res' => array()); 
+        $headers = $this->input->request_headers();
+        $this->load->library('Auth');  
+        if($this->auth->verifyToken($headers['token']) == false){
+                    $json['cod'] = 401;
+                    $json['msg'] = 'Sesion Expirada';
+                    $this->session->sess_destroy();
+        }else{
+            // Operaciones function
+        }   
         echo json_encode($json);
     }
     public function defaultLoad(){
@@ -61,22 +58,30 @@ class Main extends MX_Controller {
     public function cargarNotasPedido(){
         $json = array('cod' => '','msg' => '','res' => array());
         $text = trim($this->input->get('txt', TRUE)); 
-        if($text ==''||strlen($text)<3){
-            if($text ==''){
-                $json['msg']= 'No hay descripción para buscar';
-            }else{
-                $json['msg']= 'La descripción es muy corta';
-            }
+        $headers = $this->input->request_headers();
+        $this->load->library('Auth');  
+        if($this->auth->verifyToken($headers['token']) == false){
+                    $json['cod'] = 401;
+                    $json['msg'] = 'Sesion Expirada';
+                    $this->session->sess_destroy();
         }else{
-            try {
-                $json['res']['lstNotas'] = $this->listaNotas($text);
-                $json['cod'] = 200;
-                $json['msg'] = "Ok";
-            } catch (Exception $e) {
-                $json['cod'] = 204;
-                $json['msg'] = 'Error:'.$e->getMessage().'\n';
+            if($text ==''||strlen($text)<3){
+                if($text ==''){
+                    $json['msg']= 'No hay descripción para buscar';
+                }else{
+                    $json['msg']= 'La descripción es muy corta';
+                }
+            }else{
+                try {
+                    $json['res']['lstNotas'] = $this->listaNotas($text);
+                    $json['cod'] = 200;
+                    $json['msg'] = "Ok";
+                } catch (Exception $e) {
+                    $json['cod'] = 204;
+                    $json['msg'] = 'Error:'.$e->getMessage().'\n';
+                }
             }
-        }
+        }   
         echo json_encode($json);       
     }
     public function operacion(){
@@ -233,9 +238,8 @@ class Main extends MX_Controller {
         }
         return $json;
     }
-    private function listaNotas($param = []) {   
+    private function listaNotas($text='default') {   
         $sql = 'SELECT * FROM cont_cpe WHERE num_ruc = '.$this->rucEmpr.' AND cod_cpe ="00"';
-
         if(isset($param['numSerie']) && !empty($param['numSerie'])){
             $sql .=' AND num_serie = '.$param['numSerie'];
         }
@@ -250,11 +254,36 @@ class Main extends MX_Controller {
         }
         if(isset($param['desNomrec']) && !empty($param['desNomrec'])){
             $sql .=' AND des_nomrecep LIKE= "%'.$param['desNomrec'].'%"';
-        } 
-        //$this->db->order_by('fec_emision', 'DESC');      
-        $query = $this->db->query($sql);
+        }
+
+        $this->db->select('*');
+        $this->db->from('cont_cpe');
+        $this->db->where('num_ruc',$this->rucEmpr); //No eliminados
+        $this->db->where('cod_cpe','00'); //No eliminados
+        if($text == 'default'){
+            date_default_timezone_set('America/Lima');
+            $hoy = date('Y-m-d H:i:s');
+            $firstDay = date("Y-m-01", strtotime($hoy));
+            $lastDay = date("Y-m-t", strtotime($hoy));
+            //die($hoy.'|'.$firstDay.' : '.$lastDay);
+            $this->db->where('fec_emision >=',$firstDay);
+            $this->db->where('fec_emision <=',$lastDay);
+            //$this->db->order_by('num_cpe','DESC');
+        }else{
+            $this->db->select('*');
+            $this->db->from('cont_cpe');
+            $this->db->where('num_ruc',$this->rucEmpr); //No eliminados
+            $this->db->where('cod_cpe','00'); //No eliminados  
+            $this->db->where("UPPER(CONCAT_WS('|',cod_usuario,des_nombre,dir_correo,num_documento)) LIKE UPPER('%".$text."%')");
+            $this->db->where('ind_del','0'); //No eliminados  
+            $this->db->order_by('des_nombre','ASC');
+        }
+
+        //$this->db->order_by('fec_emision', 'DESC'); 
         $array = array();     
+        $query = $this->db->query($sql);   
         $data = [];
+
         foreach( $query->result_array() as $reg ){
             $data[] = $reg;
         }
@@ -363,15 +392,6 @@ class Main extends MX_Controller {
             'address' => '',  
             'xcoords' => ''
         );
-        $html = '<html>
-            <head>
-                <title>HTML con PHP – aprenderaprogramar.com</title>
-            </head>
-            <body>
-                Esto es una página HTML con código PHP incrustado.
-                <br />
-            </body>
-        </html>';
         $this->load->library('fpdf/FPDF');
         $pdf = new FPDF("P","mm",array(58,100));
         $pdf->SetMargins(-1,0,0);
