@@ -45,6 +45,7 @@
                 <div class="datatable" id="tabUsuario">
 					<div class="table-responsive">
 					   <table class="table">
+              <caption>Datatable/caption>
 						  <thead>
 							 <tr>
 								<th scope="col">#</th>

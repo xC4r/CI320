@@ -1,6 +1,10 @@
 var ruta = "cont_comp_nped/main/";
 //JS Events
 var localData;
+var today = new Date();
+var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+var time = today.getHours() + ":" + today.getMinutes();
+var todayDateTime = date+' '+time;
 var DataContainer = (function() { 
 	function DataContainer() {};
 	var DataContainer = {}
@@ -14,7 +18,7 @@ var DataContainer = (function() {
 		"tipo": "usuario",
 		"documento": "00000000",
 		"nombre": "nombre_de_usuario",
-		"url": "http://sky.com/main",
+		"url": "https://sky.com/main",
 		"cookie": "rO0ABXQA701GcmNEbDZPZ28xODJOWWQ4aTNPT2krWUcrM0peG0zNkNaM0NZL0RXa1FZOGNJOWZsYjB5ZXc3MVNaTUpxWURmNGF3dVlDK3pMUHdveHI2cnNIaWc1CkI3SkxDSnc9",
 		"postal": null
 	};
@@ -26,45 +30,29 @@ var DataContainer = (function() {
 });
 
 var dataFormulario= new DataContainer;
+/*
+var catalogo = [
+	{cod: 'P001', des: 'Fierro 1/2 Acero corrugado', pun: '32.5'},
+	{cod: 'P002', des: 'Fierro 3/8 Acero corrugado', pun: '32.5'},
+	{cod: 'P003', des: 'Alambra N° 16',	pun: '32.5'},
+	{cod: 'P004', des: 'Claves acero 2-4', pun: '32.5'},
+	{cod: 'P005', des: 'Barril de Brea 50 kg',pun: '32.5'},
+	{cod: 'P006', des: 'Calaminas galvanizada 3600x1800',pun: '32.5'}
+];
+*/
+var lisdest = [
+	{key: 'cod', dest: 'txtCodigo',},
+	{key: 'des', dest: 'txtProducto', ind:true},
+	{key: 'pun', dest: 'txtPrecio'}
+];
 
 $(function () {
 	fetchGet(ruta+'defaultLoad').then(json => {
 		if(json.cod === 200){	
-			json.res.lstNotas.forEach(function(row,x) {
-				var list = [];
-				row.itm.forEach(function(item,y) {
-					if(y == 0){
-						item.forEach(function(rubro) {
-							if(rubro['rub']=='01'){
-								json.res.lstNotas[x].dir = rubro['des'];
-							}
-						});
-					}else{
-						var i = {};
-						item.forEach(function(rubro) {
-							if(rubro['rub']=='81'){
-								i.cnt = rubro['val'];
-							}
-							if(rubro['rub']=='83'){
-								i.cod = rubro['des'];
-							}
-							if(rubro['rub']=='84'){
-								i.des = rubro['des'];
-							}
-							if(rubro['rub']=='85'){
-								i.pun = rubro['val'];
-							}
-							if(rubro['rub']=='99'){
-								i.imp = rubro['val'];
-							}
-						});
-						list.push(i);
-					}
-				});
-				json.res.lstNotas[x].lst = list;
-			});
 			localData = json.res;
 			cargarNotasPedido(json.res.lstNotas,'tabNotaPedido');
+			formSelectLoad('selSerieCP',json.res.lstSeries,'ser','ser');
+			document.getElementById("selSerieCP").selectedIndex = 0;
 		}else if(json.cod == 401){
 			$(expiredSession).modal('show');
 		}else{
@@ -73,23 +61,47 @@ $(function () {
 	});
 });
 
+document.getElementById('txtProducto').onkeyup = function(){autocomplete('txtProducto','autoProducto',localData.lstProdserv,lisdest);}
+//document.getElementById('txtProducto').onfocusout = function(){};
+
 // Default Events
 document.getElementById('txtFecha').value = dateToday();
 document.getElementById('txtFecha').setAttribute('min',dateSubtractYear(dateToday(),1)); //No working Safari
 document.getElementById('txtFecha').setAttribute('max',dateToday());//No working Safari
+/*
+document.getElementById('selPeriodo').onchange = function(){
+	per = document.getElementById('selPeriodo').value;
+	listarNotasPedido('tabNotaPedido',per);
+}
+*/
+$('#selPeriodo').datepicker({
+    autoclose: true,
+	startView: 1,
+    minViewMode: 1,
+    format: 'yyyymm',
+	startDate: '-1y',
+	//endDate: todayDateTime,
+	endDate: '+0m',
+    maxViewMode: 2,
+    language: "es",
+    orientation: "bottom auto"
+}).datepicker('setDate', 'today').on('changeDate', function(e) {  
+    //console.log(e.format());
+	listarNotasPedido('tabNotaPedido',e.format());
+});
 
 document.getElementById('txtBuscar').onkeyup = function(){
 	tableFilter('tabNotaPedido',this.value,5);
 }
-
+/*
 document.getElementById('btnBuscar').onclick = function(){
 	txt = document.getElementById('txtBuscar').value;
 	listarNotasPedido('tabNotaPedido',txt);
 }
-
+*/
 document.getElementById('btnReload').onclick = function(){
-	txt = document.getElementById('tabNotaPedido').getAttribute('data');
- 	listarNotasPedido('tabNotaPedido',txt);
+	per = document.getElementById('tabNotaPedido').getAttribute('data');
+ 	listarNotasPedido('tabNotaPedido',per);
 }
 
 document.getElementById('btnExport').onclick = function(){
@@ -108,14 +120,19 @@ document.getElementById('formAddProducto').onsubmit = function(e) {
 //Eventos modulo
 document.getElementById('btnRegistrar').onclick = function() {
 	if(document.getElementById('formNotaPedido').checkValidity()){
-		if(!document.getElementById('formNotaPedido').hasAttribute('cpe')){
-			document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.guardar;
-			document.getElementById(confirmForm).setAttribute('act',1);
+		if(Object.keys(tableToJson('tabItems')).length !== 0){
+			if(!document.getElementById('formNotaPedido').hasAttribute('cpe')){
+				document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.guardar;
+				document.getElementById(confirmFormId).setAttribute('ope',1);
+			}else{
+				document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.modificar;
+				document.getElementById(confirmFormId).setAttribute('ope',2);
+			}
+			$(confirmForm).modal('show');
 		}else{
-			document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.modificar;
-			document.getElementById(confirmForm).setAttribute('act',2);
+			document.querySelector(alertFormMensaje).innerHTML = 'Debe agregar al menos un producto';
+			$(alertForm).modal('show');
 		}
-		$($confirmForm).modal('show');
 	}
 }
 
@@ -130,14 +147,14 @@ document.getElementById('btnAgregar').onclick = function() {
 			des: document.getElementById('txtProducto').value,
 			cnt: document.getElementById('txtCantidad').value, 
 			pun: document.getElementById('txtPrecio').value, 
-			imp: document.getElementById('txtCantidad').value * document.getElementById('txtPrecio').value
+			imp: Math.round(document.getElementById('txtCantidad').value * document.getElementById('txtPrecio').value*100)/100
 		};
 		var datafields = [
-			{key: 'cod', name: 'Código', type: 'string'},
-			{key: 'des', name: 'Descripción', type: 'string'},
-			{key: 'cnt', name: 'Cant', type: 'decimal'},
-			{key: 'pun', name: 'P.Unit', type: 'decimal'},
-			{key: 'imp', name: 'Importe', type: 'decimal'}
+			{key: 'cod', name: 'Código', type: 'string', rub:'83'},
+			{key: 'des', name: 'Descripción', type: 'string', rub:'84'},
+			{key: 'cnt', name: 'Cant', type: 'decimal', rub:'81'},
+			{key: 'pun', name: 'P.Unit', type: 'decimal', rub:'85'},
+			{key: 'imp', name: 'Importe', type: 'decimal', rub:'99'}
 		];
 		var options = [
 			{btn:'danger', fa:'fa-trash-o', fn:'del'}
@@ -153,17 +170,29 @@ document.getElementById('btnAgregar').onclick = function() {
 				formAlertShow('formAddProducto','Ya tiene el producto en la lista');
 			}else{
 				tableAddRow('tabItems',datafields,json,options,false);
-				if (rows.length>4){
+				var items = document.querySelectorAll('#tabItems div table tbody tr');
+				if (items.length>5){
 					tablePagination('tabItems',true,5);
 				}
 				$('#modalProducto').modal('hide');
+				var mtoTotal = 0;
+				items.forEach(function(row) {
+					mtoTotal += (parseInt(row.children[5].innerHTML*100))/100;
+				});
+				document.getElementById('txtTotal').value = mtoTotal.toFixed(2);
 			}
 		}else{
 			tableAddRow('tabItems',datafields,json,options,false);
-			if (rows.length>4){
+			var items = document.querySelectorAll('#tabItems div table tbody tr');
+			if (items.length>5){
 				tablePagination('tabItems',true,5);
 			}
 			$('#modalProducto').modal('hide');
+			var mtoTotal = 0;
+			items.forEach(function(row) {
+				mtoTotal += (parseInt(row.children[5].innerHTML*100))/100;
+			});
+			document.getElementById('txtTotal').value = mtoTotal.toFixed(2);
 		}
 	}
 }
@@ -174,13 +203,16 @@ $('#modalNota').on('hidden.bs.modal', function () {
 	document.getElementById('formNotaPedido').removeAttribute('cpe');
 	document.getElementById('txtFecha').value = dateToday();
 	var datafields = [
-		{key: 'cod', name: 'Código'},
-		{key: 'des', name: 'Descripción'},
-		{key: 'cnt', name: 'Cant'},
-		{key: 'pun', name: 'P.Unit'},
-		{key: 'imp', name: 'Importe'}
+		{key: 'cod', name: 'Código', type: 'string', rub:'83'},
+		{key: 'des', name: 'Descripción', type: 'string', rub:'84'},
+		{key: 'cnt', name: 'Cant', type: 'decimal', rub:'81'},
+		{key: 'pun', name: 'P.Unit', type: 'decimal', rub:'85'},
+		{key: 'imp', name: 'Importe', type: 'decimal', rub:'99'}
 	];
-	datatableLoad('tabItems',datafields,'','','','table-sm');
+	var options = [
+		{btn:'danger', fa:'fa-trash-o', fn:'del'}
+	];
+	datatableLoad('tabItems',datafields,'',options,false,{'tableSet':'table-sm text-nowrap'});
 	tablePagination('tabItems',true,5);
 });
 
@@ -189,47 +221,64 @@ $('#modalProducto').on('hidden.bs.modal', function () {
 	//agregar limpiar grilla de productos
 });
 
-$($confirmForm).on('hidden.bs.modal', function () {
-	this.removeAttribute('act');
+$(confirmForm).on('hidden.bs.modal', function () {
+	this.removeAttribute('ope');
 	this.querySelector('div div div.modal-body').innerHTML = '';
 });
 
 document.querySelector(confirmFormAceptar).onclick = function() {
 	$(progressForm).modal('show');
-	var act = document.getElementById(confirmForm).getAttribute('act');
-	var txt = document.getElementById('tabNotaPedido').getAttribute('data');
+	var ope = document.getElementById(confirmFormId).getAttribute('ope');
+	var per = document.getElementById('tabNotaPedido').getAttribute('data');
 	$('#modalNota').modal('hide');
 	var msg;
-	if(act == 1){ 
+	if(ope == 1){ 
 		msg = msgRespuesta.guardado;
-	}else if(act == 2){
+	}else if(ope == 2){
 		msg = msgRespuesta.modificado;
-	}else if(act == 0){  
+	}else if(ope == 0){  
 		msg = msgRespuesta.eliminado;
+	}else if(ope == 'pdf'){  
+		msg = msgRespuesta.generadoPdf;
 	}else{
 		snackAlert('No hay accion para ejecutar');
 	}
 	var formData = new FormData(document.getElementById('formNotaPedido'));
-	formData.append('act',act);
-	formData.append('txt',txt);
-	if (act == 0) formData.set('txtNumeroCP',document.getElementById(confirmForm).getAttribute('cod'));
+	formData.append('itm',JSON.stringify(tableToJson('tabItems')));
+	//console.log(JSON.stringify(tableToJson('tabItems')));
+	formData.append('ope',ope);
+	formData.append('per',per);
+	if (ope == 0 || ope == 'pdf') {
+		let cpeid = document.getElementById(confirmFormId).getAttribute('cpe').split('-');
+		formData.set('selSerieCP',cpeid[0]);
+		formData.set('txtNumeroCP',cpeid[1]);
+	};
 	var PostData = setPostData(dataFormulario,'formulario',formData); // params: object container, object formData;
 	let count = 0;
 	formData.forEach(function(){count++;});
 	if(count>0){
-		fetchPost(ruta +'operacion',PostData).then(json => {
-			if(json.cod == 200){
-				cargarNotasPedido(json.res.lstNotas,'tabNotaPedido',txt);
-				snackAlert(msg,'success');
-			}else{
-				snackAlert(json.msg,'danger');
-			}
-		});
+		if (ope !== 'pdf') {
+			fetchPost(ruta +'operacion',PostData).then(json => {
+				if(json.cod == 200){
+					cargarNotasPedido(json.res.lstNotas,'tabNotaPedido',per);
+					snackAlert(msg,'success');
+				}else{
+					snackAlert(json.msg,'danger');
+				}
+			});
+		}else{
+			fetchPostPdf(ruta +'operacion',PostData).then(blob => {
+					var file = new Blob([blob], {type: "application/pdf"});
+					var fileURL = window.URL.createObjectURL(file);
+					window.open(fileURL, "_blank");
+			});	
+		}
+		
 	}else{
 		  snackAlert('No hay datos para registrar','warning');
 	}
 
-	$($confirmForm).modal('hide');
+	$(confirmForm).modal('hide');
 	setTimeout(function(){ $(progressForm).modal('hide'); }, 500);
 }
 
@@ -244,20 +293,22 @@ $(document).on('click','#tabNotaPedido div table tbody tr td div button.edit', f
     		document.getElementById('txtNumeroCP').value = row['num'];
     		document.getElementById('txtFecha').value = row['fec'];
     		document.getElementById('txtNombre').value = row['des'];
-    		document.getElementById('txtDireccion').value = row['dir'];
     		document.getElementById('txtDocumento').value = row['rec'];
-    		document.getElementById('txtObservacion').value = row['obs'];
+			document.getElementById('txtTotal').value = row['tot'];
+			if(row['dir'])document.getElementById('txtDireccion').value = row['dir'];
+    		document.getElementById('txtObservacion').value = (row['obs']) ? row['obs']:'';
 			var datafields = [
-				{key: 'cod', name: 'Código', type: 'string'},
-				{key: 'des', name: 'Descripción', type: 'string'},
-				{key: 'cnt', name: 'Cant', type: 'decimal'},
-				{key: 'pun', name: 'P.Unit', type: 'decimal'},
-				{key: 'imp', name: 'Importe', type: 'decimal'}
+				{key: 'cod', name: 'Código', type: 'string', rub:'83'},
+				{key: 'des', name: 'Descripción', type: 'string', rub:'84'},
+				{key: 'cnt', name: 'Cant', type: 'decimal', rub:'81'},
+				{key: 'pun', name: 'P.Unit', type: 'decimal', rub:'85'},
+				{key: 'imp', name: 'Importe', type: 'decimal', rub:'99'}
 			];
 			var options = [
 				{btn:'danger', fa:'fa-trash-o', fn:'del'}
 			];
-			datatableLoad('tabItems',datafields,row.lst,options,false,'table-sm text-nowrap');
+			//Tablename, datafields, lista, opciones,autonumeracion,clases, 
+			datatableLoad('tabItems',datafields,row.lst,options,false,{'tableSet':'table-sm text-nowrap'});
 			document.getElementById('tabItems').setAttribute('cpe',row['ser']+'-'+row['num']);
 			tablePagination('tabItems',true,5);
     	}
@@ -268,56 +319,95 @@ $(document).on('click','#tabNotaPedido div table tbody tr td div button.edit', f
 $(document).on('click','#tabNotaPedido div table tbody tr td div button.del', function() { 
 	let ser = (((this.parentNode).parentNode).parentNode).childNodes[2].innerHTML;
     let num = (((this.parentNode).parentNode).parentNode).childNodes[3].innerHTML;
-	document.getElementById(confirmForm).setAttribute('cpe',ser.trim()+'-'+num.trim());
-    document.getElementById(confirmForm).setAttribute('act',0);
+	document.getElementById(confirmFormId).setAttribute('cpe',ser.trim()+'-'+num.trim());
+    document.getElementById(confirmFormId).setAttribute('ope',0);
     document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.eliminar;
-    $($confirmForm).modal('show');
+    $(confirmForm).modal('show');
 });
 //Generar PDF 
 $(document).on('click','#tabNotaPedido div table tbody tr td div button.pdf', function() {
-	fetch(ruta+'generarPDF')
-	.then(response => response.blob())
-	.then(blob => {
-			var file = new Blob([blob], {type: "application/pdf"});
-			var fileURL = window.URL.createObjectURL(file);
-			window.open(fileURL, "_blank");
-	});
+	let ser = (((this.parentNode).parentNode).parentNode).childNodes[2].innerHTML;
+    let num = (((this.parentNode).parentNode).parentNode).childNodes[3].innerHTML;
+	document.getElementById(confirmFormId).setAttribute('cpe',ser.trim()+'-'+num.trim());
+    document.getElementById(confirmFormId).setAttribute('ope','pdf');
+    document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.generaPdf;
+    $(confirmForm).modal('show');
 });
 
 $(document).on('click','#tabItems div table tbody tr td div button.del', function() {
 	(((this.parentNode).parentNode).parentNode).remove();
+	var items = document.querySelectorAll('#tabItems div table tbody tr');
+	var mtoTotal = 0;
+	items.forEach(function(row) {
+		mtoTotal += (parseInt(row.children[5].innerHTML*100))/100;
+	});
+	document.getElementById('txtTotal').value = mtoTotal.toFixed(2);
 	tablePagination('tabItems',true,5);
 });
 
 //Functions
-function listarNotasPedido(datatable,txt='default'){
-	txt = txt.trim();
-	if(txt.length>=3){
-		fetchGet(ruta +'cargarNotasPedido?txt='+txt).then(json => {
-	        if(json.cod == 200){
-	        	cargarNotasPedido(json.res.lstNotas,datatable,txt);
-	        }else{
-	            snackAlert(json.msg,'warning');
-	        }
-		});
-	}else if(txt.length > 0){
-	  	snackAlert('La descripción es muy corta','warning');
-	}else{
-	  	snackAlert('La descripción esta vacia','warning');
-	}
-}
-function cargarNotasPedido(lstNotas,datatable,txt='default'){
-	localData.lstNotas = lstNotas;
-	/*
-	for (var i = 0; i < lstNotas.length; i++) {
-		lstNotas[i]['desEst'] = '';
-		localData.lstEstado.forEach(function(est){
-			if(lstNotas[i]['est'] == est['cod']){
-				lstNotas[i]['desEst'] = est['des'];
+function listarNotasPedido(datatable,per='default'){
+	per = per.trim();
+	if(per.length==6){
+		fetchGet(ruta +'listarNotasPedido?per='+per).then(json => {
+			if(json.cod === 200){	
+				cargarNotasPedido(json.res.lstNotas,datatable,per);
+			}else if(json.cod == 401){
+				$(expiredSession).modal('show');
+			}else{
+				snackAlert(json.msg,'warning');
 			}
 		});
+	}else{
+	  	snackAlert('Periodo Incorrecto','warning');
 	}
-	*/
+}
+function cargarNotasPedido(lstNotas,datatable,per='default'){
+	lstNotas.forEach(function(row,x) {
+		var list = [];
+		row.itm.forEach(function(item,y) {
+			if(y == 0){
+				item.forEach(function(rubro) {
+					if(rubro['rub']=='01'){
+						lstNotas[x].dir = rubro['des'];
+					}
+					if(rubro['rub']=='02'){
+						lstNotas[x].obs = rubro['des'];
+					}
+				});
+			}else{
+				var i = {};
+				item.forEach(function(rubro) {
+					if(rubro['rub']=='81'){
+						i.cnt = rubro['val'];
+					}
+					if(rubro['rub']=='83'){
+						i.cod = rubro['des'];
+					}
+					if(rubro['rub']=='84'){
+						i.des = rubro['des'];
+					}
+					if(rubro['rub']=='85'){
+						i.pun = rubro['val'];
+					}
+					if(rubro['rub']=='99'){
+						i.imp = rubro['val'];
+					}
+				});
+				list.push(i);
+			}
+		});
+		lstNotas[x].lst = list;
+	});
+	localData.lstNotas = lstNotas;
+	var totPeriodo = 0;
+	var cntPeriodo = 0;
+	lstNotas.forEach(function(row) {
+		cntPeriodo ++;
+		totPeriodo += (parseInt(row['tot']*100))/100;
+	});
+	document.getElementById('txtTotPeriodo').value = totPeriodo.toFixed(2);
+	document.getElementById('txtCantidad').value = cntPeriodo;
 	var datafields = [
 	    {key: 'ser', name: 'Serie', type: 'string'},
 	    {key: 'num', name: 'Número', type: 'string'},
@@ -331,7 +421,7 @@ function cargarNotasPedido(lstNotas,datatable,txt='default'){
 		{btn:'secondary', fa:'fa-file-pdf-o', fn:'pdf'},
 	    {btn:'danger', fa:'fa-trash-o', fn:'del'}
 	];
-	datatableLoad(datatable,datafields,lstNotas,options,true,'text-nowrap');
-	document.getElementById(datatable).setAttribute('data',txt);
+	datatableLoad(datatable,datafields,lstNotas,options,true,{'tableSet':'text-nowrap'});
+	document.getElementById(datatable).setAttribute('data',per);
 	tablePagination(datatable,true,5);
 }

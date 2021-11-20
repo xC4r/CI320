@@ -67,10 +67,13 @@ function fetchGetHTML(url){
         var scripts = document.getElementById("pagina").querySelectorAll("script");
         for (var i = 0; i < scripts.length; i++) {
             if (scripts[i].innerText) {
-                eval(scripts[i].innerText);
+                var a =  scripts[i].innerText;
+                //a.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+                eval(a);
             } else {
                 fetch(scripts[i].src).then(function(data) {
                     data.text().then(function(r) {
+                        //r.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
                         eval(r);
                     })
                 }).catch(error => console.log('Error:'+ error));
@@ -95,6 +98,16 @@ function fetchPost(url,data){
         headers:{'token':localStorage.getItem("token")},
     })
     .then(response => response.json())
+    .catch(error => console.log('Error:'+ error));
+}
+
+function fetchPostPdf(url,data){
+    return fetch(url,{
+        method: 'POST',
+        body: data,
+        headers:{'token':localStorage.getItem("token")},
+    })
+    .then(response => response.blob())
     .catch(error => console.log('Error:'+ error));
 }
 
@@ -129,8 +142,8 @@ function IdGen(length) {
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     var charactersLength = characters.length;
     for ( var i = 0; i < length; i++ ) {
-      result.push(characters.charAt(Math.floor(Math.random() * 
- charactersLength)));
+      //result.push(characters.charAt(Math.floor(crypto.getRandomValues() * charactersLength)));
+      result.push(characters.charAt(Math.floor(Math.random() * charactersLength)));
    }
    return result.join('');
 }
@@ -189,3 +202,5 @@ function setPostData(objectContainer,index,formData){
     dataForm.set(index,obj); 
     return dataForm;
 }
+
+

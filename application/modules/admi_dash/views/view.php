@@ -56,6 +56,7 @@
                                 </div>
                                 <div class="table-responsive mb-2">
                                     <table class="table table-hover table-sm" id="exportTable">
+                                      <caption>Tabla de usuarios</caption>
                                       <thead class="thead-dark" >
                                         <tr>
                                           <th scope="col">#</th>

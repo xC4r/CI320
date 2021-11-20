@@ -25,7 +25,7 @@
         <div class="card card-table">
           <a class="card-header" href="#" data-target="#card_body" data-toggle="collapse" aria-expanded="false" role="button">
               <h6 class="card-title float-left mb-0">Usuarios</h6>
-              <span class="float-right"><i class="fa fa-angle-down"></i></span>   
+              <span class="float-right"><em class="fa fa-angle-down"></em></span>   
           </a>
           <div class="card-body p-3 collapse show" id="card_body">
             <ul class="nav nav-tabs mb-2" role="tablist">
@@ -47,7 +47,7 @@
                     <div class="input-group mb-1 justify-content-end">
                         <input  type="text"   class="form-control" placeholder="Buscar" id="tab1_txt_busc_usua">
                         <button type="button" class="btn btn-outline-success ml-1 mb-1" id="tab1_btn_expo_csv">CSV</button>
-                        <button type="button" class="btn btn-outline-info ml-1 mb-1"    id="tab1_btn_carg_list"><i class="fa fa-sync-alt"></i></button>
+                        <button type="button" class="btn btn-outline-info ml-1 mb-1"    id="tab1_btn_carg_list"><em class="fa fa-sync-alt"></em></button>
                     </div>
                     <div class="table-responsive" id="tab1_tabl_user"></div>
                     <div class="modal fade" tabindex="-1" role="dialog" id="tab1_regi_usua" aria-hidden="true">
@@ -170,7 +170,7 @@
                     <div class="input-group mb-1 justify-content-end">
                         <input  type="text"   class="form-control" placeholder="Buscar" id="tab2_txt_busc_role">
                         <button type="button" class="btn btn-outline-success ml-1 mb-1" id="tab2_btn_expo_csv">CSV</button>
-                        <button type="button" class="btn btn-outline-info ml-1 mb-1"    id="tab2_btn_carg_list"><i class="fa fa-sync-alt"></i></button>
+                        <button type="button" class="btn btn-outline-info ml-1 mb-1"    id="tab2_btn_carg_list"><em class="fa fa-sync-alt"></em></button>
                     </div>
                     <div class="table-responsive" id="tab2_tabl_role"></div>
                     <div class="modal fade" tabindex="-1" role="dialog" id="tab2_regi_role" aria-hidden="true">

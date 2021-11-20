@@ -1,7 +1,7 @@
 <div class="content-header">
   <div class="container-fluid">
     <div class="row" >
-      <div class="col-xl-12">
+      <div class="col-xl-12 mb-2">
         <h4 class="page-header">Notas de Pedido</h4>
       </div>
     </div>
@@ -27,38 +27,51 @@
             <div class="tab-content mb-3">
               <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="home-tab">
                 <div class="form-row">
-                  <div class="col-md-6 mb-2">
+                  <div class="col-md-12 mb-2">
                     <label for="selPeriodo">Periodo</label>
                     <div class="d-flex">
                       <div class="mr-auto">
-                        <select class="form-control" id="selPeriodo" name="selPeriodo">
-                          <option value="202109">202109</option>
-                          <option value="202108">202108</option>
-                          <option value="202107">202107</option>
-                          <option value="202107">-------</option>
-                        </select>
+                        <input type="text" size="10" class="form-control text-center" id="selPeriodo" readonly>
                       </div>
-                      <div class="ml-1">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalNota">Nuevo</button>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#othermod">otropl</button>
+                      <div class="col-lg-6 pl-1 pr-0">
+                        <div class="input-group">
+                          <input type="text" class="form-control rounded" placeholder="Buscar" aria-label="Buscar" id="txtBuscar">
+                          <button type="button" class="btn btn-success ml-1" id="btnExport"><i class="fa fa-file-excel-o" aria-hidden="true"></i></button>
+                          <button type="button" class="btn btn-info ml-1" id="btnReload"><i class="fa fa-refresh"></i></button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6 mb-2">
-                    <label for="txtBuscar">Buscar</label>
-                    <div class="input-group">
-                      <input type="text" class="form-control rounded" placeholder="Buscar" aria-label="Buscar" id="txtBuscar">
-                      <button type="button" class="btn btn-secondary ml-1"><i class="fa fa-search" id="btnBuscar"></i></button>
-                      <button type="button" class="btn btn-success ml-1" id="btnExport">CSV</button>
-                      <button type="button" class="btn btn-info ml-1" id="btnReload"><i class="fa fa-refresh"></i></button>
-                    </div>
-                  </div>
-
                 </div>
 
+                <div class="form-row">
+                  <div class="col-md-4 mb-2">
+                    <div class="input-group">
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalNota">Nuevo</button>
+                    </div>
+                  </div>  
+                  <div class="col-md-3 mb-2">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Cantidad</span>
+                      </div>
+                      <input type="text" class="form-control text-right" id="txtCantidad" name="txtCantidad" value ='0' readonly>
+                    </div>
+                  </div>
+                  <div class="col-md-5 mb-2">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Monto Total - S/.</span>
+                      </div>
+                      <input type="text" class="form-control text-right" id="txtTotPeriodo" name="txtTotPeriodo" value ='0' readonly>
+                    </div>
+                  </div>
+                </div> 
+                
                 <div class="datatable" id="tabNotaPedido">
                   <div class="table-responsive">
                     <table class="table mb-0">
+                      <caption>Datatable/caption>
                       <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -146,19 +159,19 @@
                                 <label for="txtDocumento">Serie - Numero</label>
                                 <div class="input-group">
                                   <div class="input-group-prepend">
-                                    <select class="form-control" id="selSerieCP" name="selSerieCP">
+                                    <select class="form-control" id="selSerieCP" name="selSerieCP" required>
                                       <option value="N001">N001</option>
                                       <option value="N002">N002</option>
                                       <option value="N003">N003</option>
                                     </select> 
                                   </div>
-                                  <input type="text" class="form-control" id="txtNumeroCP" name="txtNumeroCP" required>
+                                  <input type="text" class="form-control" id="txtNumeroCP" name="txtNumeroCP" pattern="[0-9]{1,8}" required>
                                 </div>
                               </div>
                               <div class="col-md-3 mb-3">
                                 <label for="txtFecha">Fecha</label>
                                 <div class="input-group">
-                                  <input type="date"  class="form-control" id="txtFecha" name="txtFecha" required>
+                                  <input type="date"  class="form-control text-center" id="txtFecha" name="txtFecha" required>
                                   <div class="input-group-append">
                                     <div class="input-group-text">
                                       <input type="checkbox">
@@ -168,21 +181,21 @@
                               </div>
                               <div class="col-md-6 mb-3">
                                 <label for="txtNombre">Nombre</label>
-                                <input type="text" class="form-control" id="txtNombre" name="txtNombre" required>
+                                <input type="text" class="form-control" id="txtNombre" name="txtNombre" maxlength="100" required>
                               </div>
                         </div>
                         <div class="form-row">
                           <div class="col-md-6 mb-3">
                               <label for="txtDireccion">Direccion</label>
-                              <input type="text" class="form-control" id="txtDireccion" name="txtDireccion" required>                                     
+                              <input type="text" class="form-control" id="txtDireccion" name="txtDireccion" maxlength="100">                                     
                           </div>                                          
                           <div class="col-md-3 mb-3">
                               <label for="txtDocumento">DNI/RUC</label>
-                              <input type="text" class="form-control" id="txtDocumento" name="txtDocumento" required>                                     
+                              <input type="text" class="form-control" id="txtDocumento" name="txtDocumento" pattern="[0-9]{0,11}">                                     
                           </div> 
                           <div class="col-md-3 mb-3">
                               <label for="txtReferencia">Observ - Ref</label>
-                              <input type="text" class="form-control" id="txtObservacion" name="txtReferencia" required>                                     
+                              <input type="text" class="form-control" id="txtObservacion" name="txtObservacion" maxlength="100">                                     
                           </div> 
                         </div>
                         <div class="form-row">
@@ -193,9 +206,9 @@
                             <div class="col-md-4 mb-3">
                               <div class="input-group">
                                 <div class="input-group-prepend">
-                                  <span class="input-group-text" id="txtTotal">Total</span>
+                                  <span class="input-group-text">Total</span>
                                 </div>
-                                <input type="text" class="form-control text-right" id="txtTotal" name="txtTotal" value="15000.00" disabled required>
+                                <input type="text" class="form-control text-right" id="txtTotal" name="txtTotal" value ='0' readonly required>
                                 <div class="input-group-append">
                                   <div class="input-group-text">
                                     <input type="checkbox">
@@ -213,15 +226,16 @@
                         </div>
                         <div class="datatable" id="tabItems">
                           <div class="table-responsive">
-                            <table class="table table-sm mb-0">
+                            <table class="table table-sm mb-0" id="items" name="items">
+                                <caption>Datatable/caption>
                                 <thead>
                                   <tr>
                                     <th scope="col">Opción</th>
-                                    <th scope="col">Código</th>
-                                    <th scope="col">Descripción</th>
-                                    <th scope="col">Cant</th>
-                                    <th scope="col">P.Unit</th>
-                                    <th scope="col">Importe</th>
+                                    <th scope="col" rub="83">Código</th>
+                                    <th scope="col" rub="84">Descripción</th>
+                                    <th scope="col" rub="81">Cant</th>
+                                    <th scope="col" rub="85">P.Unit</th>
+                                    <th scope="col" rub="99">Importe</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -304,8 +318,11 @@
                         <div class="col-md-7 mb-3">
                           <label for="txtProducto">Producto</label>
                           <div class="input-group">
-                            <input type="text" class="form-control w-25" id="txtCodigo" name="txtCodigo">
-                            <input type="text" class="form-control w-75" id="txtProducto" name="txtProducto" required>
+                            <input type="text" class="form-control w-25 p-1" id="txtCodigo" name="txtCodigo">
+                            <div class="btn-group">
+                              <div class="dropdown-menu" id="autoProducto"></div>
+                            </div>
+                            <input type="text" class="form-control w-75" id="txtProducto" name="txtProducto" autocomplete="off" required>
                           </div>
                         </div>
                         <div class="col-md-2 mb-3">
@@ -349,5 +366,4 @@
     </div>        
   </div>
 </div>
-
 

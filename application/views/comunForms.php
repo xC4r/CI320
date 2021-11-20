@@ -34,11 +34,25 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" >Alerta</h5>
+        <h5 class="modal-title" >Sesion Expirada</h5>
       </div>
       <div class="modal-body">Tu sesion ha expirado. Por favor, ingresa de nuevo para continuar.</div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" data-toggle="modal" onclick='location.reload();'>Aceptar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id='alertForm' role="dialog" aria-labelledby="ConfirmlLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" >Alerta</h5>
+      </div>
+      <div class="modal-body">...</div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" data-toggle="modal" data-dismiss="modal">Aceptar</button>
       </div>
     </div>
   </div>

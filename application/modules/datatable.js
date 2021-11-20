@@ -26,17 +26,17 @@ $(window).on('resize', function(e) {
 });
 
 //cargar datatable
-function datatableLoad(datatable='',datafields=[],json=[],options=[],rowindex=false,tableSet='',theadSet='',tabResp='') {
+function datatableLoad(datatable='',datafields=[],json=[],options=[],rowindex=false,config={}) {
     var divContainer = document.getElementById(datatable);
     var tableResponsive = document.createElement("div");
     tableResponsive.classList.add("table-responsive");
-	if(tabResp !== ''){
-		var lista = tabResp.split(' ');
+	if(config.tabResp){
+		var lista = config.tabResp.split(' ');
 		lista.forEach(function(opt) {
 			tableResponsive.classList.add(opt);
 		});
 	}
-    var table = tableLoad(datafields,json,options,rowindex,tableSet,theadSet);
+    var table = tableLoad(datafields,json,options,rowindex,config);
     tableResponsive.appendChild(table);
     var nav = document.createElement("nav");
     var ul = document.createElement("ul");
@@ -49,23 +49,30 @@ function datatableLoad(datatable='',datafields=[],json=[],options=[],rowindex=fa
     divContainer.appendChild(nav);
 }
 //generate table
-function tableLoad(datafields,json=[],options=[],rowindex=false,tableSet='',theadSet='') {
+function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
     var table = document.createElement("table");
     table.classList.add("table");
     table.classList.add("mb-0");
-	if(tableSet !== ''){
-		var lista = tableSet.split(' ');
+	if(config.tableSet){
+		var lista = config.tableSet.split(' ');
 		lista.forEach(function(opt) {
 			table.classList.add(opt);
 		});
 	}
     if($(window).width()<992){
         table.classList.add("table-sm");
-        if(!tableSet.includes('table-sm')){table.classList.add('nts');}
+        if(config.tableSet){
+            if(!config.tableSet.includes('table-sm')){
+                table.classList.add('nts');
+            }
+        }
     }
+    var caption = document.createElement("caption");
+    caption.innerHTML = "Datatable";
+    //table.appendChild(caption);
     var thead = document.createElement("thead");
-	if(theadSet !== ''){
-		var lista = theadSet.split(' ');
+	if(config.theadSet){
+		var lista = config.theadSet.split(' ');
 		lista.forEach(function(opt) {
 			thead.classList.add(opt);
 		});
@@ -82,16 +89,22 @@ function tableLoad(datafields,json=[],options=[],rowindex=false,tableSet='',thea
         th.setAttribute( "scope", "col" );
         th.innerHTML = "Opción";
         tr.appendChild(th);      
-    }else{
+    }/* else{
         var th = document.createElement("th");
         th.setAttribute( "scope", "col" );
         th.innerHTML = "Opción";
-        tr.appendChild(th);      
-    }
+        tr.appendChild(th);     
+    }*/ 
     for (var i = 0; i < datafields.length; i++) {
         var th = document.createElement("th"); // TABLE HEADER.
         th.setAttribute( "scope", "col" );
         th.innerHTML = datafields[i]['name'];
+        if(typeof datafields[i]['type']!=='undefined' && datafields[i]['type']=='decimal'){
+            th.classList.add('text-right');
+        }
+        if(typeof datafields[i]['rub'] !== 'undefined'){
+            th.setAttribute( "rub", datafields[i]['rub'] );
+        }
         if(typeof datafields[i]['hidden'] !== 'undefined'){
             th.hidden = datafields[i]['hidden'];
         }
@@ -159,17 +172,16 @@ function tableLoad(datafields,json=[],options=[],rowindex=false,tableSet='',thea
 				if(datafields[j]['type']=='string'){
 					td.innerHTML = json[i][datafields[j]['key']];
 				}else if (datafields[j]['type']=='decimal'){
+                    td.classList.add('text-right');
 					var decimal = parseFloat(json[i][datafields[j]['key']]).toFixed(2);
 					td.innerHTML = decimal;
 				}else if (datafields[j]['type']=='date'){
-					//var decimal = parseFloat(json[i][datafields[j]['key']]).toFixed(2);
 					var date = new Date(json[i][datafields[j]['key']].replace(/-/g,"/"));
 					var year = date.getFullYear();
 					var fecha = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear().toString().substr(2);
 					//Saturday, June 9th, 2007, 5:46:21 PM      
 					td.innerHTML = fecha;
 				}else if (datafields[j]['type']=='datetime'){
-					//var decimal = parseFloat(json[i][datafields[j]['key']]).toFixed(2);
 					var date = new Date(json[i][datafields[j]['key']].replace(/-/g,"/"));
 					var year = date.getFullYear();
 					var fecha = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear().toString().substr(2)+' '+date.getHours()+':'+date.getMinutes().toString().padStart(2,'0');
@@ -231,13 +243,14 @@ function tableAddRow(datatable='',datafields=[],json=[],options=[],rowindex=fals
 		if(datafields[j]['type']=='string'){
 			td.innerHTML = json[datafields[j]['key']];
 		}else if (datafields[j]['type']=='decimal'){
+            td.classList.add('text-right');
 			var decimal = parseFloat(json[datafields[j]['key']]).toFixed(2);
 			td.innerHTML = decimal;
 		}else if (datafields[j]['type']=='date'){
 			var date = new Date(json[datafields[j]['key']].replace(/-/g,"/"));
 			var year = date.getFullYear();
 			var fecha = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear().toString().substr(2);
-			//Saturday, June 9th, 2007, 5:46:21 PM      
+			//Saturday, June 9th, 2007      
 			td.innerHTML = fecha;
 		}else if (datafields[j]['type']=='datetime'){
 			var date = new Date(json[datafields[j]['key']].replace(/-/g,"/"));
@@ -377,7 +390,7 @@ $.fn.pageMe = function(opts){
     
     pager.find('li .num-link').click(function(){
         var clickedPage = $(this).html().valueOf()-1;
-        goTo(clickedPage,perPage);
+        goTo(clickedPage);
         return false;
     });
     pager.find('li .prev-link').click(function(){
@@ -420,3 +433,19 @@ $.fn.pageMe = function(opts){
         pager.children().eq(page+1).addClass("active");
     }
 };
+
+function tableToJson(tableName){
+    var myRows = [];
+    var $headers = $("#"+tableName+" div table thead th");
+    $("#"+tableName+" div table tbody tr").each(function(index) {
+        $cells = $(this).find("td");
+        myRows[index+1] = {};
+        $cells.each(function(cellIndex) {
+            //console.log("rub : "+ $($headers[cellIndex]).attr("rub"));
+            if($($headers[cellIndex]).attr("rub")){
+                myRows[index+1][$($headers[cellIndex]).attr("rub")] = $(this).html();
+            }
+        });    
+    });
+    return myRows;
+}

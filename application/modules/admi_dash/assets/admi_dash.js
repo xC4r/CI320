@@ -55,7 +55,7 @@ function admin_dash_boar_print(){
     });
 
 }
-
+/*
 function admi_apro_prog_tabl_load(){
     jQuery("#admi_apro_prog_lbl_mens").html("");
     jQuery.ajaxSetup({async: true});
@@ -84,4 +84,4 @@ function admi_apro_prog_tabl_load(){
         main_erro("admi_apro_prog_prog()", admi_apro_prog_nomb_cont + "admi_prog_list", xhr.responseText, jQuery("#codUser").html())
         jQuery("#admi_apro_prog_lbl_mens").html('* SU MENSAJE DE ERROR A SIDO ENVIADO A SISTEMAS.');
     });
-}
+}*/

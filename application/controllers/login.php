@@ -45,7 +45,9 @@ class Login extends CI_Controller {
                         'codEmpr'  =>  trim(mb_strtolower($empresa[0]['cod_empresa'],'UTF-8')),
                         'rucEmpr'  =>  trim($empresa[0]['ruc_empresa']),
                         'desEmpr'  =>  trim($empresa[0]['des_empresa']),
-                        'dirEmpr'  =>  trim($empresa[0]['dir_empresa'])
+                        'desCome'  =>  trim($empresa[0]['des_comercial']),
+                        'dirEmpr'  =>  trim($empresa[0]['dir_empresa']),
+                        'tlfEmpr'  =>  trim($empresa[0]['des_telefono'])
                     );
                 }
             }

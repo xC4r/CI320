@@ -95,8 +95,55 @@ function formSelectLoad(id,list,value,html){
     });
     selectContainer.selectedIndex = '-1';
 }
+//autocomplete
+function autocomplete(valor,lst,arr,dest) {
+	var input = document.getElementById(valor);
+	var optionsVal = document.getElementById(lst);
+    RegExp.escape = function(s) {return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');}
+    optionsVal.innerHTML = "";
+    if (input.value) {
+        var textCountry = input.value;
+        for (var i = 0; i < arr.length; i++) {
+            var testableRegExp = new RegExp(RegExp.escape(textCountry), "i");
+            if (arr[i]['des'].match(testableRegExp)) {
+                addValue(arr[i],dest,lst);
+            }
+        }
+        if(optionsVal.children.length > 0) $('#'+valor).dropdown('show');
+    }
+    else{
+        $('#'+valor).dropdown('hide');
+    }
 
+    $('#'+lst).on('click','a.dropdown-item', function(){
+        //document.getElementById(valor).value = this.text;
+        var sel = this;
+        dest.forEach(function(row) {
+            if(sel.getAttribute(row['key'])){
+                document.getElementById(row['dest']).value = sel.getAttribute(row['key']);
+            }
+        });
+        $('#'+valor).dropdown('hide');
+    });
 
+    function addValue(item,dst,lst) {
+        var createOptions = document.createElement('a');
+        var listaAuto = document.getElementById(lst);
+        createOptions.classList.add("dropdown-item");
+        createOptions.href = "#";
+        dst.forEach(function(row) {
+            if(row['ind']){
+                createOptions.text = item[row['key']];
+                createOptions.setAttribute(row['key'],item[row['key']]);
+            }
+            createOptions.setAttribute(row['key'],item[row['key']]);
+        });
+        listaAuto.appendChild(createOptions);
+    }
 
-
-
+    function setAutocomplete(valor,inpt) {
+        console.log('entre set value');
+        var input = document.getElementById(inpt);
+        input.value = valor;
+    }
+}

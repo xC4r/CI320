@@ -10,6 +10,7 @@
   <!-- Bootstrap Core CSS -->
   <link href="assets/libs/icon.ico" rel="icon">
   <link href="assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/libs/datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
   <!-- Custom Fonts --> 
   <link href="assets/libs/font-awesome/css/font-awesome.min.css" rel="stylesheet" >
   <!-- Custom CSS -->
@@ -56,7 +57,9 @@
 <!-- jQuery -->
 <script src="assets/libs/jquery/jquery-3.4.1.min.js"></script>
 <!-- Bootstrap Plugin JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="assets/libs/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/libs/datepicker/js/bootstrap-datepicker.min.js"></script>
 <!-- Custom Plugins y JavaScript -->
 <script src="application/modules/main.js"></script>
 <script src="application/modules/datatable.js"></script>

@@ -24,8 +24,9 @@ class Main extends CI_Controller
         //$post = json_decode(file_get_contents('php://input'),true);
         //$modu = $post['mod'];
         $modu = $this->input->get('mod', TRUE); 
+        $modu = $this->security->xss_clean($modu);
         $query = $this->db->get_where('syst_asignamod', array('cod_usuario' => $this->codUser,'cod_ruta' => $modu));
-        $html;
+        $html = "";
         if($query->num_rows() > 0){
             $html = $this->load->view($modu.'/view','',true);
             $html .= $this->load->view('comunForms','',true);
@@ -48,7 +49,7 @@ class Main extends CI_Controller
             $listMenu = [];
             foreach( $asignados->result_array() as $row ){
                 $code = explode('_',$row['cod_ruta']);
-                $modulo;
+                $modulo = '';
                 for ($i=0; $i<count($code); $i++){
                     if($i==0){
                         $modulo = $code[$i];

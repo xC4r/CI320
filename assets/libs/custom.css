@@ -13,6 +13,15 @@ body.dark {
   background-color: #181818 !important;
   color: #FFF;
 }
+body.dark .datepicker{
+  background-color: #313131 !important;
+}
+body.dark .datepicker table tr td span.focused, 
+body.dark .datepicker table tr td span:hover,
+body.dark .datepicker table tr th:hover{
+  background-color: #383838 !important;
+}
+
 body.dark .navbar {
   background-color: #202020 !important;
   border-bottom: 1px solid #373737 !important;
@@ -125,6 +134,15 @@ body.dark .sidebar a{
   padding-bottom: 15px;
   background: transparent;
 }
+input[type="date"]::-webkit-calendar-picker-indicator {
+    //display: none;
+    //-webkit-appearance: none;
+    width: 16px;
+    padding: 0px;
+    margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 5px;
+}
 
 /* Sidebar Item Settings*/
 .sidebar{
@@ -212,7 +230,6 @@ input.password {
   background: lightgoldenrodyellow;
   color: white;
 }
-
 
 /* windows after 768px settings*/
 @media (min-width: 768px) and (max-width: 992px){

@@ -523,6 +523,6 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
 
  
-$config['cookie_path']      = '/; SameSite=Lax';
+//$config['cookie_path']      = '/; SameSite=Lax';
 // $config['cookie_secure']    = FALSE;
 // $config['cookie_httponly']  = FALSE;

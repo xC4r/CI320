@@ -14,7 +14,7 @@ var DataContainer = (function() {
 		"tipo": "usuario",
 		"documento": "00000000",
 		"nombre": "nombre_de_usuario",
-		"url": "http://sky.com/main",
+		"url": "https://sky.com/main",
 		"cookie": "rO0ABXQA701GcmNEbDZPZ28xODJOWWQ4aTNPT2krWUcrM0peG0zNkNaM0NZL0RXa1FZOGNJOWZsYjB5ZXc3MVNaTUpxWURmNGF3dVlDK3pMUHdveHI2cnNIaWc1CkI3SkxDSnc9",
 		"postal": null
 	};
@@ -119,12 +119,12 @@ document.getElementById('btnRegistrar').onclick = function() {
 	if(document.getElementById('formRegistro').checkValidity()){
 		if(!document.getElementById('txtUsuario').hasAttribute('ind')){
 			document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.guardar;
-			document.getElementById(confirmForm).setAttribute('act',1);
+			document.getElementById(confirmFormId).setAttribute('act',1);
 		}else{
 			document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.modificar;
-			document.getElementById(confirmForm).setAttribute('act',2);
+			document.getElementById(confirmFormId).setAttribute('act',2);
 		}
-		$($confirmForm).modal('show');
+		$(confirmForm).modal('show');
 	}
 }
 //Bootstrap Events
@@ -136,11 +136,11 @@ $('#addModal').on('hidden.bs.modal', function () {
 	document.getElementById('txtUsuario').removeAttribute('ind');
 });
 /*
-$($confirmForm).on('show.bs.modal', function () {
+$(confirmForm).on('show.bs.modal', function () {
 	document.getElementById("addModal").classList.remove("show");
 });
 */
-$($confirmForm).on('hide.bs.modal', function () {
+$(confirmForm).on('hide.bs.modal', function () {
 	//document.getElementById("addModal").classList.add("show");
 	this.removeAttribute('act');
 	this.querySelector('div div div.modal-body').innerHTML = '';
@@ -148,7 +148,7 @@ $($confirmForm).on('hide.bs.modal', function () {
 
 document.querySelector(confirmFormAceptar).onclick = function() {
 	$(progressForm).modal('show');
-	var act = document.getElementById(confirmForm).getAttribute('act');
+	var act = document.getElementById(confirmFormId).getAttribute('act');
 	var txt = document.getElementById('tabUsuario').getAttribute('data');
 	$('#addModal').modal('hide');
 	var msg;
@@ -164,7 +164,7 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	var formData = new FormData(document.getElementById('btnRegistrar'));
 	formData.append('act',act);
 	formData.append('txt',txt);
-	if (act == 0) formData.set('txtUsuario',document.getElementById(confirmForm).getAttribute('cod'));
+	if (act == 0) formData.set('txtUsuario',document.getElementById(confirmFormId).getAttribute('cod'));
 	var PostData = setPostData(dataFormUsuario,'formulario',formData); // params: object container, object formData;
 	let count = 0;
 	formData.forEach(function(){count++;});
@@ -181,7 +181,7 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 		  snackAlert('No hay datos para registrar','warning');
 	}
 
-	$($confirmForm).modal('hide');
+	$(confirmForm).modal('hide');
 	setTimeout(function(){ $(progressForm).modal('hide'); }, 500);
 }
 //Eventos opciones datatable
@@ -205,10 +205,10 @@ $(document).on('click','#tabUsuario div table tbody tr td div button.edit', func
 
 $(document).on('click','#tabUsuario div table tbody tr td div button.del', function() { 
     let cod = (((this.parentNode).parentNode).parentNode).childNodes[2].innerHTML;
-	document.getElementById(confirmForm).setAttribute('cod',cod);
-    document.getElementById(confirmForm).setAttribute('act',0);
+	document.getElementById(confirmFormId).setAttribute('cod',cod);
+    document.getElementById(confirmFormId).setAttribute('act',0);
     document.querySelector(confirmFormMensaje).innerHTML = msgConfirmacion.eliminar;
-    $($confirmForm).modal('show');
+    $(confirmForm).modal('show');
 });
 //Functions
 function listarUsuario(datatable,txt='default'){
