@@ -1,10 +1,10 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-06-2021 a las 18:43:46
--- Versión del servidor: 10.1.37-MariaDB
+-- Tiempo de generación: 20-11-2021 a las 22:41:57
+-- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 5.6.40
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -27,6 +27,32 @@ USE `db_sky`;
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `alma_prodserv`
+--
+
+CREATE TABLE `alma_prodserv` (
+  `num_ruc` char(11) COLLATE utf8_spanish_ci NOT NULL,
+  `cod_producto` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
+  `des_producto` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
+  `des_larga` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `mto_precio` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `cod_estado` char(2) COLLATE utf8_spanish_ci NOT NULL DEFAULT '01'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `alma_prodserv`
+--
+
+INSERT INTO `alma_prodserv` (`num_ruc`, `cod_producto`, `des_producto`, `des_larga`, `mto_precio`, `cod_estado`) VALUES
+('20601344557', 'P0001', 'Fierro 1/2 AA', '', '32.50', '01'),
+('20601344557', 'P0002', 'Fierro 12mm AA', '', '30.50', '01'),
+('20601344557', 'P0003', 'Fierro 3/8 AA', '', '22.50', '01'),
+('20601344557', 'P0004', 'Fierro 5/8 AA', '', '49.00', '01'),
+('20601344557', 'P0005', 'Fierro 8mm AA', '', '19.50', '01');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `cont_cpe`
 --
 
@@ -44,9 +70,8 @@ CREATE TABLE `cont_cpe` (
   `mto_totalvta` decimal(15,2) NOT NULL DEFAULT '0.00',
   `mto_totaligv` decimal(15,2) NOT NULL DEFAULT '0.00',
   `mto_imptotal` decimal(15,2) NOT NULL DEFAULT '0.00',
-  `des_observa` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
-  `num_xml` int(11) DEFAULT NULL,
   `ind_estado` char(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0',
+  `ind_informado` tinyint(1) NOT NULL DEFAULT '0',
   `cod_usumod` char(20) COLLATE utf8_spanish_ci NOT NULL DEFAULT 'noUser',
   `fec_modif` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -55,9 +80,15 @@ CREATE TABLE `cont_cpe` (
 -- Volcado de datos para la tabla `cont_cpe`
 --
 
-INSERT INTO `cont_cpe` (`num_ruc`, `cod_cpe`, `num_serie`, `num_cpe`, `fec_emision`, `cod_tipdocrec`, `num_docrecep`, `des_nomrecep`, `cod_moneda`, `mto_tipocambio`, `mto_totalvta`, `mto_totaligv`, `mto_imptotal`, `des_observa`, `num_xml`, `ind_estado`, `cod_usumod`, `fec_modif`) VALUES
-('20601344557', '00', 'N001', 1, '2021-06-11', '06', '11111111111', 'Empresa prueba 1', 'PEN', '0.00', '1100.00', '0.00', '1100.00', 'sin observaciones', 0, '0', 'noUser', '2021-06-13 13:09:26'),
-('20601344557', '00', 'N001', 2, '2021-06-13', '06', '22222222222', 'Empresa prueba 2', 'PEN', '0.00', '1200.00', '0.00', '1200.00', 'sin observaciones', NULL, '0', 'noUser', '2021-06-13 10:30:48');
+INSERT INTO `cont_cpe` (`num_ruc`, `cod_cpe`, `num_serie`, `num_cpe`, `fec_emision`, `cod_tipdocrec`, `num_docrecep`, `des_nomrecep`, `cod_moneda`, `mto_tipocambio`, `mto_totalvta`, `mto_totaligv`, `mto_imptotal`, `ind_estado`, `ind_informado`, `cod_usumod`, `fec_modif`) VALUES
+('20601344557', '00', 'N001', 1, '2021-09-11', '06', '11111111111', 'Empresa prueba 1', 'PEN', '0.00', '1100.00', '0.00', '2700.00', '0', 1, 'noUser', '2021-09-30 11:42:07'),
+('20601344557', '00', 'N001', 2, '2021-09-13', '0', '22222222222', 'Empresa prueba 2', 'PEN', '1.00', '1200.00', '0.00', '145.50', '0', 0, 'noUser', '2021-10-05 09:16:56'),
+('20601344557', '00', 'N001', 3, '2021-09-29', '0', '1232434', 'FERRO REY SRL', 'PEN', '1.00', '0.00', '0.00', '592.07', '0', 0, 'noUser', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 8, '2021-11-20', '0', '12345678', 'Empresa prueba 1', 'PEN', '1.00', '0.00', '0.00', '32.50', '0', 0, 'noUser', '2021-11-20 14:24:15'),
+('20601344557', '00', 'N001', 9, '2021-11-20', '0', '12345678', 'Empresa prueba 1', 'PEN', '1.00', '0.00', '0.00', '112.50', '0', 0, 'noUser', '2021-11-20 15:59:38'),
+('20601344557', '00', 'N001', 10, '2021-11-20', '0', '12313123', 'empresa sin nombre', 'PEN', '1.00', '0.00', '0.00', '344.46', '0', 0, 'noUser', '2021-11-20 15:33:56'),
+('20601344557', '00', 'N001', 11, '2021-11-20', '0', '', 'pollo', 'PEN', '1.00', '0.00', '0.00', '91.50', '0', 0, 'noUser', '2021-11-20 15:34:49'),
+('20601344557', '00', 'N001', 12, '2021-11-20', '0', '', 'Sin name', 'PEN', '1.00', '0.00', '0.00', '208.00', '0', 0, 'noUser', '2021-11-20 15:57:53');
 
 -- --------------------------------------------------------
 
@@ -74,16 +105,18 @@ CREATE TABLE `cont_cpedata` (
   `cod_rubro` char(2) COLLATE utf8_spanish_ci NOT NULL,
   `mto_rubro` decimal(15,2) DEFAULT NULL,
   `des_rubro` varchar(250) COLLATE utf8_spanish_ci NOT NULL,
-  `cod_usureg` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
-  `fec_registro` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `cod_usumod` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
+  `fec_modif` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `cont_cpedata`
 --
 
-INSERT INTO `cont_cpedata` (`num_ruc`, `cod_cpe`, `num_serie`, `num_cpe`, `num_item`, `cod_rubro`, `mto_rubro`, `des_rubro`, `cod_usureg`, `fec_registro`) VALUES
+INSERT INTO `cont_cpedata` (`num_ruc`, `cod_cpe`, `num_serie`, `num_cpe`, `num_item`, `cod_rubro`, `mto_rubro`, `des_rubro`, `cod_usumod`, `fec_modif`) VALUES
 ('20601344557', '00', 'N001', 1, 0, '01', NULL, 'Av universitaria 3418 los ceros 104 ', '', '2021-06-13 10:30:36'),
+('20601344557', '00', 'N001', 1, 0, '02', NULL, 'Sin observaciones', '', '2021-09-23 15:55:02'),
+('20601344557', '00', 'N001', 1, 0, '03', NULL, 'fs3r34r-23r-23r-23r23-r2-r7', '', '2021-09-23 15:55:02'),
 ('20601344557', '00', 'N001', 1, 0, '31', '1200.00', '', '', '2021-06-17 23:57:40'),
 ('20601344557', '00', 'N001', 1, 1, '80', NULL, '1', '', '2021-06-18 00:02:07'),
 ('20601344557', '00', 'N001', 1, 1, '81', '12.00', '', '', '2021-06-18 00:04:22'),
@@ -91,7 +124,127 @@ INSERT INTO `cont_cpedata` (`num_ruc`, `cod_cpe`, `num_serie`, `num_cpe`, `num_i
 ('20601344557', '00', 'N001', 1, 1, '83', NULL, 'P0123', '', '2021-06-18 00:08:26'),
 ('20601344557', '00', 'N001', 1, 1, '84', NULL, 'Calamina Galv 022 x 360', '', '2021-06-18 00:11:03'),
 ('20601344557', '00', 'N001', 1, 1, '85', '100.00', '', '', '2021-06-18 00:08:26'),
-('20601344557', '00', 'N001', 1, 1, '99', '1200.00', '', '', '2021-06-18 00:09:12');
+('20601344557', '00', 'N001', 1, 1, '99', '1200.00', '', '', '2021-06-18 00:09:12'),
+('20601344557', '00', 'N001', 1, 2, '80', NULL, '1', '', '2021-07-06 15:59:29'),
+('20601344557', '00', 'N001', 1, 2, '81', '10.00', '', '', '2021-07-06 15:59:29'),
+('20601344557', '00', 'N001', 1, 2, '82', NULL, 'UND', '', '2021-07-06 15:59:29'),
+('20601344557', '00', 'N001', 1, 2, '83', NULL, 'P0122', '', '2021-07-06 15:59:29'),
+('20601344557', '00', 'N001', 1, 2, '84', NULL, 'Carretilla Simple Contruccion', '', '2021-07-06 15:59:29'),
+('20601344557', '00', 'N001', 1, 2, '85', '150.00', '', '', '2021-07-06 15:59:29'),
+('20601344557', '00', 'N001', 1, 2, '99', '1500.00', '', '', '2021-07-06 15:59:29'),
+('20601344557', '00', 'N001', 2, 0, '01', NULL, '', 'usuario_maestro', '2021-10-05 09:16:56'),
+('20601344557', '00', 'N001', 2, 0, '02', NULL, '', 'usuario_maestro', '2021-10-05 09:16:56'),
+('20601344557', '00', 'N001', 2, 1, '81', '1.00', '', 'usuario_maestro', '2021-10-05 09:16:56'),
+('20601344557', '00', 'N001', 2, 1, '83', NULL, 'p1', 'usuario_maestro', '2021-10-05 09:16:56'),
+('20601344557', '00', 'N001', 2, 1, '84', NULL, 'kilos', 'usuario_maestro', '2021-10-05 09:16:56'),
+('20601344557', '00', 'N001', 2, 1, '85', '13.00', '', 'usuario_maestro', '2021-10-05 09:16:56'),
+('20601344557', '00', 'N001', 2, 1, '99', '13.00', '', 'usuario_maestro', '2021-10-05 09:16:56'),
+('20601344557', '00', 'N001', 2, 2, '81', '10.00', '', 'usuario_maestro', '2021-10-05 09:16:56'),
+('20601344557', '00', 'N001', 2, 2, '83', NULL, 'p2', 'usuario_maestro', '2021-10-05 09:16:56'),
+('20601344557', '00', 'N001', 2, 2, '84', NULL, 'calaminas galva nizafa 34x34', 'usuario_maestro', '2021-10-05 09:16:56'),
+('20601344557', '00', 'N001', 2, 2, '85', '13.25', '', 'usuario_maestro', '2021-10-05 09:16:56'),
+('20601344557', '00', 'N001', 2, 2, '99', '132.50', '', 'usuario_maestro', '2021-10-05 09:16:56'),
+('20601344557', '00', 'N001', 3, 0, '01', NULL, 'av unversotar 1233', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 0, '02', NULL, 'sin obs', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 1, '81', '1.00', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 1, '83', NULL, 'P001', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 1, '84', NULL, 'calamar', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 1, '85', '13.20', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 1, '99', '13.20', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 2, '81', '15.00', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 2, '83', NULL, 'P2', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 2, '84', NULL, 'Calaminas 3600 x 1800', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 2, '85', '12.30', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 2, '99', '184.50', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 3, '81', '12.30', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 3, '83', NULL, 'P4', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 3, '84', NULL, 'Tormillos', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 3, '85', '16.22', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 3, '99', '199.51', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 4, '81', '1.00', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 4, '83', NULL, 'p3', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 4, '84', NULL, 'julioa', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 4, '85', '23.60', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 4, '99', '23.60', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 5, '81', '12.33', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 5, '83', NULL, 'p5', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 5, '84', NULL, 'lopk', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 5, '85', '12.00', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 5, '99', '147.96', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 6, '81', '1.00', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 6, '83', NULL, 'p6', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 6, '84', NULL, 'julad', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 6, '85', '23.30', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 3, 6, '99', '23.30', '', 'usuario_maestro', '2021-09-30 16:44:04'),
+('20601344557', '00', 'N001', 8, 0, '01', NULL, 'Av unversitario 2331', 'usuario_maestro', '2021-11-20 14:24:15'),
+('20601344557', '00', 'N001', 8, 0, '02', NULL, '-sin obse d', 'usuario_maestro', '2021-11-20 14:24:15'),
+('20601344557', '00', 'N001', 8, 1, '81', '1.00', '', 'usuario_maestro', '2021-11-20 14:24:15'),
+('20601344557', '00', 'N001', 8, 1, '83', NULL, 'P0001', 'usuario_maestro', '2021-11-20 14:24:15'),
+('20601344557', '00', 'N001', 8, 1, '84', NULL, 'Fierro 1/2 AA', 'usuario_maestro', '2021-11-20 14:24:15'),
+('20601344557', '00', 'N001', 8, 1, '85', '32.50', '', 'usuario_maestro', '2021-11-20 14:24:15'),
+('20601344557', '00', 'N001', 8, 1, '99', '32.50', '', 'usuario_maestro', '2021-11-20 14:24:15'),
+('20601344557', '00', 'N001', 9, 0, '01', NULL, 'AV llroas', 'usuario_maestro', '2021-11-20 15:59:38'),
+('20601344557', '00', 'N001', 9, 0, '02', NULL, 'fadsin obs', 'usuario_maestro', '2021-11-20 15:59:38'),
+('20601344557', '00', 'N001', 9, 1, '81', '5.00', '', 'usuario_maestro', '2021-11-20 15:59:38'),
+('20601344557', '00', 'N001', 9, 1, '83', NULL, 'P0003', 'usuario_maestro', '2021-11-20 15:59:38'),
+('20601344557', '00', 'N001', 9, 1, '84', NULL, 'Fierro 3/8 AA', 'usuario_maestro', '2021-11-20 15:59:38'),
+('20601344557', '00', 'N001', 9, 1, '85', '22.50', '', 'usuario_maestro', '2021-11-20 15:59:38'),
+('20601344557', '00', 'N001', 9, 1, '99', '112.50', '', 'usuario_maestro', '2021-11-20 15:59:38'),
+('20601344557', '00', 'N001', 10, 0, '01', NULL, 'av kilowao', 'usuario_maestro', '2021-11-20 15:33:56'),
+('20601344557', '00', 'N001', 10, 0, '02', NULL, 'sin obs ', 'usuario_maestro', '2021-11-20 15:33:56'),
+('20601344557', '00', 'N001', 10, 1, '81', '2.00', '', 'usuario_maestro', '2021-11-20 15:33:56'),
+('20601344557', '00', 'N001', 10, 1, '83', NULL, '', 'usuario_maestro', '2021-11-20 15:33:56'),
+('20601344557', '00', 'N001', 10, 1, '84', NULL, 'fierro', 'usuario_maestro', '2021-11-20 15:33:56'),
+('20601344557', '00', 'N001', 10, 1, '85', '123.23', '', 'usuario_maestro', '2021-11-20 15:33:56'),
+('20601344557', '00', 'N001', 10, 1, '99', '246.46', '', 'usuario_maestro', '2021-11-20 15:33:56'),
+('20601344557', '00', 'N001', 10, 2, '81', '2.00', '', 'usuario_maestro', '2021-11-20 15:33:56'),
+('20601344557', '00', 'N001', 10, 2, '83', NULL, 'P0004', 'usuario_maestro', '2021-11-20 15:33:56'),
+('20601344557', '00', 'N001', 10, 2, '84', NULL, 'Fierro 5/8 AA', 'usuario_maestro', '2021-11-20 15:33:56'),
+('20601344557', '00', 'N001', 10, 2, '85', '49.00', '', 'usuario_maestro', '2021-11-20 15:33:56'),
+('20601344557', '00', 'N001', 10, 2, '99', '98.00', '', 'usuario_maestro', '2021-11-20 15:33:56'),
+('20601344557', '00', 'N001', 11, 0, '01', NULL, '', 'usuario_maestro', '2021-11-20 15:34:49'),
+('20601344557', '00', 'N001', 11, 0, '02', NULL, '', 'usuario_maestro', '2021-11-20 15:34:49'),
+('20601344557', '00', 'N001', 11, 1, '81', '3.00', '', 'usuario_maestro', '2021-11-20 15:34:49'),
+('20601344557', '00', 'N001', 11, 1, '83', NULL, 'P0002', 'usuario_maestro', '2021-11-20 15:34:49'),
+('20601344557', '00', 'N001', 11, 1, '84', NULL, 'Fierro 12mm AA', 'usuario_maestro', '2021-11-20 15:34:49'),
+('20601344557', '00', 'N001', 11, 1, '85', '30.50', '', 'usuario_maestro', '2021-11-20 15:34:49'),
+('20601344557', '00', 'N001', 11, 1, '99', '91.50', '', 'usuario_maestro', '2021-11-20 15:34:49'),
+('20601344557', '00', 'N001', 12, 0, '01', NULL, 'av sin name', 'usuario_maestro', '2021-11-20 15:57:53'),
+('20601344557', '00', 'N001', 12, 1, '81', '4.00', '', 'usuario_maestro', '2021-11-20 15:57:53'),
+('20601344557', '00', 'N001', 12, 1, '83', NULL, 'P0001', 'usuario_maestro', '2021-11-20 15:57:53'),
+('20601344557', '00', 'N001', 12, 1, '84', NULL, 'Fierro 1/2 AA', 'usuario_maestro', '2021-11-20 15:57:53'),
+('20601344557', '00', 'N001', 12, 1, '85', '32.50', '', 'usuario_maestro', '2021-11-20 15:57:53'),
+('20601344557', '00', 'N001', 12, 1, '99', '130.00', '', 'usuario_maestro', '2021-11-20 15:57:53'),
+('20601344557', '00', 'N001', 12, 2, '81', '4.00', '', 'usuario_maestro', '2021-11-20 15:57:53'),
+('20601344557', '00', 'N001', 12, 2, '83', NULL, 'P0005', 'usuario_maestro', '2021-11-20 15:57:53'),
+('20601344557', '00', 'N001', 12, 2, '84', NULL, 'Fierro 8mm AA', 'usuario_maestro', '2021-11-20 15:57:53'),
+('20601344557', '00', 'N001', 12, 2, '85', '19.50', '', 'usuario_maestro', '2021-11-20 15:57:53'),
+('20601344557', '00', 'N001', 12, 2, '99', '78.00', '', 'usuario_maestro', '2021-11-20 15:57:53');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cont_cpeserie`
+--
+
+CREATE TABLE `cont_cpeserie` (
+  `num_ruc` char(11) COLLATE utf8_spanish_ci NOT NULL,
+  `cod_cpe` char(2) COLLATE utf8_spanish_ci NOT NULL,
+  `num_serie` char(4) COLLATE utf8_spanish_ci NOT NULL,
+  `ind_estado` char(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '1',
+  `cod_usumod` char(20) COLLATE utf8_spanish_ci NOT NULL DEFAULT 'noUser',
+  `fec_modif` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `cont_cpeserie`
+--
+
+INSERT INTO `cont_cpeserie` (`num_ruc`, `cod_cpe`, `num_serie`, `ind_estado`, `cod_usumod`, `fec_modif`) VALUES
+('20601344557', '00', 'N001', '1', 'noUser', '2021-11-08 21:43:59'),
+('20601344557', '00', 'N002', '1', 'noUser', '2021-11-08 21:43:48'),
+('20601344557', '00', 'N003', '0', 'noUser', '2021-11-08 21:44:47'),
+('20601344557', '00', 'N004', '1', 'noUser', '2021-11-08 21:43:48');
 
 -- --------------------------------------------------------
 
@@ -214,7 +367,9 @@ CREATE TABLE `sysm_empresa` (
   `cod_empresa` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
   `ruc_empresa` char(11) COLLATE utf8_spanish_ci NOT NULL,
   `des_empresa` varchar(100) COLLATE utf8_spanish_ci NOT NULL,
+  `des_comercial` varchar(20) COLLATE utf8_spanish_ci NOT NULL,
   `dir_empresa` varchar(150) COLLATE utf8_spanish_ci NOT NULL,
+  `des_telefono` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
   `cod_estado` char(2) COLLATE utf8_spanish_ci NOT NULL DEFAULT '01',
   `ind_del` char(1) COLLATE utf8_spanish_ci NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -223,12 +378,12 @@ CREATE TABLE `sysm_empresa` (
 -- Volcado de datos para la tabla `sysm_empresa`
 --
 
-INSERT INTO `sysm_empresa` (`num_empresa`, `cod_empresa`, `ruc_empresa`, `des_empresa`, `dir_empresa`, `cod_estado`, `ind_del`) VALUES
-(1, 'sin_empresa', '00000000000', '_Sin Empresa', 'Av Sin Direccion', '01', '0'),
-(2, 'empresa_prueba1', '11111111111', 'Empresa Prueba 01', 'Av Pruebas 01', '02', '0'),
-(3, 'empresa_prueba2', '22222222222', 'Empresa Prueba 02', 'Av Pruebas 02', '01', '0'),
-(4, 'empresa_prueba3', '33333333333', 'Empresa Prueba 03', 'Av Pruebas 03', '01', '0'),
-(5, 'abascom_matias', '20601344557', 'ABASTECEDORA Y COMERCIALIZADORA MATIAS E.I.R.L.', 'AV UNIVERSITARIA #3418 URB CAYHUAYNA - HUANUCO', '01', '0');
+INSERT INTO `sysm_empresa` (`num_empresa`, `cod_empresa`, `ruc_empresa`, `des_empresa`, `des_comercial`, `dir_empresa`, `des_telefono`, `cod_estado`, `ind_del`) VALUES
+(1, 'sin_empresa', '00000000000', 'MATERIALES DE CONSTRUCCION MATIAS', 'MATCONMATIAS', 'Carr Central km 3.5 - Cayhuayma', '962645577-962683058', '01', '0'),
+(2, 'empresa_prueba1', '11111111111', 'Empresa Prueba 01', '', 'Av Pruebas 01', '999999999', '02', '0'),
+(3, 'empresa_prueba2', '22222222222', 'Empresa Prueba 02', '', 'Av Pruebas 02', '1234343544', '01', '0'),
+(4, 'empresa_prueba3', '33333333333', 'Empresa Prueba 03', '', 'Av Pruebas 03', '01-32434424', '01', '0'),
+(5, 'abascom_matias', '20601344557', 'ABASTECEDORA Y COMERCIALIZADORA MATIAS E.I.R.L.', 'ABACOMMAT', 'AV UNIVERSITARIA #3418 URB CAYHUAYNA - HUANUCO', '061-241234', '01', '0');
 
 -- --------------------------------------------------------
 
@@ -332,7 +487,7 @@ CREATE TABLE `sysm_usuario` (
 --
 
 INSERT INTO `sysm_usuario` (`num_usuario`, `cod_usuario`, `pas_usuario`, `dir_correo`, `des_nombre`, `num_documento`, `num_empresa`, `num_rol`, `cod_supervisor`, `cod_estado`, `ind_del`) VALUES
-(1, 'usuario_maestro', 'internet', 'matikasrf@gmail.com', 'USUARIO', '11111110', 1, 1, '', '01', '0'),
+(1, 'usuario_maestro', 'internet', 'matikasrf@gmail.com', 'USUARIO', '11111110', 5, 1, '', '01', '0'),
 (2, 'usuario_prueba', 'internet', 'usuario.prueba@gmail.com', 'USUARIO', '22222220', 3, 2, '', '01', '1'),
 (3, 'usuario_prueba1', 'internet', 'armdf@gmail.com', 'Kelvin Arthas Menetil Son', '11111111', 2, 3, '', '01', '0'),
 (4, 'usuario_prueba2', 'internet', 'aeeff@fasdf.com', 'salUSUinas', '22222222', 1, 3, '', '01', '0'),
@@ -434,6 +589,12 @@ INSERT INTO `vmat_producto` (`num_produco`, `cod_producto`, `des_producto`, `des
 --
 
 --
+-- Indices de la tabla `alma_prodserv`
+--
+ALTER TABLE `alma_prodserv`
+  ADD PRIMARY KEY (`num_ruc`,`cod_producto`);
+
+--
 -- Indices de la tabla `cont_cpe`
 --
 ALTER TABLE `cont_cpe`
@@ -444,6 +605,12 @@ ALTER TABLE `cont_cpe`
 --
 ALTER TABLE `cont_cpedata`
   ADD UNIQUE KEY `pk_rubrocpe` (`num_ruc`,`cod_cpe`,`num_serie`,`num_cpe`,`num_item`,`cod_rubro`);
+
+--
+-- Indices de la tabla `cont_cpeserie`
+--
+ALTER TABLE `cont_cpeserie`
+  ADD UNIQUE KEY `UNIQ_SERIE` (`num_ruc`,`cod_cpe`,`num_serie`) USING BTREE;
 
 --
 -- Indices de la tabla `cont_docrubro`
