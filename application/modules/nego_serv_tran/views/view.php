@@ -22,12 +22,28 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-12">
-                <div class="card card-table" id="card001">
-                    <a class="card-header" href="#" data-target="#coll_01" data-toggle="collapse" aria-expanded="true" role="button">
-                        <h6 class="card-title float-left mb-0">Card1</h6>
+                <div class="card card-table">
+                    <a class="card-header" href="#" data-target="#card1" data-toggle="collapse" aria-expanded="true" role="button">
+                        <h6 class="card-title float-left mb-0">Servicio de Transporte</h6>
                         <span class="float-right"><i class="fa fa-angle-down"></i></span>   
                     </a>
-                    <div class="card-body p-2 collapse show" id="coll_01">
+                    <a class="card-header" href="#" data-target="#card2" data-toggle="collapse" aria-expanded="false" role="button">
+                        <h6 class="card-title float-left mb-0">Card Title</h6>
+                        <span class="float-right"><i class="fa fa-angle-down"></i></span>   
+                    </a>
+                    <a class="card-header" href="#" data-target="#card3" data-toggle="collapse" aria-expanded="false" role="button">
+                        <h6 class="card-title float-left mb-0">Card Title</h6>
+                        <span class="float-right"><i class="fa fa-angle-down"></i></span>   
+                    </a>
+                    <a class="card-header" href="#" data-target="#card4" data-toggle="collapse" aria-expanded="false" role="button">
+                        <h6 class="card-title float-left mb-0">Card Title</h6>
+                        <span class="float-right"><i class="fa fa-angle-down"></i></span>   
+                    </a>
+                    <a class="card-header" href="#" data-target="#card5" data-toggle="collapse" aria-expanded="false" role="button">
+                        <h6 class="card-title float-left mb-0">Card Title</h6>
+                        <span class="float-right"><i class="fa fa-angle-down"></i></span>   
+                    </a>
+                    <div class="card-body p-2 collapse show" id="card1">
                         <ul class="nav nav-tabs mb-2" id="myTab" role="tablist">
                           <li class="nav-item">
                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Usuarios</a>
@@ -126,29 +142,13 @@
                           
                         </div>
                     </div>
-                    <a class="card-header" href="#" data-target="#card2" data-toggle="collapse" aria-expanded="false" role="button">
-                        <h6 class="card-title float-left mb-0">Card Title</h6>
-                        <span class="float-right"><i class="fa fa-angle-down"></i></span>   
-                    </a> 
                     <div class="card-body p-2 collapse" id="card2">              
                     </div>
-                    <a class="card-header" href="#" data-target="#card2" data-toggle="collapse" aria-expanded="false" role="button">
-                        <h6 class="card-title float-left mb-0">Card Title</h6>
-                        <span class="float-right"><i class="fa fa-angle-down"></i></span>   
-                    </a> 
-                    <div class="card-body p-2 collapse" id="card2">              
+                    <div class="card-body p-2 collapse" id="card3">              
                     </div>
-                    <a class="card-header" href="#" data-target="#card2" data-toggle="collapse" aria-expanded="false" role="button">
-                        <h6 class="card-title float-left mb-0">Card Title</h6>
-                        <span class="float-right"><i class="fa fa-angle-down"></i></span>   
-                    </a> 
-                    <div class="card-body p-2 collapse" id="card2">              
+                    <div class="card-body p-2 collapse" id="card4">              
                     </div>
-                    <a class="card-header" href="#" data-target="#card2" data-toggle="collapse" aria-expanded="false" role="button">
-                        <h6 class="card-title float-left mb-0">Card Title</h6>
-                        <span class="float-right"><i class="fa fa-angle-down"></i></span>   
-                    </a> 
-                    <div class="card-body p-2 collapse" id="card2">              
+                    <div class="card-body p-2 collapse" id="card5">              
                     </div>
                 </div>
             </div>
