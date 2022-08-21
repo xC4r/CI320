@@ -309,6 +309,7 @@ $(document).on('click','#tabNotaPedido div table tbody tr td div button.edit', f
 			];
 			//Tablename, datafields, lista, opciones,autonumeracion,clases, 
 			datatableLoad('tabItems',datafields,row.lst,options,false,{'tableSet':'table-sm text-nowrap'});
+			//alert(JSON.stringify(row.lst));
 			document.getElementById('tabItems').setAttribute('cpe',row['ser']+'-'+row['num']);
 			tablePagination('tabItems',true,5);
     	}
@@ -365,37 +366,36 @@ function listarNotasPedido(datatable,per='default'){
 function cargarNotasPedido(lstNotas,datatable,per='default'){
 	lstNotas.forEach(function(row,x) {
 		var list = [];
-		row.itm.forEach(function(item,y) {
-			if(y == 0){
-				item.forEach(function(rubro) {
-					if(rubro['rub']=='01'){
-						lstNotas[x].dir = rubro['des'];
-					}
-					if(rubro['rub']=='02'){
-						lstNotas[x].obs = rubro['des'];
-					}
-				});
-			}else{
-				var i = {};
-				item.forEach(function(rubro) {
-					if(rubro['rub']=='81'){
-						i.cnt = rubro['val'];
-					}
-					if(rubro['rub']=='83'){
-						i.cod = rubro['des'];
-					}
-					if(rubro['rub']=='84'){
-						i.des = rubro['des'];
-					}
-					if(rubro['rub']=='85'){
-						i.pun = rubro['val'];
-					}
-					if(rubro['rub']=='99'){
-						i.imp = rubro['val'];
-					}
-				});
-				list.push(i);
+		row.det.forEach(function(detal) {
+			detal.forEach(function(rubro) {
+				if(rubro.rub=='01'){
+					lstNotas[x].dir = rubro.des;
+				}
+				if(rubro.rub=='02'){
+					lstNotas[x].obs = rubro.des;
+				}
+			});  
+		});
+		row.itm.forEach(function(item) {
+			var i = {};
+			item.forEach(function(rubro) {
+			if(rubro.rub=='81'){
+				i.cnt = rubro.val;
 			}
+			if(rubro.rub=='83'){
+				i.cod = rubro.des;
+			}
+			if(rubro.rub=='84'){
+				i.des = rubro.des;
+			}
+			if(rubro.rub=='85'){
+				i.pun = rubro.val;
+			}
+			if(rubro.rub=='99'){
+				i.imp = rubro.val;
+			}
+			});
+			list.push(i);
 		});
 		lstNotas[x].lst = list;
 	});

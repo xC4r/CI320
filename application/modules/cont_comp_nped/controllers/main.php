@@ -367,16 +367,26 @@ class Main extends MX_Controller {
                 $qry = $this->db->get_where('cont_cpedata',$params);
                 $items = [];
                 $lstItem = array();
+                $lstDetalle = array();
                 foreach( $qry->result_array() as $res ){
                     $items[] = $res;
                 }
                 if(count($items)>0){
                     foreach( $items as $line ) {
-                        $lstItem[$line['num_item']][] = array(
-                            'rub' => trim($line['cod_rubro']),
-                            'val' => trim($line['mto_rubro']),
-                            'des' => trim($line['des_rubro'])
-                        );
+                        //die($line['num_item']);
+                        if($line['num_item']==0) {
+                            $lstDetalle[][] = array(
+                                'rub' => trim($line['cod_rubro']),
+                                'val' => trim($line['mto_rubro']),
+                                'des' => trim($line['des_rubro'])
+                            );
+                        }else{
+                            $lstItem[][] = array(
+                                'rub' => trim($line['cod_rubro']),
+                                'val' => trim($line['mto_rubro']),
+                                'des' => trim($line['des_rubro'])
+                            );                            
+                        }
                     }
                 }
                 $docs = array(
@@ -392,6 +402,7 @@ class Main extends MX_Controller {
                     'vta' => trim($row['mto_totalvta']),
                     'igv' => trim($row['mto_totaligv']),
                     'tot' => trim($row['mto_imptotal']),
+                    'det' => $lstDetalle,
                     'itm' => $lstItem
                 );   
                 $array[] = $docs;
