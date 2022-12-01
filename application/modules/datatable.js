@@ -165,10 +165,10 @@ function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
 				//td.innerHTML = i + 1;
 				tr.appendChild(td);
 			}
-			
+			console.log(json[i]);
 			for (var j = 0; j < datafields.length; j++) {    
 				var td = tr.insertCell(-1);
-				
+				console.log(j);
 				if(datafields[j]['type']=='string'){
 					td.innerHTML = json[i][datafields[j]['key']];
 				}else if (datafields[j]['type']=='decimal'){
@@ -194,6 +194,7 @@ function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
 				if(typeof datafields[j]['hidden'] !== 'undefined'){
 					td.hidden = datafields[j]['hidden'];
 				}
+                console.log(json[i][datafields[j]['key']]);
 			}		
 		}
     }
