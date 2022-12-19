@@ -64,7 +64,7 @@ $(function () {
 document.getElementById('txtProducto').onkeyup = function(){autocomplete('txtProducto','autoProducto',localData.lstProdserv,lisdest);}
 //document.getElementById('txtProducto').onfocusout = function(){};
 
-// Default Events
+// Por dfecto Eventos
 document.getElementById('txtFecha').value = dateToday();
 document.getElementById('txtFecha').setAttribute('min',dateSubtractYear(dateToday(),1)); //No working Safari
 document.getElementById('txtFecha').setAttribute('max',dateToday());//No working Safari
@@ -149,12 +149,13 @@ document.getElementById('btnAgregar').onclick = function() {
 			pun: document.getElementById('txtPrecio').value, 
 			imp: Math.round(document.getElementById('txtCantidad').value * document.getElementById('txtPrecio').value*100)/100
 		};
+		//console.log(document.getElementById('txtCantidad').value);
 		var datafields = [
-			{key: 'cod', name: 'Código', type: 'string', rub:'83'},
-			{key: 'des', name: 'Descripción', type: 'string', rub:'84'},
-			{key: 'cnt', name: 'Cant', type: 'decimal', rub:'81'},
-			{key: 'pun', name: 'P.Unit', type: 'decimal', rub:'85'},
-			{key: 'imp', name: 'Importe', type: 'decimal', rub:'99'}
+			{key: 'cod', name: 'Código', type: 'string'},
+			{key: 'des', name: 'Descripción', type: 'string'},
+			{key: 'cnt', name: 'Cant', type: 'decimal'},
+			{key: 'pun', name: 'P.Unit', type: 'decimal'},
+			{key: 'imp', name: 'Importe', type: 'decimal'}
 		];
 		var options = [
 			{btn:'danger', fa:'fa-trash-o', fn:'del'}
@@ -202,18 +203,74 @@ $('#modalNota').on('hidden.bs.modal', function () {
 	document.getElementById("formNotaPedido").reset();
 	document.getElementById('formNotaPedido').removeAttribute('cpe');
 	document.getElementById('txtFecha').value = dateToday();
+	document.getElementById('txtFecha').disabled = true;
+	document.getElementById('txtNumeroCP').disabled = true;
 	var datafields = [
-		{key: 'cod', name: 'Código', type: 'string', rub:'83'},
-		{key: 'des', name: 'Descripción', type: 'string', rub:'84'},
-		{key: 'cnt', name: 'Cant', type: 'decimal', rub:'81'},
-		{key: 'pun', name: 'P.Unit', type: 'decimal', rub:'85'},
-		{key: 'imp', name: 'Importe', type: 'decimal', rub:'99'}
+		{key: 'cod', name: 'Código', type: 'string'},
+		{key: 'des', name: 'Descripción', type: 'string'},
+		{key: 'cnt', name: 'Cant', type: 'decimal'},
+		{key: 'pun', name: 'P.Unit', type: 'decimal'},
+		{key: 'imp', name: 'Importe', type: 'decimal'}
 	];
 	var options = [
 		{btn:'danger', fa:'fa-trash-o', fn:'del'}
 	];
 	datatableLoad('tabItems',datafields,'',options,false,{'tableSet':'table-sm text-nowrap'});
 	tablePagination('tabItems',true,5);
+});
+
+$('#modalNota').on('shown.bs.modal', function () {
+	fetchGet(ruta +'obtenerNumCp').then(json => {
+		if(json.cod === 200){
+			if(document.getElementById('txtNumeroCP').value == '')
+				document.getElementById('txtNumeroCP').value = json.res.numCp;
+		}else if(json.cod == 401){
+			$(expiredSession).modal('show');
+		}else{
+			snackAlert(json.msg,'warning');
+		}
+	});
+});
+
+document.getElementById('txtNumeroCP').addEventListener('keydown', function(e){
+	if (!(e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode==8)){
+	  	e.preventDefault();
+	}
+});
+
+document.getElementById('txtNumeroCP').onblur = function(){
+	let numCp = Number(document.getElementById('txtNumeroCP').value)
+	if(Number.isInteger(numCp)&& numCp>0) {
+		fetchGet(ruta +'validarNumCp?numCp='+numCp).then(json => {
+			if(json.cod === 200){
+				// No hacer nada
+			}else if(json.cod == 201){
+				document.getElementById('txtNumeroCP').value = json.res.numCp;
+				snackAlert(json.msg,'warning');
+			}else if(json.cod == 401){
+				$(expiredSession).modal('show');
+			}else{
+				snackAlert(json.msg,'warning');
+				document.getElementById('txtNumeroCP').value = '';
+			}
+		});
+	}
+};
+
+document.getElementById('chkNumeroCP').addEventListener('change', (e) => {
+	if (e.currentTarget.checked) {
+		
+		document.getElementById('txtNumeroCP').disabled = false;
+	} else {
+		document.getElementById('txtNumeroCP').disabled = true;
+	}
+}); 
+document.getElementById('chkFecha').addEventListener('change', (e) => {
+	if (e.currentTarget.checked) {
+		document.getElementById('txtFecha').disabled = false;
+	} else {
+		document.getElementById('txtFecha').disabled = true;
+	}
 });
 
 $('#modalProducto').on('hidden.bs.modal', function () {
@@ -244,6 +301,8 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 		snackAlert('No hay accion para ejecutar');
 	}
 	var formData = new FormData(document.getElementById('formNotaPedido'));
+	console.log(formData);
+	/*
 	formData.append('itm',JSON.stringify(tableToJson('tabItems')));
 	//console.log(JSON.stringify(tableToJson('tabItems')));
 	formData.append('ope',ope);
@@ -252,6 +311,11 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 		let cpeid = document.getElementById(confirmFormId).getAttribute('cpe').split('-');
 		formData.set('selSerieCP',cpeid[0]);
 		formData.set('txtNumeroCP',cpeid[1]);
+	}
+	if (ope == 2 ){
+		let cpeid = document.getElementById('formNotaPedido').getAttribute('cpe').split('-');
+		formData.set('selSerieCP',cpeid[0]);
+		formData.set('txtNumeroCP',cpeid[1]);		
 	};
 	var PostData = setPostData(dataFormulario,'formulario',formData); // params: object container, object formData;
 	let count = 0;
@@ -280,6 +344,7 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 
 	$(confirmForm).modal('hide');
 	setTimeout(function(){ $(progressForm).modal('hide'); }, 500);
+	*/
 }
 
 //Eventos opciones datatable
@@ -295,21 +360,19 @@ $(document).on('click','#tabNotaPedido div table tbody tr td div button.edit', f
     		document.getElementById('txtNombre').value = row['des'];
     		document.getElementById('txtDocumento').value = row['rec'];
 			document.getElementById('txtTotal').value = row['tot'];
-			if(row['dir'])document.getElementById('txtDireccion').value = row['dir'];
+			if(row['dir']) document.getElementById('txtDireccion').value = row['dir'];
     		document.getElementById('txtObservacion').value = (row['obs']) ? row['obs']:'';
 			var datafields = [
-				{key: 'cod', name: 'Código', type: 'string', rub:'83'},
-				{key: 'des', name: 'Descripción', type: 'string', rub:'84'},
-				{key: 'cnt', name: 'Cant', type: 'decimal', rub:'81'},
-				{key: 'pun', name: 'P.Unit', type: 'decimal', rub:'85'},
-				{key: 'imp', name: 'Importe', type: 'decimal', rub:'99'}
+				{key: 'cod', name: 'Código', type: 'string'},
+				{key: 'des', name: 'Descripción', type: 'string'},
+				{key: 'cnt', name: 'Cant', type: 'decimal'},
+				{key: 'pun', name: 'P.Unit', type: 'decimal'},
+				{key: 'imp', name: 'Importe', type: 'decimal'}
 			];
 			var options = [
 				{btn:'danger', fa:'fa-trash-o', fn:'del'}
 			];
-			//Tablename, datafields, lista, opciones,autonumeracion,clases, 
-			datatableLoad('tabItems',datafields,row.lst,options,false,{'tableSet':'table-sm text-nowrap'});
-			//alert(JSON.stringify(row.lst));
+			datatableLoad('tabItems',datafields,row.itm,options,false,{'tableSet':'table-sm text-nowrap'});
 			document.getElementById('tabItems').setAttribute('cpe',row['ser']+'-'+row['num']);
 			tablePagination('tabItems',true,5);
     	}
@@ -364,42 +427,8 @@ function listarNotasPedido(datatable,per='default'){
 	}
 }
 function cargarNotasPedido(lstNotas,datatable,per='default'){
-	lstNotas.forEach(function(row,x) {
-		var list = [];
-		row.det.forEach(function(detal) {
-			detal.forEach(function(rubro) {
-				if(rubro.rub=='01'){
-					lstNotas[x].dir = rubro.des;
-				}
-				if(rubro.rub=='02'){
-					lstNotas[x].obs = rubro.des;
-				}
-			});  
-		});
-		row.itm.forEach(function(item) {
-			var i = {};
-			item.forEach(function(rubro) {
-			if(rubro.rub=='81'){
-				i.cnt = rubro.val;
-			}
-			if(rubro.rub=='83'){
-				i.cod = rubro.des;
-			}
-			if(rubro.rub=='84'){
-				i.des = rubro.des;
-			}
-			if(rubro.rub=='85'){
-				i.pun = rubro.val;
-			}
-			if(rubro.rub=='99'){
-				i.imp = rubro.val;
-			}
-			});
-			list.push(i);
-		});
-		lstNotas[x].lst = list;
-	});
 	localData.lstNotas = lstNotas;
+	//console.log(localData);
 	var totPeriodo = 0;
 	var cntPeriodo = 0;
 	lstNotas.forEach(function(row) {
@@ -407,7 +436,7 @@ function cargarNotasPedido(lstNotas,datatable,per='default'){
 		totPeriodo += (parseInt(row['tot']*100))/100;
 	});
 	document.getElementById('txtTotPeriodo').value = totPeriodo.toFixed(2);
-	document.getElementById('txtCantidad').value = cntPeriodo;
+	document.getElementById('txtCantCpe').value = cntPeriodo;
 	var datafields = [
 	    {key: 'ser', name: 'Serie', type: 'string'},
 	    {key: 'num', name: 'Número', type: 'string'},

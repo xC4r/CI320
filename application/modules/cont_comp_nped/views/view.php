@@ -53,9 +53,9 @@
                   <div class="col-md-3 mb-2">
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text">Cantidad</span>
+                        <span class="input-group-text">Comprobantes</span>
                       </div>
-                      <input type="text" class="form-control text-right" id="txtCantidad" name="txtCantidad" value ='0' readonly>
+                      <input type="text" class="form-control text-right" id="txtCantCpe" name="txtCantidad" value ='0' readonly>
                     </div>
                   </div>
                   <div class="col-md-5 mb-2">
@@ -165,16 +165,21 @@
                                       <option value="N003">N003</option>
                                     </select> 
                                   </div>
-                                  <input type="text" class="form-control" id="txtNumeroCP" name="txtNumeroCP" pattern="[0-9]{1,8}" required>
+                                  <input type="text" class="form-control" id="txtNumeroCP" name="txtNumeroCP" pattern="[0-9]{1,8}" required readonly>
+                                  <div class="input-group-append">
+                                    <div class="input-group-text">
+                                      <input type="checkbox" id="chkNumeroCP">
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                               <div class="col-md-3 mb-3">
                                 <label for="txtFecha">Fecha</label>
                                 <div class="input-group">
-                                  <input type="date"  class="form-control text-center" id="txtFecha" name="txtFecha" required>
+                                  <input type="date"  class="form-control text-center" id="txtFecha" name="txtFecha" required readonly>
                                   <div class="input-group-append">
                                     <div class="input-group-text">
-                                      <input type="checkbox">
+                                      <input type="checkbox" id="chkFecha">
                                     </div>
                                   </div>
                                 </div>

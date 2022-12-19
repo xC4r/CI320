@@ -102,8 +102,8 @@ function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
         if(typeof datafields[i]['type']!=='undefined' && datafields[i]['type']=='decimal'){
             th.classList.add('text-right');
         }
-        if(typeof datafields[i]['rub'] !== 'undefined'){
-            th.setAttribute( "rub", datafields[i]['rub'] );
+        if(typeof datafields[i]['key'] !== 'undefined'){
+            th.setAttribute( "cod", datafields[i]['key'] );
         }
         if(typeof datafields[i]['hidden'] !== 'undefined'){
             th.hidden = datafields[i]['hidden'];
@@ -165,10 +165,10 @@ function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
 				//td.innerHTML = i + 1;
 				tr.appendChild(td);
 			}
-			console.log(json[i]);
+			//console.log(json[i]);
 			for (var j = 0; j < datafields.length; j++) {    
 				var td = tr.insertCell(-1);
-				console.log(j);
+				//console.log(j);
 				if(datafields[j]['type']=='string'){
 					td.innerHTML = json[i][datafields[j]['key']];
 				}else if (datafields[j]['type']=='decimal'){
@@ -194,7 +194,7 @@ function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
 				if(typeof datafields[j]['hidden'] !== 'undefined'){
 					td.hidden = datafields[j]['hidden'];
 				}
-                console.log(json[i][datafields[j]['key']]);
+                //console.log(json[i][datafields[j]['key']]);
 			}		
 		}
     }
@@ -440,13 +440,13 @@ function tableToJson(tableName){
     var $headers = $("#"+tableName+" div table thead th");
     $("#"+tableName+" div table tbody tr").each(function(index) {
         $cells = $(this).find("td");
-        myRows[index+1] = {};
+        myRows[index] = {};
         $cells.each(function(cellIndex) {
-            //console.log("rub : "+ $($headers[cellIndex]).attr("rub"));
-            if($($headers[cellIndex]).attr("rub")){
-                myRows[index+1][$($headers[cellIndex]).attr("rub")] = $(this).html();
+            if($($headers[cellIndex]).attr("cod")){
+                //console.log("cod : "+ $($headers[cellIndex]).attr("cod"));
+                myRows[index][$($headers[cellIndex]).attr("cod")] = $(this).html();
             }
-        });    
+        });  
     });
     return myRows;
 }

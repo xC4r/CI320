@@ -135,7 +135,75 @@ class Main extends MX_Controller {
             $json['msg'] = 'Request Error';
         }
         echo json_encode($json);
+    } 
+
+    public function obtenerNumCp($codCpe='00') {   
+        $json = array('cod' => '','msg' => '','res' => array());
+
+        $json['cod'] = 200;
+        $json['msg'] = 'Ok';
+        $json['res']['numCp'] = $this->obtenerCorrelativo('00','N001');
+       
+        echo json_encode($json); 
     }
+
+    private function obtenerCorrelativo($codCpe,$numSerie) {   
+        $this->db->select_max('num_cpe');
+        $this->db->from('cont_cpe');
+        $this->db->where('num_ruc',$this->rucEmpr); //Comprobantes de la empresa xxx
+        $this->db->where('cod_cpe',$codCpe); //Tipo comprobante 00 - Nota de pedido
+        $this->db->where('num_serie',$numSerie);
+        $query = $this->db->get();   
+        $data = [];
+        foreach( $query->result_array() as $reg ){
+            $data[] = $reg;
+        }
+        if(count($data)>0){
+            return (int) $data[0]['num_cpe'] + 1;
+        } else{
+            return 1;
+        }       
+    }
+
+    public function validarNumCp($codCpe='00') {   
+        $json = array('cod' => '','msg' => '','res' => array());
+        $numCp = (int) $this->input->get('numCp', TRUE); 
+        $headers = $this->input->request_headers();
+        $this->load->library('Auth');  
+        if($this->auth->verifyToken($headers['token']) == false){
+            $json['cod'] = 401;
+            $json['msg'] = 'Sesion Expirada';
+            $this->session->sess_destroy();
+        }else{
+            if(is_int($numCp)&&$numCp>0){
+                $this->db->select('*');
+                $this->db->from('cont_cpe');
+                $this->db->where('num_ruc',$this->rucEmpr); //Comprobantes de la emppresa
+                $this->db->where('cod_cpe',$codCpe); //Tipo comprobante 00 - Nota de pedido
+                $this->db->where('num_serie','N001'); //numero de serie
+                $this->db->where('num_cpe',(int) $numCp); //Tipo comprobante 00 - Nota
+                $query = $this->db->get();   
+                $data = [];
+                foreach( $query->result_array() as $reg ){
+                    $data[] = $reg;
+                }
+                if(count($data)>0){
+                    $json['cod'] = 201;
+                    $json['msg'] = 'El numero de comprobante ya existe';
+                    $json['res']['numCp'] = $this->obtenerCorrelativo('00','N001');
+                } else{
+                    $json['cod'] = 200;
+                    $json['msg'] = 'Ok';
+                }
+            }else{
+                $json['cod'] = 201;
+                $json['msg'] = 'Dato es incorrecto';
+                $json['res']['numCp'] = $this->obtenerCorrelativo('00','N001');
+            }
+        } 
+        echo json_encode($json); 
+    }
+
     private function registrarComprobante($data,$json){
         try {
             //if($this->codUser == 'usuario_maestro'|| $this->codUser == 'supervisor_del_usuario'){
@@ -206,6 +274,7 @@ class Main extends MX_Controller {
         return $json;
     }
     private function actualizarComprobante($data,$json){
+        die();
         try {
             $this->db->where('num_ruc',$this->rucEmpr);
             $this->db->where('cod_cpe','00');
@@ -243,23 +312,63 @@ class Main extends MX_Controller {
                             'num_cpe' => $data['txtNumeroCP']
                         );
                         $this->db->delete('cont_cpedata',$where);
-                        $data['itm'][0]['01'] = $data['txtDireccion'];
-                        $data['itm'][0]['02'] = $data['txtObservacion'];
+                        $item01 = array(
+                            'num_ruc' => $this->rucEmpr,
+                            'cod_cpe' => '00', // Nota de pedido
+                            'num_serie' => $data['selSerieCP'],
+                            'num_cpe' => $data['txtNumeroCP'],   
+                            'num_item' => 0,
+                            'cod_rubro' => '01',
+                            'des_rubro' => $data['txtDireccion'],
+                            'cod_usumod' => $this->codUser
+                        );
+                        $this->db->insert('cont_cpedata',$item01);
+                        $item02 = array(
+                            'num_ruc' => $this->rucEmpr,
+                            'cod_cpe' => '00', // Nota de pedido
+                            'num_serie' => $data['selSerieCP'],
+                            'num_cpe' => $data['txtNumeroCP'],   
+                            'num_item' => 0,
+                            'cod_rubro' => '02',
+                            'des_rubro' => $data['txtObservacion'],
+                            'cod_usumod' => $this->codUser
+                        );
+                        $this->db->insert('cont_cpedata',$item02);
+
                         foreach( $data['itm'] as $key1=>$row ) {
-                            foreach( $row as $key2=>$rub ) {
+                            foreach( $row as $key2=>$value ) {
+                                $rubro ='';
+                                switch($key2){
+                                    case 'cod':
+                                        $rubro ='83';
+                                    break;
+                                    case 'des':
+                                        $rubro ='84';
+                                    break;
+                                    case 'cnt':
+                                        $rubro ='81';
+                                    break;
+                                    case 'pun':
+                                        $rubro ='85';
+                                    break;
+                                    case 'imp':
+                                        $rubro ='99';
+                                    break;
+                                }
+
                                 $item = array(
                                     'num_ruc' => $this->rucEmpr,
-                                    'cod_cpe' => '00',
+                                    'cod_cpe' => '00', // Nota de pedido
                                     'num_serie' => $data['selSerieCP'],
                                     'num_cpe' => $data['txtNumeroCP'],   
-                                    'num_item' => $key1,
-                                    'cod_rubro' => $key2,
+                                    'num_item' => $key1+1,
+                                    'cod_rubro' => $rubro,
                                     'cod_usumod' => $this->codUser
                                 );
-                                if(is_numeric($rub)){
-                                    $item['mto_rubro'] = (float)$rub;
+                                if(is_numeric($value)){
+                                    $item['mto_rubro'] = (float)$value;
                                 }else{
-                                    $item['des_rubro'] = $rub;
+                                    $item['des_rubro'] = $value;
                                 }
                                 $this->db->insert('cont_cpedata',$item);
                             }      
@@ -358,13 +467,16 @@ class Main extends MX_Controller {
         }
         if(count($data)>0){
             foreach( $data as $row ) {
-                $params = array(
-                    'num_ruc' => trim($row['num_ruc']),
-                    'cod_cpe' => trim($row['cod_cpe']),
-                    'num_serie' => trim($row['num_serie']),
-                    'num_cpe' => trim($row['num_cpe'])
-                );
-                $qry = $this->db->get_where('cont_cpedata',$params);
+                $this->db->select('*');
+                $this->db->from('cont_cpedata');
+                $this->db->where('num_ruc',trim($row['num_ruc']));
+                $this->db->where('cod_cpe',trim($row['cod_cpe']));
+                $this->db->where('num_serie',trim($row['num_serie']));
+                $this->db->where('num_cpe',trim($row['num_cpe']));
+                $this->db->order_by('num_item', 'ASC');
+                $this->db->order_by('cod_rubro', 'ASC');
+
+                $qry = $this->db->get(); 
                 $items = [];
                 $lstItem = array();
                 $lstDetalle = array();
@@ -372,21 +484,24 @@ class Main extends MX_Controller {
                     $items[] = $res;
                 }
                 if(count($items)>0){
+                    $i=-1;
+                    $j=0;
                     foreach( $items as $line ) {
-                        //die($line['num_item']);
                         if($line['num_item']==0) {
-                            $lstDetalle[][] = array(
-                                'rub' => trim($line['cod_rubro']),
-                                'val' => trim($line['mto_rubro']),
-                                'des' => trim($line['des_rubro'])
-                            );
+                            ($line['cod_rubro']=='01')? $lstDetalle['dir'] = $line['des_rubro'] : $lstDetalle['dir'] = '';
+                            ($line['cod_rubro']=='02')? $lstDetalle['obs'] = $line['des_rubro'] : $lstDetalle['obs'] = '';
                         }else{
-                            $lstItem[][] = array(
-                                'rub' => trim($line['cod_rubro']),
-                                'val' => trim($line['mto_rubro']),
-                                'des' => trim($line['des_rubro'])
-                            );                            
+                            if ($j!==(int)$line['num_item']){
+                                $j = (int)$line['num_item'];
+                                $i++;
+                            }
+                            ($line['cod_rubro']==81)? $lstItem[$i]['cnt'] = $line['mto_rubro'] : '';
+                            ($line['cod_rubro']==83)? $lstItem[$i]['cod'] = $line['des_rubro'] : '';
+                            ($line['cod_rubro']==84)? $lstItem[$i]['des'] = $line['des_rubro'] : '';
+                            ($line['cod_rubro']==85)? $lstItem[$i]['pun'] = $line['mto_rubro'] : '';
+                            ($line['cod_rubro']==99)? $lstItem[$i]['imp'] = $line['mto_rubro'] : '';
                         }
+
                     }
                 }
                 $docs = array(
@@ -402,7 +517,8 @@ class Main extends MX_Controller {
                     'vta' => trim($row['mto_totalvta']),
                     'igv' => trim($row['mto_totaligv']),
                     'tot' => trim($row['mto_imptotal']),
-                    'det' => $lstDetalle,
+                    'dir' => $lstDetalle['dir'],
+                    'obs' => $lstDetalle['obs'],
                     'itm' => $lstItem
                 );   
                 $array[] = $docs;
