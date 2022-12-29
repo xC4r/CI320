@@ -171,6 +171,9 @@ function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
 				//console.log(j);
 				if(datafields[j]['type']=='string'){
 					td.innerHTML = json[i][datafields[j]['key']];
+				}else if (datafields[j]['type']=='numeric'){
+                    td.classList.add('text-right');
+					td.innerHTML = json[i][datafields[j]['key']];
 				}else if (datafields[j]['type']=='decimal'){
                     td.classList.add('text-right');
 					var decimal = parseFloat(json[i][datafields[j]['key']]).toFixed(2);

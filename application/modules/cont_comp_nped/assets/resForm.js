@@ -203,8 +203,9 @@ $('#modalNota').on('hidden.bs.modal', function () {
 	document.getElementById("formNotaPedido").reset();
 	document.getElementById('formNotaPedido').removeAttribute('cpe');
 	document.getElementById('txtFecha').value = dateToday();
-	document.getElementById('txtFecha').disabled = true;
-	document.getElementById('txtNumeroCP').disabled = true;
+	document.getElementById('txtFecha').readOnly = true;
+	document.getElementById('txtNumeroCP').readOnly = true;
+	document.getElementById('chkNumeroCP').disabled = false;
 	var datafields = [
 		{key: 'cod', name: 'Código', type: 'string'},
 		{key: 'des', name: 'Descripción', type: 'string'},
@@ -220,16 +221,18 @@ $('#modalNota').on('hidden.bs.modal', function () {
 });
 
 $('#modalNota').on('shown.bs.modal', function () {
-	fetchGet(ruta +'obtenerNumCp').then(json => {
-		if(json.cod === 200){
-			if(document.getElementById('txtNumeroCP').value == '')
-				document.getElementById('txtNumeroCP').value = json.res.numCp;
-		}else if(json.cod == 401){
-			$(expiredSession).modal('show');
-		}else{
-			snackAlert(json.msg,'warning');
-		}
-	});
+	if(!document.getElementById('formNotaPedido').hasAttribute('cpe')){
+		fetchGet(ruta +'obtenerNumCp').then(json => {
+			if(json.cod === 200){
+				if(document.getElementById('txtNumeroCP').value == '')
+					document.getElementById('txtNumeroCP').value = json.res.numCp;
+			}else if(json.cod == 401){
+				$(expiredSession).modal('show');
+			}else{
+				snackAlert(json.msg,'warning');
+			}
+		});
+	}
 });
 
 document.getElementById('txtNumeroCP').addEventListener('keydown', function(e){
@@ -259,17 +262,16 @@ document.getElementById('txtNumeroCP').onblur = function(){
 
 document.getElementById('chkNumeroCP').addEventListener('change', (e) => {
 	if (e.currentTarget.checked) {
-		
-		document.getElementById('txtNumeroCP').disabled = false;
+		document.getElementById('txtNumeroCP').readOnly = false;
 	} else {
-		document.getElementById('txtNumeroCP').disabled = true;
+		document.getElementById('txtNumeroCP').readOnly = true;
 	}
 }); 
 document.getElementById('chkFecha').addEventListener('change', (e) => {
 	if (e.currentTarget.checked) {
-		document.getElementById('txtFecha').disabled = false;
+		document.getElementById('txtFecha').readOnly = false; 
 	} else {
-		document.getElementById('txtFecha').disabled = true;
+		document.getElementById('txtFecha').readOnly = true; 
 	}
 });
 
@@ -287,6 +289,7 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	$(progressForm).modal('show');
 	var ope = document.getElementById(confirmFormId).getAttribute('ope');
 	var per = document.getElementById('tabNotaPedido').getAttribute('data');
+	var itm = JSON.stringify(tableToJson('tabItems'));
 	$('#modalNota').modal('hide');
 	var msg;
 	if(ope == 1){ 
@@ -301,10 +304,7 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 		snackAlert('No hay accion para ejecutar');
 	}
 	var formData = new FormData(document.getElementById('formNotaPedido'));
-	console.log(formData);
-	/*
-	formData.append('itm',JSON.stringify(tableToJson('tabItems')));
-	//console.log(JSON.stringify(tableToJson('tabItems')));
+	formData.append('itm',itm);
 	formData.append('ope',ope);
 	formData.append('per',per);
 	if (ope == 0 || ope == 'pdf') {
@@ -317,9 +317,11 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 		formData.set('selSerieCP',cpeid[0]);
 		formData.set('txtNumeroCP',cpeid[1]);		
 	};
+	console.log(formData);
 	var PostData = setPostData(dataFormulario,'formulario',formData); // params: object container, object formData;
 	let count = 0;
 	formData.forEach(function(){count++;});
+	
 	if(count>0){
 		if (ope !== 'pdf') {
 			fetchPost(ruta +'operacion',PostData).then(json => {
@@ -341,10 +343,9 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	}else{
 		  snackAlert('No hay datos para registrar','warning');
 	}
-
+	
 	$(confirmForm).modal('hide');
 	setTimeout(function(){ $(progressForm).modal('hide'); }, 500);
-	*/
 }
 
 //Eventos opciones datatable
@@ -352,7 +353,8 @@ $(document).on('click','#tabNotaPedido div table tbody tr td div button.edit', f
     let ser = (((this.parentNode).parentNode).parentNode).childNodes[2].innerHTML;
     let num = (((this.parentNode).parentNode).parentNode).childNodes[3].innerHTML;
 	document.getElementById('formNotaPedido').setAttribute('cpe',ser.trim()+'-'+num.trim());
-    localData.lstNotas.forEach(function(row) {
+    document.getElementById('chkNumeroCP').disabled = true;
+	localData.lstNotas.forEach(function(row) {
     	if(row['ser'] == ser && row['num'] == num){
     		document.getElementById('selSerieCP').value = row['ser'];
     		document.getElementById('txtNumeroCP').value = row['num'];
@@ -439,7 +441,7 @@ function cargarNotasPedido(lstNotas,datatable,per='default'){
 	document.getElementById('txtCantCpe').value = cntPeriodo;
 	var datafields = [
 	    {key: 'ser', name: 'Serie', type: 'string'},
-	    {key: 'num', name: 'Número', type: 'string'},
+	    {key: 'num', name: 'Número', type: 'numeric'},
 	    {key: 'fec', name: 'Fecha Emisión', type: 'date'},
 	    {key: 'rec', name: 'Documento', type: 'string'},
 	    {key: 'des', name: 'Nombre / Razon Social', type: 'string'},

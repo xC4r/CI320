@@ -53,15 +53,15 @@
                   <div class="col-md-3 mb-2">
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text">Comprobantes</span>
+                        <span class="input-group-text">Cant.</span>
                       </div>
-                      <input type="text" class="form-control text-right" id="txtCantCpe" name="txtCantidad" value ='0' readonly>
+                      <input type="text" class="form-control text-right" id="txtCantCpe" name="txtCantCpe" value ='0' readonly>
                     </div>
                   </div>
                   <div class="col-md-5 mb-2">
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text">Monto Total - S/.</span>
+                        <span class="input-group-text">Total Periodo S/.</span>
                       </div>
                       <input type="text" class="form-control text-right" id="txtTotPeriodo" name="txtTotPeriodo" value ='0' readonly>
                     </div>
@@ -85,7 +85,7 @@
                       </tr>
                       </thead>
                       <tbody>
-                      <tr style="">
+                      <tr>
                         <th scope="row">1</th>
                         <td></td>
                         <td></td>
@@ -95,7 +95,7 @@
                         <td></td>
                         <td></td>
                       </tr>
-                      <tr style="">
+                      <tr>
                         <th scope="row">2</th>
                         <td></td>
                         <td></td>
@@ -105,7 +105,7 @@
                         <td></td>
                         <td></td>
                       </tr>
-                      <tr style="">
+                      <tr>
                         <th scope="row">3</th>
                         <td></td>
                         <td></td>
@@ -115,7 +115,7 @@
                         <td></td>
                         <td></td>
                       </tr>
-                      <tr style="">
+                      <tr>
                         <th scope="row">4</th>
                         <td></td>
                         <td></td>
@@ -125,7 +125,7 @@
                         <td></td>
                         <td></td>
                       </tr>
-                      <tr style="">
+                      <tr>
                         <th scope="row">5</th>
                         <td></td>
                         <td></td>
@@ -214,17 +214,12 @@
                                   <span class="input-group-text">Total</span>
                                 </div>
                                 <input type="text" class="form-control text-right" id="txtTotal" name="txtTotal" value ='0' readonly required>
-                                <div class="input-group-append">
-                                  <div class="input-group-text">
-                                    <input type="checkbox">
-                                  </div>
-                                </div>
                               </div>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="col-md-12 mb-3">
-                              <div class="invalid-feedback d-block">
+                              <div class="invalid-feedback">
                                   Message invalid feedback.
                               </div>
                             </div>
@@ -236,11 +231,11 @@
                                 <thead>
                                   <tr>
                                     <th scope="col">Opción</th>
-                                    <th scope="col" rub="83">Código</th>
-                                    <th scope="col" rub="84">Descripción</th>
-                                    <th scope="col" rub="81">Cant</th>
-                                    <th scope="col" rub="85">P.Unit</th>
-                                    <th scope="col" rub="99">Importe</th>
+                                    <th scope="col" cod="cod">Código</th>
+                                    <th scope="col" cod="des">Descripción</th>
+                                    <th scope="col" cod="cnt">Cant</th>
+                                    <th scope="col" cod="pun">P.Unit</th>
+                                    <th scope="col" cod="imp">Importe</th>
                                   </tr>
                                 </thead>
                                 <tbody>
