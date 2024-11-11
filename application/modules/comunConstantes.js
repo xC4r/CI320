@@ -1,10 +1,10 @@
 
-var confirmFormId = 'confirmForm';
-var confirmForm = '#confirmForm';
-var confirmFormAceptar = '#confirmForm div div div button[type="submit"]';
-var progressForm = '#progressForm';
-var confirmFormMensaje = '#confirmForm div div div.modal-body';
-var expiredSession = '#expiredSesion';
-var expiredSessionAceptar = '#expiredSesion div div div button[type="submit"]';
-var alertForm = '#alertForm';
-var alertFormMensaje = '#alertForm div div div.modal-body';
+const confirmFormId = 'confirmForm';
+const confirmForm = '#confirmForm';
+const confirmFormAceptar = '#confirmForm div div div button[type="submit"]';
+const progressForm = '#progressForm';
+const confirmFormMensaje = '#confirmForm div div div.modal-body';
+const expiredSession = '#expiredSesion';
+const expiredSessionAceptar = '#expiredSesion div div div button[type="submit"]';
+const alertForm = '#alertForm';
+const alertFormMensaje = '#alertForm div div div.modal-body';

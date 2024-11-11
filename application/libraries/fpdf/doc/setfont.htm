@@ -18,11 +18,10 @@ Si sólo desea cambiar el tamaño de la fuente actual, es más simple invocar SetFo
 <ul>
 <li>El directorio especificado por la constante <code>FPDF_FONTPATH</code> (si es que ha sido definida)
 <li>El directorio de fuentes incluido en el directorio que contiene fpdf.php (si es que existe)
-<li>Cualquier directorio accesible mediante <code>include()</code>
 </ul>
 Ejemplo del primer casa:
 <div class="doc-source">
-<pre><code>define('FPDF_FONTPATH','/home/www/font');
+<pre><code>define('FPDF_FONTPATH', '/home/www/font');
 require('fpdf.php');</code></pre>
 </div>
 Si el archivo correspondiente a la fuente requerida no es encuentra, se genera el error "Could not include
@@ -65,11 +64,11 @@ El valor por defecto es el tamaño actual. Si ningún tamaño ha sido especificado 
 <pre><code>// Times regular 12
 $pdf-&gt;SetFont('Times');
 // Arial bold 14
-$pdf-&gt;SetFont('Arial','B',14);
+$pdf-&gt;SetFont('Arial', 'B', 14);
 // Elimina bold
 $pdf-&gt;SetFont('');
 // Times bold, italic y underlined 14
-$pdf-&gt;SetFont('Times','BIU');</code></pre>
+$pdf-&gt;SetFont('Times', 'BIU');</code></pre>
 </div>
 <h2>Vea además</h2>
 <a href="addfont.htm">AddFont</a>,

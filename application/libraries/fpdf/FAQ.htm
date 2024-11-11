@@ -46,13 +46,13 @@ libremente en su aplicación (comercial o no), con o sin modificaciones.
 <p><b>2.</b> <span class='question'>Encuentro el siguiente error cuando intento generar un PDF: Some data has already been output, can't send PDF file</span></p>
 Usted no debe enviar nada al navegador, excepto el propio PDF: ningún HTML, espacio o retorno de carro. Un caso común
 es tener una línea o espacio en blanco extra al final del script incluido.<br>
-Si usted no puede averiguar de donde proviene el problema, este otro mensaje que aparece justo abajo puede ayudarlo:<br>
 <br>
-<b>Warning:</b> Cannot modify header information - headers already sent by (output started at script.php:X)<br>
+Si usted no puede averiguar de donde proviene el problema, este otro mensaje puede ayudarlo:<br>
 <br>
-Esto significa que script.php envía algo en la línea X. Vaya a esta línea y arréglelo.
-En caso de que el mensaje no aparece, en primer lugar compruebe que usted no haya desactivado las advertencias, a continuación, agregue esto
-al comienzo de su script:
+(output started at script.php:X)<br>
+<br>
+Esto significa que script.php envía algo en la línea X. En caso de que el mensaje no aparece, agregue esto al
+comienzo de su script:
 <div class="doc-source">
 <pre><code>ob_end_clean();</code></pre>
 </div>
@@ -60,15 +60,14 @@ al comienzo de su script:
 
 <li id='q3'>
 <p><b>3.</b> <span class='question'>Caracteres acentuados son reemplazados por algunos caracteres extraños como Ã©.</span></p>
-No utilice codificación UTF-8. La codificación estándar de fuentes en FPDF es ISO-8859-1 o windows-1252.
-Es posible realizar una conversión a la norma ISO-8859-1 con utf8_decode():
-<div class="doc-source">
-<pre><code>$str = utf8_decode($str);</code></pre>
-</div>
-Sin embargo, algunos caracteres, tales como Euro no serán traducidos correctamente. Si la extensión iconv está disponible, la
-forma correcta de hacerlo es la siguiente:
+No utilice codificación UTF-8. La codificación estándar de fuentes en FPDF es windows-1252.
+Es posible realizar una conversión con iconv:
 <div class="doc-source">
 <pre><code>$str = iconv('UTF-8', 'windows-1252', $str);</code></pre>
+</div>
+O con mbstring:
+<div class="doc-source">
+<pre><code>$str = mb_convert_encoding($str, 'windows-1252', 'UTF-8');</code></pre>
 </div>
 </li>
 

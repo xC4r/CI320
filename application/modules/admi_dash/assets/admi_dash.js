@@ -1,7 +1,5 @@
-var admi_dash_boar_ctrl = "admi_dash_boar/main/";
+const admi_dash_boar_ctrl = "admi_dash_boar/main/";
 /* SECCION XXXXX */
-
-//admin_dash_boar_print();
 
 /* FUNTIONS SECTION  */
 $("#expXLS").click(function (){
@@ -39,7 +37,7 @@ function admin_dash_boar_print(){
         dataType: 'json',
         success: function(data){
             if(data.mensaje == ""){
-                var $menu = $("#side-menu");
+                let $menu = $("#side-menu");
                 $.each(data.menu, function (i) {
                     $menu.append(
                         load_menu(this,(i+1)*100)
@@ -55,33 +53,4 @@ function admin_dash_boar_print(){
     });
 
 }
-/*
-function admi_apro_prog_tabl_load(){
-    jQuery("#admi_apro_prog_lbl_mens").html("");
-    jQuery.ajaxSetup({async: true});
-    jQuery.post(
-        admi_apro_prog_nomb_cont + "admi_prog_list", {
-            cache: Math.random()
-        }, function (html) {
-            if (html.mensaje == "") {
-                var sour_codi_prog = {
-                    datatype: "json",
-                    datafields: [
-                        {name: 'cons_prog', type: 'string'},
-                        {name: 'codi_prog', type: 'string'}
-                    ],
-                    localdata: html.data
-                };
-                var data_codi_prog = new jQuery.jqx.dataAdapter(sour_codi_prog);
-                 jQuery("#admi_apro_prog_txt_prog").jqxInput({
-                    source: data_codi_prog
-                });
-            } else {
-                jQuery("#admi_apro_prog_lbl_mens").html(html.mensaje);
-            }
-        }, "json")
-    .fail(function (xhr, textStatus, errorThrown) {
-        main_erro("admi_apro_prog_prog()", admi_apro_prog_nomb_cont + "admi_prog_list", xhr.responseText, jQuery("#codUser").html())
-        jQuery("#admi_apro_prog_lbl_mens").html('* SU MENSAJE DE ERROR A SIDO ENVIADO A SISTEMAS.');
-    });
-}*/
+

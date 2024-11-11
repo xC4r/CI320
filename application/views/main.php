@@ -47,11 +47,15 @@
             </div>
           </li>
           <!-- Custom Menu -->
+
         </ul>
       </div>
     </div>
-    <div class="snackbar" id="toast"></div>
-    <div class="page-wrapper" id="pagina"></div>  
+    <div class="page-wrapper" id="pagina">
+      
+    </div>
+    <div class="snackbar" id="toast">
+    </div>  
   </div>
 </div>
 <!-- jQuery -->

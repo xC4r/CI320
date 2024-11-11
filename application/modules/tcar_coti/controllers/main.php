@@ -1,6 +1,6 @@
 <?php
 if (!defined('BASEPATH'))
-    exit('No direct script access allowed');
+    {exit('No direct script access allowed');}
 ini_set('memory_limit', '-1');
 set_time_limit(0);
 
@@ -16,12 +16,4 @@ class Main extends MX_Controller {
         }
     }
 
-
-    public function admi_prog_list() {
-
-    }
-    public function menu_list_apli() {
-
-    }
-    
 }

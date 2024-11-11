@@ -43,7 +43,6 @@
                     </div>
                   </div>
                 </div>
-
                 <div class="form-row">
                   <div class="col-md-4 mb-2">
                     <div class="input-group">
@@ -67,11 +66,10 @@
                     </div>
                   </div>
                 </div> 
-                
                 <div class="datatable" id="tabNotaPedido">
                   <div class="table-responsive">
                     <table class="table mb-0">
-                      <caption>Datatable/caption>
+                      <caption>Datatable</caption>
                       <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -233,6 +231,7 @@
                                     <th scope="col">Opción</th>
                                     <th scope="col" cod="cod">Código</th>
                                     <th scope="col" cod="des">Descripción</th>
+                                    <th scope="col" cod="und">Und</th>
                                     <th scope="col" cod="cnt">Cant</th>
                                     <th scope="col" cod="pun">P.Unit</th>
                                     <th scope="col" cod="imp">Importe</th>
@@ -315,19 +314,22 @@
                   <form id="formAddProducto">
                     <div class="modal-body">
                       <div class="form-row">
-                        <div class="col-md-7 mb-3">
+                        <div class="col-md-6 mb-3">
                           <label for="txtProducto">Producto</label>
                           <div class="input-group">
-                            <input type="text" class="form-control w-25 p-1" id="txtCodigo" name="txtCodigo">
+                            <input type="text" class="form-control w-25 p-1" id="txtCodigo" name="txtCodigo" readonly required>
                             <div class="btn-group">
                               <div class="dropdown-menu" id="autoProducto"></div>
                             </div>
                             <input type="text" class="form-control w-75" id="txtProducto" name="txtProducto" autocomplete="off" required>
                           </div>
                         </div>
-                        <div class="col-md-2 mb-3">
-                          <label for="txtCantidad">Cantidad</label>
-                          <input type="text" class="form-control" id="txtCantidad" name="txtCantidad" value="1" required>
+                        <div class="col-md-3 mb-3">
+                          <label for="txtCantidad">Und - Cantidad</label>
+                          <div class="input-group">
+                            <input type="text" class="form-control p-1" id="txtUnidad" name="txtUnidad" readonly required>
+                            <input type="text" class="form-control" id="txtCantidad" name="txtCantidad" value="1" required>
+                          </div>
                         </div>
                         <div class="col-md-3 mb-3">
                           <label for="txtPrecio">Precio</label>

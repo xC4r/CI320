@@ -4,7 +4,7 @@ $(document).on('click','table tbody tr', function(event) {
 });
 //rezise table on change screen
 $(window).on('resize', function(e) {    
-    var tables = document.getElementsByTagName('table');
+    let tables = document.getElementsByTagName('table');
     Array.prototype.forEach.call(tables, function(elem) {
 		if(!elem.classList.contains('table-sm')){
 			elem.classList.add("nts");
@@ -27,19 +27,19 @@ $(window).on('resize', function(e) {
 
 //cargar datatable
 function datatableLoad(datatable='',datafields=[],json=[],options=[],rowindex=false,config={}) {
-    var divContainer = document.getElementById(datatable);
-    var tableResponsive = document.createElement("div");
+    let divContainer = document.getElementById(datatable);
+    let tableResponsive = document.createElement("div");
     tableResponsive.classList.add("table-responsive");
 	if(config.tabResp){
-		var lista = config.tabResp.split(' ');
+		let lista = config.tabResp.split(' ');
 		lista.forEach(function(opt) {
 			tableResponsive.classList.add(opt);
 		});
 	}
-    var table = tableLoad(datafields,json,options,rowindex,config);
+    let table = tableLoad(datafields,json,options,rowindex,config);
     tableResponsive.appendChild(table);
-    var nav = document.createElement("nav");
-    var ul = document.createElement("ul");
+    let nav = document.createElement("nav");
+    let ul = document.createElement("ul");
     ul.classList.add("pagination");
     ul.classList.add("justify-content-center");
     ul.classList.add("mb-0");
@@ -50,11 +50,11 @@ function datatableLoad(datatable='',datafields=[],json=[],options=[],rowindex=fa
 }
 //generate table
 function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
-    var table = document.createElement("table");
+    let table = document.createElement("table");
     table.classList.add("table");
     table.classList.add("mb-0");
 	if(config.tableSet){
-		var lista = config.tableSet.split(' ');
+		let lista = config.tableSet.split(' ');
 		lista.forEach(function(opt) {
 			table.classList.add(opt);
 		});
@@ -67,25 +67,25 @@ function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
             }
         }
     }
-    var caption = document.createElement("caption");
+    let caption = document.createElement("caption");
     caption.innerHTML = "Datatable";
-    //table.appendChild(caption);
-    var thead = document.createElement("thead");
+    table.appendChild(caption);
+    let thead = document.createElement("thead");
 	if(config.theadSet){
-		var lista = config.theadSet.split(' ');
+		let lista = config.theadSet.split(' ');
 		lista.forEach(function(opt) {
 			thead.classList.add(opt);
 		});
 	}
-    var tr = thead.insertRow(-1);
+    let tr = thead.insertRow(-1);
     if(rowindex == true){
-        var th = document.createElement("th");
+        let th = document.createElement("th");
         th.setAttribute( "scope", "col" );
         th.innerHTML = "#";
         tr.appendChild(th);      
     }
     if(options.length > 0){
-        var th = document.createElement("th");
+        let th = document.createElement("th");
         th.setAttribute( "scope", "col" );
         th.innerHTML = "Opción";
         tr.appendChild(th);      
@@ -95,11 +95,11 @@ function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
         th.innerHTML = "Opción";
         tr.appendChild(th);     
     }*/ 
-    for (var i = 0; i < datafields.length; i++) {
-        var th = document.createElement("th"); // TABLE HEADER.
+    for (let i = 0; i < datafields.length; i++) {
+        let th = document.createElement("th"); // TABLE HEADER.
         th.setAttribute( "scope", "col" );
         th.innerHTML = datafields[i]['name'];
-        if(typeof datafields[i]['type']!=='undefined' && datafields[i]['type']=='decimal'){
+        if(typeof datafields[i]['type']!=='undefined' && datafields[i]['type']=='decimal'&& datafields[i]['type']=='numeric'){
             th.classList.add('text-right');
         }
         if(typeof datafields[i]['key'] !== 'undefined'){
@@ -113,7 +113,7 @@ function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
     table.appendChild(thead);
 	
     // ADD JSON DATA TO THE TABLE AS ROWS.
-    var tbody = document.createElement("tbody");
+    let tbody = document.createElement("tbody");
 	
 	if(!json.length > 0){
         /*
@@ -129,22 +129,22 @@ function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
 			}
 		}*/
 	}else{
-		for (var i = 0; i < json.length; i++) {
+		for (let i = 0; i < json.length; i++) {
 			tr = tbody.insertRow(-1);
 			if(rowindex == true){
-				var th = document.createElement('th');
+				let th = document.createElement('th');
 				th.innerHTML = i + 1;
 				th.setAttribute( "scope", "row" );
 				tr.appendChild(th);
 			}
 			if(options.length > 0){
-				var td = document.createElement('td');
-				var btng = document.createElement('div');
+				let td = document.createElement('td');
+				let btng = document.createElement('div');
 				btng.classList.add('btn-group');
 				btng.setAttribute( "role", "group" );
-				var ind = 0;
+				let ind = 0;
 				options.forEach(function(opt) {
-					var btn = document.createElement('button');
+					let btn = document.createElement('button');
 					btn.type = 'button';
 					btn.classList.add('btn');
 					btn.classList.add('btn-'+opt['btn']);
@@ -155,39 +155,41 @@ function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
 						btn.classList.add('ml-1');
 					}
 					ind ++;
-					var fa = document.createElement('i');
+					let fa = document.createElement('i');
 					fa.classList.add('fa');
 					fa.classList.add(opt['fa']);
 					btn.appendChild(fa);
 					btng.appendChild(btn);
 				});
 				td.appendChild(btng);
-				//td.innerHTML = i + 1;
 				tr.appendChild(td);
 			}
-			//console.log(json[i]);
-			for (var j = 0; j < datafields.length; j++) {    
-				var td = tr.insertCell(-1);
-				//console.log(j);
+
+			for (let j = 0; j < datafields.length; j++) {    
+				let td = tr.insertCell(-1);
+
 				if(datafields[j]['type']=='string'){
-					td.innerHTML = json[i][datafields[j]['key']];
+					//td.innerHTML = json[i][datafields[j]['key']];
+                    (typeof json[i][datafields[j]['key']] !== 'undefined') ? td.innerHTML = json[i][datafields[j]['key']]:td.innerHTML ='';
 				}else if (datafields[j]['type']=='numeric'){
-                    td.classList.add('text-right');
-					td.innerHTML = json[i][datafields[j]['key']];
+                    //td.classList.add('text-right');
+                    let numerico = parseInt(json[i][datafields[j]['key']]).toFixed(0);
+					//td.innerHTML = json[i][datafields[j]['key']];
+                    td.innerHTML = numerico;
 				}else if (datafields[j]['type']=='decimal'){
                     td.classList.add('text-right');
-					var decimal = parseFloat(json[i][datafields[j]['key']]).toFixed(2);
+					let decimal = parseFloat(json[i][datafields[j]['key']]).toFixed(2);
 					td.innerHTML = decimal;
 				}else if (datafields[j]['type']=='date'){
-					var date = new Date(json[i][datafields[j]['key']].replace(/-/g,"/"));
-					var year = date.getFullYear();
-					var fecha = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear().toString().substr(2);
+					let date = new Date(json[i][datafields[j]['key']].replace(/-/g,"/"));
+					let year = date.getFullYear();
+					let fecha = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear().toString().substr(2);
 					//Saturday, June 9th, 2007, 5:46:21 PM      
 					td.innerHTML = fecha;
 				}else if (datafields[j]['type']=='datetime'){
-					var date = new Date(json[i][datafields[j]['key']].replace(/-/g,"/"));
-					var year = date.getFullYear();
-					var fecha = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear().toString().substr(2)+' '+date.getHours()+':'+date.getMinutes().toString().padStart(2,'0');
+					let date = new Date(json[i][datafields[j]['key']].replace(/-/g,"/"));
+					let year = date.getFullYear();
+					let fecha = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear().toString().substr(2)+' '+date.getHours()+':'+date.getMinutes().toString().padStart(2,'0');
 					//Saturday, June 9th, 2007, 5:46:21 PM      
 					td.innerHTML = fecha;
 				}else{
@@ -197,6 +199,10 @@ function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
 				if(typeof datafields[j]['hidden'] !== 'undefined'){
 					td.hidden = datafields[j]['hidden'];
 				}
+                if(typeof datafields[j]['ind'] !== 'undefined'){
+					tr.setAttribute('ind',datafields[j]['ind']);
+				}
+
                 //console.log(json[i][datafields[j]['key']]);
 			}		
 		}
@@ -207,21 +213,21 @@ function tableLoad(datafields,json=[],options=[],rowindex,config={}) {
 }
 
 function tableAddRow(datatable='',datafields=[],json=[],options=[],rowindex=false){
-	var tr = document.createElement("tr");
+	let tr = document.createElement("tr");
 	if(rowindex == true){
-		var th = document.createElement('th');
+		let th = document.createElement('th');
 		th.innerHTML = 0;
 		th.setAttribute( "scope", "row" );
 		tr.appendChild(th);
 	}
 	if(options.length > 0){
-		var td = document.createElement('td');
-		var btng = document.createElement('div');
+		let td = document.createElement('td');
+		let btng = document.createElement('div');
 		btng.classList.add('btn-group');
 		btng.setAttribute( "role", "group" );
-		var ind = 0;
+		let ind = 0;
 		options.forEach(function(opt) {
-			var btn = document.createElement('button');
+			let btn = document.createElement('button');
 			btn.type = 'button';
 			btn.classList.add('btn');
 			btn.classList.add('btn-'+opt['btn']);
@@ -232,7 +238,7 @@ function tableAddRow(datatable='',datafields=[],json=[],options=[],rowindex=fals
 				btn.classList.add('ml-1');
 			}
 			ind ++;
-			var fa = document.createElement('i');
+			let fa = document.createElement('i');
 			fa.classList.add('fa');
 			fa.classList.add(opt['fa']);
 			btn.appendChild(fa);
@@ -242,24 +248,24 @@ function tableAddRow(datatable='',datafields=[],json=[],options=[],rowindex=fals
 		//td.innerHTML = i + 1;
 		tr.appendChild(td);
 	}
-	for (var j = 0; j < datafields.length; j++) {    
-		var td = tr.insertCell(-1);
+	for (let j = 0; j < datafields.length; j++) {    
+		let td = tr.insertCell(-1);
 		if(datafields[j]['type']=='string'){
-			td.innerHTML = json[datafields[j]['key']];
+            (typeof json[datafields[j]['key']] !== 'undefined') ? td.innerHTML = json[datafields[j]['key']]:td.innerHTML ='';
 		}else if (datafields[j]['type']=='decimal'){
             td.classList.add('text-right');
-			var decimal = parseFloat(json[datafields[j]['key']]).toFixed(2);
+			let decimal = parseFloat(json[datafields[j]['key']]).toFixed(2);
 			td.innerHTML = decimal;
 		}else if (datafields[j]['type']=='date'){
-			var date = new Date(json[datafields[j]['key']].replace(/-/g,"/"));
-			var year = date.getFullYear();
-			var fecha = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear().toString().substr(2);
+			let date = new Date(json[datafields[j]['key']].replace(/-/g,"/"));
+			let year = date.getFullYear();
+			let fecha = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear().toString().substr(2);
 			//Saturday, June 9th, 2007      
 			td.innerHTML = fecha;
 		}else if (datafields[j]['type']=='datetime'){
-			var date = new Date(json[datafields[j]['key']].replace(/-/g,"/"));
-			var year = date.getFullYear();
-			var fecha = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear().toString().substr(2)+' '+date.getHours()+':'+date.getMinutes().toString().padStart(2,'0');
+			let date = new Date(json[datafields[j]['key']].replace(/-/g,"/"));
+			let year = date.getFullYear();
+			let fecha = date.getDate()+'/'+(date.getMonth()+1)+'/'+date.getFullYear().toString().substr(2)+' '+date.getHours()+':'+date.getMinutes().toString().padStart(2,'0');
 			//Saturday, June 9th, 2007, 5:46:21 PM      
 			td.innerHTML = fecha;
 		}else{
@@ -276,15 +282,15 @@ function tableAddRow(datatable='',datafields=[],json=[],options=[],rowindex=fals
 function tableFilter(table,buscar,maxrows) {
     buscar = buscar.trim();
     if(document.getElementById(table) && buscar!=='undefined' && Number.isInteger(maxrows)){
-        var input,filter,tbody,tr,td,tdval,rows=0;
+        let input,filter,tbody,tr,td,tdval,rows=0;
         filter = buscar.toUpperCase();
         table = document.getElementById(table);
         tbody = table.getElementsByTagName('tbody')[0];
         tr = tbody.getElementsByTagName('tr');
-        for (var i = 0; i < tr.length; i++) {
+        for (let i = 0; i < tr.length; i++) {
                 td = tr[i].getElementsByTagName('td')
-            var ind = 0;
-                for (var j = 0; j < td.length; j++) {
+                let ind = 0;
+                for (let j = 0; j < td.length; j++) {
               tdval = td[j].textContent || td[j].innerText;
               if (tdval.toUpperCase().indexOf(filter) > -1) {
                   ind = 1;
@@ -316,11 +322,11 @@ function tablePagination(datatable,indprevNext,npages) {
 }
 //exporto to csv file
 function tableToCsv(table, filename) {
-    var csv = [];
-    var rows = document.querySelectorAll('#'+table+" div table tr");
-    for (var i = 0; i < rows.length; i++) {
-        var row = [], cols = rows[i].querySelectorAll("td, th");
-        for (var j = 0; j < cols.length; j++) 
+    let csv = [];
+    let rows = document.querySelectorAll('#'+table+" div table tr");
+    for (let i = 0; i < rows.length; i++) {
+        let row = [], cols = rows[i].querySelectorAll("td, th");
+        for (let j = 0; j < cols.length; j++) 
             row.push(cols[j].innerText);
         csv.push(row.join(","));        
     }
@@ -329,8 +335,8 @@ function tableToCsv(table, filename) {
 }
 //download file
 function downloadCSV(csv, filename) {
-    var csvFile;
-    var downloadLink;
+    let csvFile;
+    let downloadLink;
     // CSV FILE
     csvFile = new Blob([csv], {type: "text/csv"});
     // Download link
@@ -348,26 +354,26 @@ function downloadCSV(csv, filename) {
 }
 //Paginacion options
 $.fn.pageMe = function(opts){
-    var $this = this.find('tbody'),
+    let $this = this.find('tbody'),
         defaults = {
             perPage: 5,
             showPrevNext: false,
             hidePageNumbers: false
         },
         settings = $.extend(defaults, opts);
-    var pagerSelector = this.find('.pagination');
-    var listElement = $this;
-    var perPage = settings.perPage; 
-    var children = listElement.children();
-    var pager;
+    let pagerSelector = this.find('.pagination');
+    let listElement = $this;
+    let perPage = settings.perPage; 
+    let children = listElement.children();
+    let pager;
     if (typeof settings.childSelector!="undefined") {
         children = listElement.find(settings.childSelector);
     }
     if (typeof pagerSelector!="undefined") {
         pager = pagerSelector;
     }
-    var numItems = children.length;
-    var numPages = Math.ceil(numItems/perPage);
+    let numItems = children.length;
+    let numPages = Math.ceil(numItems/perPage);
 
     if(numPages == 0){ numPages=1;}
 
@@ -375,7 +381,7 @@ $.fn.pageMe = function(opts){
     if (settings.showPrevNext){
         $('<li class="page-item"><a class="page-link prev-link" href="#"><i class="fa fa-arrow-left"></i></a></li>').appendTo(pager);
     }
-    var curr = 0;
+    let curr = 0;
     while(numPages > curr && (settings.hidePageNumbers==false)){
         $('<li class="page-item"><a class="page-link num-link" href="#">'+(curr+1)+'</a></li>').appendTo(pager);
         curr++;
@@ -393,7 +399,7 @@ $.fn.pageMe = function(opts){
     children.slice(0, perPage).show();
     
     pager.find('li .num-link').click(function(){
-        var clickedPage = $(this).html().valueOf()-1;
+        let clickedPage = $(this).html().valueOf()-1;
         goTo(clickedPage);
         return false;
     });
@@ -407,17 +413,17 @@ $.fn.pageMe = function(opts){
     });
 
     function previous(){
-        var goToPage = parseInt(pager.data("curr")) - 1;
+        let goToPage = parseInt(pager.data("curr")) - 1;
         goTo(goToPage);
     }
      
     function next(){
-        goToPage = parseInt(pager.data("curr")) + 1;
+        let goToPage = parseInt(pager.data("curr")) + 1;
         goTo(goToPage);
     }
     
     function goTo(page){
-        var startAt = page * perPage,
+        let startAt = page * perPage,
             endOn = startAt + perPage;
         children.css('display','none').slice(startAt, endOn).show();
         if (page>=1) {
@@ -439,17 +445,20 @@ $.fn.pageMe = function(opts){
 };
 
 function tableToJson(tableName){
-    var myRows = [];
-    var $headers = $("#"+tableName+" div table thead th");
+    let myRows = [];
+    let $headers = $("#"+tableName+" div table thead th");
     $("#"+tableName+" div table tbody tr").each(function(index) {
-        $cells = $(this).find("td");
+        let $cells = $(this).find("td");
         myRows[index] = {};
         $cells.each(function(cellIndex) {
             if($($headers[cellIndex]).attr("cod")){
                 //console.log("cod : "+ $($headers[cellIndex]).attr("cod"));
                 myRows[index][$($headers[cellIndex]).attr("cod")] = $(this).html();
             }
-        });  
+        });
+        if($(this).attr('ind') && $(this).attr('ind')=='1'){
+            myRows[index]['ind'] = $(this).attr('ind'); 
+        }
     });
     return myRows;
 }

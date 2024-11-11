@@ -1,9 +1,9 @@
-var ruta = "syst_user/main/";
+const ruta = "syst_user/main/";
 //JS Events
-var localData;
-var DataContainer = (function() { 
-	function DataContainer() {};
-	var DataContainer = {}
+let localData;
+let DataContainer = (function() { 
+
+	let DataContainer = {}
   	DataContainer.ID = 1;
 	DataContainer.Serial = IdGen(50);
 	DataContainer.codUsuario = "usuariomaestro";
@@ -25,13 +25,13 @@ var DataContainer = (function() {
   	return DataContainer;
 });
 
-var dataFormUsuario= new DataContainer;
+let dataFormUsuario= new DataContainer;
 
 $(function () {
 	fetchGet(ruta+'defaultLoad').then(json => {
 		if(json.cod === 200){	
 			localData = json.res;
-			//cargarListaUsuario(json.res.lstUser,'tabUsuario');
+			listarUsuario('tabUsuario');
 			formSelectLoad('txtEmpresa',json.res.lstEmpresa,'num','des');
 			formSelectLoad('txtRol',json.res.lstRol,'num','des');
 			formSelectLoad('txtEstado',json.res.lstEstado,'cod','des');
@@ -47,48 +47,9 @@ document.getElementById('btnPDF').onclick = function(){
 	fetch(ruta+'generarPDF')
 	.then(response => response.blob())
 	.then(blob => {
-			var file = new Blob([blob], {type: "application/pdf"});
-			var fileURL = window.URL.createObjectURL(file);
+			let file = new Blob([blob], {type: "application/pdf"});
+			let fileURL = window.URL.createObjectURL(file);
 			window.open(fileURL, "_blank");
-			/*
-			var a = document.createElement('a');
-        	a.href = fileURL;
-            a.download = "Nota-Credito.pdf";
-			a.click();
-			*/
-			/*
-			newWindow = setTimeout(function() {
-				newWindow.document.title = isbFilename;
-			}, 100);
-			/*
-			var downloadLink = document.createElement("a");
-			// File name
-			downloadLink.download = 'nuevo.pdd';
-			// We have to create a link to the file
-			downloadLink.href = window.URL.createObjectURL(file);
-			// Make sure that the link is not displayed
-			downloadLink.style.display = "none";
-			// Add the link to your DOM
-			document.body.appendChild(downloadLink);
-			// Lanzamos
-			downloadLink.click();
-			*/
-
-			/*
-
-			*/	
-			/*
-			if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-				window.navigator.msSaveOrOpenBlob(file);
-				return;
-			} 
-			const url = window.URL.createObjectURL(file);
-			var a = document.createElement('a');
-			a.href = url;
-			a.download="file.pdf";
-			a.click();
-			*/
-
 	});
 }
 
@@ -97,7 +58,7 @@ document.getElementById('txtBuscar').onkeyup = function(){
 }
 
 document.getElementById('btnBuscar').onclick = function(){
-	txt = document.getElementById('txtBuscar').value;
+	let txt = document.getElementById('txtBuscar').value;
 	listarUsuario('tabUsuario',txt);
 }
 
@@ -106,7 +67,7 @@ document.getElementById('btnExport').onclick = function(){
 }
 
 document.getElementById('btnReload').onclick = function(){
-	txt = document.getElementById('tabUsuario').getAttribute('data');
+	let txt = document.getElementById('tabUsuario').getAttribute('data');
  	listarUsuario('tabUsuario',txt);
 }
 // Modal Registro Eventos
@@ -148,10 +109,10 @@ $(confirmForm).on('hide.bs.modal', function () {
 
 document.querySelector(confirmFormAceptar).onclick = function() {
 	$(progressForm).modal('show');
-	var act = document.getElementById(confirmFormId).getAttribute('act');
-	var txt = document.getElementById('tabUsuario').getAttribute('data');
+	let act = document.getElementById(confirmFormId).getAttribute('act');
+	let txt = document.getElementById('tabUsuario').getAttribute('data');
 	$('#addModal').modal('hide');
-	var msg;
+	let msg;
 	if(act == 1){ 
 		msg = msgRespuesta.guardado;
 	}else if(act == 2){
@@ -161,11 +122,11 @@ document.querySelector(confirmFormAceptar).onclick = function() {
 	}else{
 		snackAlert('No hay accion para ejecutar');
 	}
-	var formData = new FormData(document.getElementById('btnRegistrar'));
+	let formData = new FormData(document.getElementById('formRegistro'));
 	formData.append('act',act);
 	formData.append('txt',txt);
 	if (act == 0) formData.set('txtUsuario',document.getElementById(confirmFormId).getAttribute('cod'));
-	var PostData = setPostData(dataFormUsuario,'formulario',formData); // params: object container, object formData;
+	let PostData = setPostData(dataFormUsuario,'formulario',formData); // params: object container, object formData;
 	let count = 0;
 	formData.forEach(function(){count++;});
 	if(count>0){
@@ -229,7 +190,7 @@ function listarUsuario(datatable,txt='default'){
 }
 function cargarListaUsuario(lstUser,datatable,txt='default'){
 	localData.lstUser = lstUser;
-	for (var i = 0; i < lstUser.length; i++) {
+	for (let i = 0; i < lstUser.length; i++) {
 		lstUser[i]['desEmp'] = '';
 		lstUser[i]['desEst'] = '';
 		lstUser[i]['desRol'] = '';
@@ -249,7 +210,7 @@ function cargarListaUsuario(lstUser,datatable,txt='default'){
 			}
 		});
 	}
-	var datafields = [
+	let datafields = [
 	    {key: 'cod', name: 'Codigo', type: 'string', hidden: true},
 	    {key: 'nom', name: 'Nombres y apellidos', type: 'string'},
 	    {key: 'eml', name: 'Correo Electronico', type: 'string'},
@@ -258,7 +219,7 @@ function cargarListaUsuario(lstUser,datatable,txt='default'){
 	    {key: 'desEst', name: 'Estado', type: 'string'},
 	    {key: 'desRol', name: 'Rol', type: 'string'}
 	];
-	var options = [
+	let options = [
 	    {btn:'primary', fa:'fa-pencil', fn:'edit'},
 	    {btn:'danger', fa:'fa-trash-o', fn:'del'}
 	];
