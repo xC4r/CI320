@@ -155,7 +155,6 @@ $(document).on('click','#tabInventario div table tbody tr td div button.add', fu
 
 $(document).on('click','#tabInventario div table tbody tr td div button.del', function() { 
     let cod = (((this.parentNode).parentNode).parentNode).childNodes[2].innerHTML;
-    console.log(cod);
     let inv = document.getElementById('selInventario').value;
 	document.getElementById(confirmFormId).setAttribute('cod',cod.trim());
     document.getElementById('formInventario').setAttribute('inv',inv);
@@ -246,7 +245,7 @@ document.querySelector(confirmFormAceptar).onclick = function() {
         let cod = document.getElementById(confirmFormId).getAttribute('cod');
         formData.set('codProd', cod);
     }
-    
+
     let PostData = setPostData(dataFormulario, 'formulario', formData); 
     let count = formData.size;
     console.log(formData);

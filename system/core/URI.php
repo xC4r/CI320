@@ -96,6 +96,14 @@ class CI_URI {
 	 *
 	 * @return	void
 	 */
+
+	 /** 
+	 * CI Config 
+	 * 
+	 * @var CI_Config 
+	 */ 
+	public $config;
+
 	public function __construct()
 	{
 		$this->config =& load_class('Config', 'core');

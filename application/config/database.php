@@ -75,17 +75,17 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-   /*
+	
 	'hostname' => 'localhost',
 	'username' => 'gtrackspe_fermat',
 	'password' => 'bd_gtracks_21',
 	'database' => 'gtrackspe_db_fermat',
-	*/
+	/*
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '1234',
 	'database' => 'db_gtrackspe',
-	
+	*/
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

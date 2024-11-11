@@ -69,6 +69,12 @@ body.dark input[type=date]::-webkit-calendar-picker-indicator{
   margin: 0px;
   padding: 0px;
 }
+
+body.dark .nav-link.active{
+  color: #FFF;
+  background-color: #383838;
+}
+
 body.dark table{
   color: #FFF;
 }
